@@ -1,0 +1,22 @@
+doctype 5
+html
+  head
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+    title= content_for?(:title) ? yield(:title) : 'Gemsurance As A Service'
+
+    = stylesheet_link_tag 'application'
+    - if content_for?(:css)
+      = yield(:css)
+    = javascript_include_tag 'application', 'data-turbolinks-track': true
+    - if content_for?(:js)
+      = yield(:js)
+    = csrf_meta_tags
+  body
+    nav.top-bar
+      .top-bar-left
+        ul.dropdown.menu
+          li.title-text= link_to 'Gemsurance As A Service', root_path
+          li= link_to 'Applications', applications_path
+    = yield

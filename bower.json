@@ -1,0 +1,23 @@
+{
+  "name": "bands",
+  "authors": [
+    "Nicolas Ganz <nicolas@citrin.ch>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "foundation-sites": "6.2.0",
+    "jquery-ujs": "1.2.0"
+  }
+}

@@ -1,0 +1,16 @@
+/*
+ *= require_self
+ */
+
+@import "foundation/foundation_and_overrides";
+
+.title-text {
+  font-size: 1.4em;
+  display: inline;
+}
+
+.top-bar {
+  a {
+    color: $white;
+  }
+}
