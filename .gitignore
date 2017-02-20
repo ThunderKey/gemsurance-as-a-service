@@ -30,3 +30,5 @@
 
 /.cap_tasks~
 /.rake_tasks
+
+/config/deploy/production.rb
