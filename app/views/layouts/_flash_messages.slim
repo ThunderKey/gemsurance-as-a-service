@@ -1,0 +1,7 @@
+- messages.each do |name, msg|
+  - msgs = (msg.is_a?(String) ? [msg] : (msg.is_a?(Array) ? msg : []))
+  - msgs.each do |m|
+    .callout(data-closable class=(translate_flash_type name))
+      button.close-button(aria-label='Close' type='button' data-close)
+        span aria-hidden=true &times;
+      p= m

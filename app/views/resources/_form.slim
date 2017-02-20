@@ -1,0 +1,24 @@
+= form_for(resource) do |f|
+  - if resource.errors.any?
+    .callout.alert(data-closable)
+      button.close-button(aria-label='Close' type='button' data-close)
+        span aria-hidden=true &times;
+      ul
+        - resource.errors.full_messages.each do |m|
+          li= m
+
+  .row
+    .small-3.columns= f.label :name, class: 'text-right middle'
+    .small-9.columns= f.text_field :name
+
+  fieldset.fieldset
+    legend Resource
+    .row
+      .small-3.columns= f.label :resource_type, class: 'text-right middle'
+      .small-9.columns= f.select :resource_type, Resource.resource_type_attributes_for_select
+
+    .row
+      .small-3.columns= f.label :path, class: 'text-right middle'
+      .small-9.columns= f.text_field :path
+
+  = f.submit class: 'button success'

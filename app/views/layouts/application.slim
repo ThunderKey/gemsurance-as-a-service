@@ -18,5 +18,8 @@ html
       .top-bar-left
         ul.dropdown.menu
           li.title-text= link_to 'Gemsurance As A Service', root_path
-          li= link_to 'Applications', applications_path
-    = yield
+          li= link_to 'Resources', resources_path
+    .row
+      .small-12.columns
+        = render partial: 'layouts/flash_messages', locals: {messages: flash}
+        = yield
