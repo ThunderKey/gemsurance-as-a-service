@@ -29,13 +29,19 @@ ActiveRecord::Migration.maintain_test_schema!
 RSpec.configure do |config|
   config.before(:each) do
     rebuild_tmp_dir
-
+    build_stubs
   end
 
   def rebuild_tmp_dir
     dir = Rails.application.config.test_tmp_dir
     FileUtils.rm_r dir if File.exists? dir
     FileUtils.mkdir dir
+  end
+
+  def build_stubs
+    GitRepository.any_instance.stub :exec do |*args|
+      raise NotImplementedError, 'default disabled in test'
+    end
   end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
