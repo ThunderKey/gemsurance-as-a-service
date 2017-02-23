@@ -15,5 +15,7 @@ module GemsuranceAsAService
     config.git_command = '/usr/bin/git'
     config.private_dir = File.join Rails.root, 'private'
     config.gemfile_dir = File.join config.private_dir, 'gemfiles'
+    config.ruby_advisory_database_dir = File.join config.private_dir, 'ruby_advisory_database'
+    config.ruby_advisory_database_repository = 'https://github.com/rubysec/ruby-advisory-db.git'
   end
 end
