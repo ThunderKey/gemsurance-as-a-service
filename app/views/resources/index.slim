@@ -6,11 +6,12 @@ table
     th
   - @resources.each do |resource|
     tr
-      td= resource.name
+      td= link_to resource.name, resource_path(resource)
       td= resource.description
       td= resource.fetched_at ? l(resource.fetched_at) : '-'
       td= resource.status
-      td
-        = link_to 'Edit', edit_resource_path(resource), class: 'button small'
+      td.button-group.small
+        = link_to 'Edit', edit_resource_path(resource), class: 'button'
+        = button_to 'Delete', resource_path(resource), method: :delete, class: 'button alert', data: {confirm: 'Are you sure?'}
 
 = link_to 'New', new_resource_path, class: 'button'

@@ -1,4 +1,10 @@
 h1= @resource.name
 
+p= @resource.description
+p= @resource.fetched_at ? l(resource.fetched_at) : '-'
+p= @resource.path
+p= @resource.status
+
+
 = link_to 'Edit', edit_resource_path(@resource), class: 'button'
 = button_to 'Delete', resource_path(@resource), method: :delete, class: 'button alert', data: {confirm: 'Are you sure?'}
