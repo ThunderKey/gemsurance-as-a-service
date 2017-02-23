@@ -4,18 +4,23 @@ table
     th Name
     th Resource
     th Last Fetch
+    th Status
     - unless readonly
       th
   - resources.each do |resource|
     tr
-      td= link_to resource.name, resource_path(resource)
-      td= resource.description
+      td
+        = link_to resource.name, resource_path(resource)
+        - if resource.build_image_url
+          = build_image_tag resource
+      td= resource.resource_type
       td= resource.fetched_at ? l(resource.fetched_at) : '-'
       td= resource.status
       - unless readonly
-        td.button-group.small
-          = link_to 'Edit', edit_resource_path(resource), class: 'button'
-          = button_to 'Delete', resource_path(resource), method: :delete, class: 'button alert', data: {confirm: 'Are you sure?'}
+        td.full-width
+          .button-group.small
+            = link_to 'Edit', edit_resource_path(resource), class: 'button'
+            = button_to 'Delete', resource_path(resource), method: :delete, class: 'button alert', data: {confirm: 'Are you sure?'}
 
 - unless readonly
   = link_to 'New', new_resource_path, class: 'button'

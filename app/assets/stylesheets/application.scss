@@ -20,3 +20,15 @@ td {
     margin-bottom: 0;
   }
 }
+
+.build-image {
+  margin-left: 5px;
+  height: 20px;
+}
+
+table {
+  td.full-width {
+    max-width:100%;
+    white-space: nowrap;
+  }
+}

@@ -7,8 +7,10 @@ class Resource < ApplicationRecord
   has_many :gem_infos, through: :gem_versions
 
   validates :name, presence: true, uniqueness: true
-  validates :path, presence: true, format: {with: /\A\//, message: 'must be an absolute path' }
+  validates :path, presence: true, format: {with: /\A\//, message: :relative_path}
   validates :resource_type, presence: true
+  validates :build_image_url, format: {with: Rails.application.config.url_regex, message: :invalid_url, allow_blank: true}
+  validates :build_url, format: {with: Rails.application.config.url_regex, message: :invalid_url, allow_blank: true}
 
   before_save do
     self.status ||= :pending
@@ -34,10 +36,6 @@ class Resource < ApplicationRecord
 
   def resource_fetcher
     ResourceFetcher.for self
-  end
-
-  def description
-    "#{resource_type}: #{path}"
   end
 
   def update_gems!

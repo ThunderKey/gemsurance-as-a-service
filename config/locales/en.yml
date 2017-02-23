@@ -1,6 +1,8 @@
 en:
   activerecord:
     errors:
+      messages:
+        invalid_url: must be a valid URL
       models:
         resource:
           attributes:
@@ -8,6 +10,7 @@ en:
               file_missing: does not contain %{filename}
               does_not_exist: does not exist
               not_a_directory: is not a directory
+              relative_path: must be an absolute path
     attributes:
       resource:
         resource_types:

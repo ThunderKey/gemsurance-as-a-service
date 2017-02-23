@@ -62,6 +62,24 @@ describe ResourcesController do
         expect{
           post :create, params: {resource: attributes_for(:local_resource)}
         }.to change(Resource,:count).by(1)
+        resource = assigns :resource
+        expect(resource.name).to match /\ATest App \d+\z/
+        expect(resource.resource_type).to eq 'local'
+        expect(resource.path).to eq '/var/www/rails_apps/dev/gaas/spec/assets/valid_app'
+        expect(resource.build_url).to eq nil
+        expect(resource.build_image_url).to eq nil
+      end
+
+      it 'creates a new resource with optional attributes' do
+        expect{
+          post :create, params: {resource: attributes_for(:local_resource), build_url: 'https://test.test/project/1', build_image_url: 'https://test.test/project/1.svg'}
+        }.to change(Resource,:count).by(1)
+        resource = assigns :resource
+        expect(resource.name).to match /\ATest App \d+\z/
+        expect(resource.resource_type).to eq 'local'
+        expect(resource.path).to eq '/var/www/rails_apps/dev/gaas/spec/assets/valid_app'
+        expect(resource.build_url).to eq nil
+        expect(resource.build_image_url).to eq nil
       end
 
       it 'redirects to the new resource' do
@@ -102,6 +120,16 @@ describe ResourcesController do
         @resource.reload
         expect(@resource.name).to eq('MyOtherTestApp')
         expect(@resource.path).to eq(@valid_path)
+        expect(@resource.build_url).to eq nil
+        expect(@resource.build_image_url).to eq nil
+      end
+
+      it 'changes @resource\'s optional attributes' do
+        put :update, params: {id: @resource,
+          resource: {build_url: 'https://test.test/project/1', build_image_url: 'https://test.test/project/1.svg'}}
+        @resource.reload
+        expect(@resource.build_url).to eq 'https://test.test/project/1'
+        expect(@resource.build_image_url).to eq 'https://test.test/project/1.svg'
       end
 
       it 'redirects to the updated resource' do
