@@ -11,10 +11,8 @@ dist: trusty
 #    - mysql-client-5.6
 #services:
 #  - mysql
-#before_install:
-#  - mysql -e "CREATE DATABASE IF NOT EXISTS bands_test;" -uroot
-#  - mysql -e "CREATE DATABASE IF NOT EXISTS musicbrainz_test;" -uroot
-#  - mysql musicbrainz_test < ./db/musicbrainz_schema.sql -uroot
+before_install:
+  - echo "test:\n  secret_key_base: b3e5376fa509458710aa3c48c3f484d1f86d9c79b56e76497546b4279bc69aeb0f92f294640852903f8585427bf29005ab2a84be47c6c047331cb7a091fb39c4" > config/secrets.yml
 env:
   - "RAILS_ENV=test"
 before_script:
