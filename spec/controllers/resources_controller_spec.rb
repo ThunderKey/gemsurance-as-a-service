@@ -2,6 +2,8 @@ require 'rails_helper'
 # https://everydayrails.com/2012/04/07/testing-series-rspec-controllers.html
 
 describe ResourcesController do
+  valid_path = File.join Rails.root, 'spec', 'assets', 'valid_app'
+
   describe 'GET #index' do
     it 'displays 0 resources' do
       get :index
@@ -65,7 +67,7 @@ describe ResourcesController do
         resource = assigns :resource
         expect(resource.name).to match /\ATest App \d+\z/
         expect(resource.resource_type).to eq 'local'
-        expect(resource.path).to eq '/var/www/rails_apps/dev/gaas/spec/assets/valid_app'
+        expect(resource.path).to eq valid_path
         expect(resource.build_url).to eq nil
         expect(resource.build_image_url).to eq nil
       end
@@ -77,7 +79,7 @@ describe ResourcesController do
         resource = assigns :resource
         expect(resource.name).to match /\ATest App \d+\z/
         expect(resource.resource_type).to eq 'local'
-        expect(resource.path).to eq '/var/www/rails_apps/dev/gaas/spec/assets/valid_app'
+        expect(resource.path).to eq valid_path
         expect(resource.build_url).to eq nil
         expect(resource.build_image_url).to eq nil
       end
