@@ -88,6 +88,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.4)
+    database_cleaner (1.5.3)
     debug_inspector (0.0.2)
     devise (4.2.0)
       bcrypt (~> 3.0)
@@ -106,7 +107,7 @@ GEM
     faraday (0.10.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.17)
-    gemfile_interpreter (0.0.4)
+    gemfile_interpreter (0.0.5)
       bundler (~> 1.0)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -276,6 +277,7 @@ DEPENDENCIES
   capistrano3-puma
   capybara
   coffee-rails (~> 4.2)
+  database_cleaner
   devise
   factory_girl_rails
   gemfile_interpreter

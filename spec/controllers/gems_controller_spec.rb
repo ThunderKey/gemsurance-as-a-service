@@ -1,0 +1,38 @@
+require 'rails_helper'
+# https://everydayrails.com/2012/04/07/testing-series-rspec-controllers.html
+
+describe GemsController do
+  describe 'GET #index' do
+    it 'displays 0 gem_infos' do
+      get :index
+      expect(assigns(:gem_infos)).to eq []
+    end
+
+    it 'displays 3 gem_infos' do
+      g1 = create :gem_info
+      g2 = create :gem_info
+      g3 = create :gem_info
+
+      get :index
+      expect(assigns(:gem_infos)).to eq [g1, g2, g3]
+    end
+
+    it 'renders the :index view' do
+      get :index
+      expect(response).to render_template :index
+    end
+  end
+
+  describe 'GET #show' do
+    it 'assigns the requested gem_info to @gem_info' do
+      gem_info = create :gem_info
+      get :show, params: {id: gem_info}
+      expect(assigns(:gem_info)).to eq(gem_info)
+    end
+
+    it 'renders the #show view' do
+      get :show, params: {id: create(:gem_info)}
+      expect(response).to render_template :show
+    end
+  end
+end

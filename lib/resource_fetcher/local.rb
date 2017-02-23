@@ -8,15 +8,17 @@ module ResourceFetcher
 
     def errors
       e = super
-      if File.exists? resource.path
-        if File.directory? resource.path
-          validate_file e, gemfile
-          validate_file e, lockfile
+      unless resource.path.blank?
+        if File.exists? resource.path
+          if File.directory? resource.path
+            validate_file e, gemfile
+            validate_file e, lockfile
+          else
+            e << [:path, :not_a_directory]#'is not a directory']
+          end
         else
-          e << [:path, :not_a_directory]#'is not a directory']
+          e << [:path, :does_not_exist]#'does not exist']
         end
-      else
-        e << [:path, :does_not_exist]#'does not exist']
       end
       e
     end

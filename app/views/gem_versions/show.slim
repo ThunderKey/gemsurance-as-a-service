@@ -1,0 +1,4 @@
+h1 #{@gem_version.gem_info.name} - #{@gem_version.version}
+
+h2 Resources
+= render partial: 'resources/list', locals: {resources: @gem_version.resources, readonly: true}

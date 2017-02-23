@@ -1,0 +1,16 @@
+h1
+  = @gem_info.name
+  small &nbsp;- #{link_to_gem_source @gem_info}
+
+h2 Versions
+
+table
+  tr
+    th Name
+  - @gem_info.gem_versions.each do |gem_version|
+    tr
+      td= link_to gem_version.version, gem_version_path(@gem_info, gem_version)
+
+h2 Resources
+
+= render partial: 'resources/list', locals: {resources: @gem_info.resources, readonly: true}

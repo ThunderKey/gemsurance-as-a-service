@@ -39,9 +39,7 @@ RSpec.configure do |config|
   end
 
   def build_stubs
-    GitRepository.any_instance.stub :exec do |*args|
-      raise NotImplementedError, 'default disabled in test'
-    end
+    allow_any_instance_of(GitRepository).to receive(:exec).and_raise(NotImplementedError)
   end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

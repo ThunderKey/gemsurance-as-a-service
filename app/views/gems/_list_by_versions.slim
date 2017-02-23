@@ -1,0 +1,10 @@
+table
+  tr
+    th Name
+    th Source
+    th Versions
+  - gem_versions.each do |gem_version|
+    tr
+      td= link_to gem_version.gem_info.name, gem_path(gem_version.gem_info)
+      td= link_to_gem_source gem_version.gem_info
+      td= gem_versions.version

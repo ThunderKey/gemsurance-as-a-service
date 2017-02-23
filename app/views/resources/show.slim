@@ -5,6 +5,7 @@ p= @resource.fetched_at ? l(resource.fetched_at) : '-'
 p= @resource.path
 p= @resource.status
 
+= render partial: 'gems/list_by_versions', locals: {gem_versions: @resource.gem_versions}
 
 = link_to 'Edit', edit_resource_path(@resource), class: 'button'
 = button_to 'Delete', resource_path(@resource), method: :delete, class: 'button alert', data: {confirm: 'Are you sure?'}
