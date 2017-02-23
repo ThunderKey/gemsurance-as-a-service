@@ -39,4 +39,9 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  config.private_dir = File.join Rails.root, 'spec', 'tmp', 'private'
+  config.gemfile_dir = File.join config.private_dir, 'gemfiles'
+
+  config.test_tmp_dir = File.join Rails.root, 'spec', 'tmp'
 end

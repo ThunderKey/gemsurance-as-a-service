@@ -4,7 +4,7 @@ FactoryGirl.define do
 
     factory :local_resource do
       resource_type :local
-      path { "/#{name.underscore.gsub('_', '/')}" }
+      path { File.join Rails.root, 'spec', 'assets', 'valid_app' }
     end
   end
 

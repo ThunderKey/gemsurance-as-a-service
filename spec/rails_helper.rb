@@ -27,6 +27,17 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
+  config.before(:each) do
+    rebuild_tmp_dir
+
+  end
+
+  def rebuild_tmp_dir
+    dir = Rails.application.config.test_tmp_dir
+    FileUtils.rm_r dir if File.exists? dir
+    FileUtils.mkdir dir
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

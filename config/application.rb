@@ -11,5 +11,8 @@ module GemsuranceAsAService
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+
+    config.private_dir = File.join Rails.root, 'private'
+    config.gemfile_dir = File.join config.private_dir, 'gemfiles'
   end
 end

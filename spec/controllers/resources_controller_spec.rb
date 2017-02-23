@@ -86,7 +86,8 @@ describe ResourcesController do
 
   describe 'PUT #update' do
     before :each do
-      @resource = create :local_resource, name: 'MyTestApp', path: '/path/to/my/test/app'
+      @resource = create :local_resource, name: 'MyTestApp'
+      @valid_path = @resource.path
     end
 
     context 'valid attributes' do
@@ -97,10 +98,10 @@ describe ResourcesController do
 
       it 'changes @resource\'s attributes' do
         put :update, params: {id: @resource,
-          resource: attributes_for(:resource, name: 'MyOtherTestApp', path: '/path/to/my/test/app')}
+          resource: attributes_for(:resource, name: 'MyOtherTestApp', path: @valid_path)}
         @resource.reload
         expect(@resource.name).to eq('MyOtherTestApp')
-        expect(@resource.path).to eq('/path/to/my/test/app')
+        expect(@resource.path).to eq(@valid_path)
       end
 
       it 'redirects to the updated resource' do
@@ -120,7 +121,7 @@ describe ResourcesController do
           resource: attributes_for(:resource, name: 'MyOtherTestApp', path: nil)}
         @resource.reload
         expect(@resource.name).to_not eq('MyOtherTestApp')
-        expect(@resource.path).to eq('/path/to/my/test/app')
+        expect(@resource.path).to eq(@valid_path)
       end
 
       it 're-renders the edit method' do
