@@ -21,4 +21,8 @@ class GemInfo < ApplicationRecord
       source
     end
   end
+
+  def similar_gems
+    self.class.where('name LIKE ?', name).where.not(id: id)
+  end
 end

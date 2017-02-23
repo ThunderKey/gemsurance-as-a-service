@@ -2,14 +2,21 @@ h1
   = @gem_info.name
   small &nbsp;- #{link_to_gem_source @gem_info}
 
-h2 Versions
+.row
+  .small-12.large-6.columns
+    h2 Versions
 
-table
-  tr
-    th Name
-  - @gem_info.gem_versions.each do |gem_version|
-    tr
-      td= link_to gem_version.version, gem_version_path(@gem_info, gem_version)
+    table
+      tr
+        th Name
+      - @gem_info.gem_versions.each do |gem_version|
+        tr
+          td= link_to gem_version.version, gem_version_path(@gem_info, gem_version)
+
+  .small-12.large-6.columns
+    h2 Simliar Gems
+
+    = render partial: 'list', locals: {gem_infos: @gem_info.similar_gems}
 
 h2 Resources
 
