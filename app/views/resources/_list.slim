@@ -11,7 +11,7 @@ table
     tr
       td
         = link_to resource.name, resource_path(resource)
-        - if resource.build_image_url
+        - unless resource.build_image_url.blank?
           = build_image_tag resource
       td= resource.resource_type
       td= resource.fetched_at ? l(resource.fetched_at) : '-'

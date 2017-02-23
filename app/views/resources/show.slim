@@ -1,6 +1,6 @@
 h1
   = @resource.name
-  - if @resource.build_image_url
+  - unless @resource.build_image_url.blank?
     = build_image_tag @resource
 
 p #{@resource.resource_type}: #{@resource.path}

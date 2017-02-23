@@ -24,3 +24,5 @@ html
       .small-12.columns
         = render partial: 'layouts/flash_messages', locals: {messages: flash}
         = yield
+    - if content_for?(:body_js)
+      = yield(:body_js)
