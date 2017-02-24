@@ -42,6 +42,11 @@ RSpec.configure do |config|
     allow_any_instance_of(GitRepository).to receive(:exec).and_raise(NotImplementedError)
   end
 
+  def autologin user = nil
+    user ||= create(:user)
+    get '/autologin', controller: :static, params: {user_id: user.id}
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

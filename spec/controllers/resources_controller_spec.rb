@@ -4,6 +4,10 @@ require 'rails_helper'
 describe ResourcesController do
   valid_path = File.join Rails.root, 'spec', 'assets', 'valid_app'
 
+  before :each do
+    stub_devise
+  end
+
   describe 'GET #index' do
     it 'displays 0 resources' do
       get :index

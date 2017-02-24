@@ -18,8 +18,16 @@ html
       .top-bar-left
         ul.dropdown.menu
           li.title-text= link_to 'Gemsurance As A Service', root_path
-          li= link_to 'Resources', resources_path
-          li= link_to 'Gems', gems_path
+          - if current_user
+            li= link_to 'Resources', resources_path
+            li= link_to 'Gems', gems_path
+      .top-bar-right
+        ul.dropdown.menu
+          - if current_user
+            li= current_user.fullname
+            li= link_to 'Logout', destroy_user_session_path, method: :delete
+          - else
+            li= link_to 'Login', new_user_session_path
     .row
       .small-12.columns
         = render partial: 'layouts/flash_messages', locals: {messages: flash}

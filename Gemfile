@@ -22,7 +22,7 @@ gem 'puma'
 
 gem 'slim'
 
-gem 'omniauth-keltec', git: 'https://github.com/ThunderKey/omniauth-keltec.git'
+gem 'omniauth-keltec'
 gem 'devise'
 
 # Use jquery as the JavaScript library
@@ -66,6 +66,3 @@ group :development do
   gem 'capistrano3-puma', require: false
   gem 'capistrano-bower', require: false
 end
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

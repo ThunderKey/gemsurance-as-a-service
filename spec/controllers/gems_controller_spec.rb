@@ -2,6 +2,10 @@ require 'rails_helper'
 # https://everydayrails.com/2012/04/07/testing-series-rspec-controllers.html
 
 describe GemsController do
+  before :each do
+    stub_devise
+  end
+
   describe 'GET #index' do
     it 'displays 0 gem_infos' do
       get :index
