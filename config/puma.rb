@@ -15,6 +15,10 @@ port        ENV.fetch('PORT') { 9710 }
 #
 environment ENV.fetch('RAILS_ENV') { 'development' }
 
+pidfile './tmp/pids/puma.pid'
+state_path './tmp/pids/puma.state'
+stdout_redirect './log/puma_access.log', './log/puma_error.log', true
+
 # Specifies the number of `workers` to boot in clustered mode.
 # Workers are forked webserver processes. If using threads and workers together
 # the concurrency of the application would be max `threads` * `workers`.
