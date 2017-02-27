@@ -1,4 +1,5 @@
 #= require jquery/dist/jquery
+#= require jquery.turbolinks
 #= require jquery-ujs/src/rails
 #= require foundation-sites/dist/foundation
 #= require charts
@@ -6,7 +7,11 @@
 #= require_self
 #= require turbolinks
 
-ready = () ->
+initPage = () ->
+  console.debug 'init'
   $(document).foundation()
 
-$(document).on('turbolinks:load', ready)
+  # Fix for stiky with turbolinks
+  $(window).trigger('load.zf.sticky');
+
+$(document).on 'turbolinks:load', initPage
