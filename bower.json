@@ -17,7 +17,7 @@
     "tests"
   ],
   "dependencies": {
-    "foundation-sites": "6.2.0",
+    "foundation-sites": "6.3.0",
     "jquery-ujs": "1.2.0",
     "chart.js": "^2.5.0"
   }
