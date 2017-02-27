@@ -3,9 +3,12 @@
  */
 
 @import "foundation/foundation_and_overrides";
+@import "data_tables";
+@import "resources";
+@import "definition_lists";
 
 #main-content {
-  padding-top: 1em;
+  padding-top: $global-margin;
 }
 
 .title-text {

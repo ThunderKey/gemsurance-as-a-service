@@ -1,0 +1,22 @@
+ul.resource-panel
+  li.title= resource.name
+  li.with-dl
+    dl.dl-small-4
+      .dl-item
+        dt Build
+        dd= resource.build_image_url.blank? ? '-' : build_image_tag(resource)
+      .dl-item
+        dt Type
+        dd= resource.resource_type
+      .dl-item
+        dt Path
+        dd= resource.path
+      .dl-item
+        dt Fetched at
+        dd= resource.fetched_at ? l(resource.fetched_at) : '-'
+      .dl-item
+        dt Status
+        dd= resource.status
+  li.button-group.buttons-2
+    = link_to 'Edit', edit_resource_path(resource), class: 'button'
+    = button_to 'Delete', resource_path(resource), method: :delete, class: 'button alert', data: {confirm: 'Are you sure?'}

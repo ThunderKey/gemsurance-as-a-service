@@ -1,0 +1,42 @@
+@mixin dl-size($min-padding) {
+  dd {
+    margin-left: $min-padding;
+  }
+
+  dt {
+    min-width: $min-padding;
+  }
+}
+
+dl {
+  &.no-spacing {
+    margin: 0;
+  }
+
+  .dl-item {
+    text-align: left;
+
+    dd {
+      display: block;
+    }
+
+    dt {
+      font-weight: $global-weight-bold;
+      margin: 0;
+      float: left;
+      padding-right: 8px;
+      &::after {
+        content: ":";
+      }
+    }
+  }
+
+  // .dl-small-1 .dl-medium-2 etc
+  @include -zf-each-breakpoint {
+    @for $i from 1 through $grid-column-count {
+      &.dl-#{$-zf-size}-#{$i} {
+        @include dl-size($i/12*100%);
+      }
+    }
+  }
+}

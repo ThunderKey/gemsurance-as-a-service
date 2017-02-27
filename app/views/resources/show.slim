@@ -1,14 +1,14 @@
-h1
-  = @resource.name
-  - unless @resource.build_image_url.blank?
-    = build_image_tag @resource
+.row
+  .columns.large-8.large-offset-4
+    h1
+      = @resource.name
+      - unless @resource.build_image_url.blank?
+        = build_image_tag @resource
 
-p #{@resource.resource_type}: #{@resource.path}
-p= @resource.fetched_at ? l(resource.fetched_at) : '-'
-p= @resource.path
-p= @resource.status
-
-= render partial: 'gems/list_by_versions', locals: {gem_versions: @resource.gem_versions}
-
-= link_to 'Edit', edit_resource_path(@resource), class: 'button'
-= button_to 'Delete', resource_path(@resource), method: :delete, class: 'button alert', data: {confirm: 'Are you sure?'}
+.row
+  .columns.medium-5.large-4
+    div(data-sticky-container)
+      div(data-sticky data-anchor="resource-data" style="width:100%")
+        = render partial: 'panel', locals: {resource: @resource}
+  #resource-data.columns.medium-7.large-8
+    = render partial: 'gems/list_by_versions', locals: {gem_versions: @resource.gem_versions}

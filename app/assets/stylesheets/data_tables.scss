@@ -1,0 +1,60 @@
+.data-table {
+  $border-color: $medium-gray;
+  $outer-border: solid 1px $border-color;
+  $inner-border: dotted 1px $border-color;
+  $item-padding: 0.875rem 1.125rem;
+
+  @extend .no-bullet, .text-center;
+  border: $outer-border;
+
+  li {
+    border-bottom: $inner-border;
+    padding: $item-padding;
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  .title {
+    background-color: $light-gray;
+    font-weight: $global-weight-bold;
+    font-size: 1.5rem;
+    border-bottom: 0;
+  }
+
+  .price {
+    background-color: $lighter-gray;
+    font-size: 1.75rem;
+    border-bottom: 0;
+  }
+
+  .description {
+    color: $dark-gray;
+    font-size: 0.875rem;
+  }
+
+  .with-dl {
+    padding: 0;
+    border-bottom: 0;
+    dl {
+      @extend .no-spacing;
+
+      .dl-item {
+        padding: $item-padding;
+        border-bottom: $inner-border;
+      }
+    }
+  }
+
+  .button {
+    margin: 0;
+  }
+
+  // .buttons-1, .buttons-2 etc
+  @each $i in 1, 2, 3, 4, 5 {
+    .buttons-#{$i} .button {
+      width: 100% / $i;
+      float: left;
+    }
+  }
+}
