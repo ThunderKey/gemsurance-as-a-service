@@ -7,6 +7,10 @@
 @import "resources";
 @import "definition_lists";
 
+form.button_to {
+  display: inline-block;
+}
+
 #main-content {
   padding-top: $global-margin;
 }

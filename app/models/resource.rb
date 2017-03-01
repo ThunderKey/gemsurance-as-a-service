@@ -1,5 +1,5 @@
 class Resource < ApplicationRecord
-  enum resource_type: {local: 'local'}
+  enum resource_type: Hash[ResourceFetcher.fetcher_names.map {|name| [name, name] }]
   enum status: {pending: 'pending', uptodate: 'uptodate', outdated: 'outdated', vulnerable: 'vulnerable'}
 
   has_many :gem_usages
@@ -46,10 +46,11 @@ class Resource < ApplicationRecord
     fetcher.gems.each do |name, gem_data|
       info = GemInfo.where(name: name, source: source_from_data(gem_data)).first_or_create
       version = GemVersion.where(gem_info: info, version: gem_data['version']).first_or_create
-      usage = gem_usages.where(gem_version: version).first_or_create
+      usage = gem_usages.where(gem_version: version, in_gemfile: !!gem_data['in_gemfile']).first_or_create
       ids_to_keep << usage.id
     end
     gem_usages.where.not(id: ids_to_keep).destroy_all
+    gem_usages.reload # because it's destroyed in a seperate ActiveRecord::Relation
   end
 
   private

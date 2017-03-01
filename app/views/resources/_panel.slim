@@ -17,6 +17,7 @@ ul.resource-panel
       .dl-item
         dt Status
         dd= resource.status
-  li.button-group.buttons-2
+  li.button-group.buttons-3
     = link_to 'Edit', edit_resource_path(resource), class: 'button'
+    = link_to 'Update', resource_update_data_path(resource), class: 'button success', method: :put
     = button_to 'Delete', resource_path(resource), method: :delete, class: 'button alert', data: {confirm: 'Are you sure?'}

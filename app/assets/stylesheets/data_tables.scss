@@ -52,9 +52,16 @@
 
   // .buttons-1, .buttons-2 etc
   @each $i in 1, 2, 3, 4, 5 {
-    .buttons-#{$i} .button {
-      width: 100% / $i;
-      float: left;
+    .buttons-#{$i} {
+      .button, .button_to {
+        width: 100% / $i;
+        float: left;
+      }
+
+      .button_to .button {
+        width: 100%;
+        float: initial;
+      }
     }
   }
 }

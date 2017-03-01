@@ -11,6 +11,13 @@ class ResourcesController < ApplicationController
     @resource = Resource.new
   end
 
+  def update_data
+    @resource = Resource.find params[:resource_id]
+    UpdateResourceJob.new.perform @resource
+    flash[:notice] = %Q{Started to update "#{@resource.name}"}
+    redirect_back fallback_location: @resource
+  end
+
   def create
     @resource = Resource.new resource_params
     if @resource.save

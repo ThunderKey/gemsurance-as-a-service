@@ -1,6 +1,10 @@
 module ResourceFetcher
   @@fetchers = {}
 
+  def self.fetcher_names
+    @@fetchers.keys
+  end
+
   def self.register key, fetcher
     @@fetchers[key.to_s] = fetcher
   end

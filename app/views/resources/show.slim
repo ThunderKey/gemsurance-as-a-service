@@ -11,4 +11,10 @@
       div(data-sticky data-anchor="resource-data" style="width:100%")
         = render partial: 'panel', locals: {resource: @resource}
   #resource-data.columns.medium-7.large-8
-    = render partial: 'gems/list_by_versions', locals: {gem_versions: @resource.gem_versions}
+    .card
+      .card-divider In Gemfile
+      .card-section
+        = render partial: 'gems/list_by_usages', locals: {gem_usages: @resource.gem_usages.where(in_gemfile: true)}
+      .card-divider Dependencies
+      .card-section
+        = render partial: 'gems/list_by_usages', locals: {gem_usages: @resource.gem_usages.where(in_gemfile: false)}

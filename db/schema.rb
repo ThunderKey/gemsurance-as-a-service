@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170224203523) do
+ActiveRecord::Schema.define(version: 20170227203409) do
 
   create_table "gem_infos", force: :cascade do |t|
     t.string   "name",       null: false
@@ -20,10 +20,11 @@ ActiveRecord::Schema.define(version: 20170224203523) do
   end
 
   create_table "gem_usages", force: :cascade do |t|
-    t.integer  "gem_version_id", null: false
-    t.integer  "resource_id",    null: false
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.integer  "gem_version_id",                 null: false
+    t.integer  "resource_id",                    null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.boolean  "in_gemfile",     default: false, null: false
     t.index ["gem_version_id"], name: "index_gem_usages_on_gem_version_id"
     t.index ["resource_id"], name: "index_gem_usages_on_resource_id"
   end

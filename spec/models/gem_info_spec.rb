@@ -4,27 +4,27 @@ RSpec.describe GemInfo, type: :model do
   context 'is valid'do
     it 'with valid attributes' do
       record = described_class.new name: 'Test Gem', source: described_class::RUBYGEMS
-      expect(record.valid?).to be true
+      expect(record).to be_a_valid_record
     end
   end
 
   context 'is not valid' do
     it 'without a name' do
       record = described_class.new source: described_class::RUBYGEMS
-      expect(record.valid?).to be false
+      expect(record).to_not be_a_valid_record
       expect(record.errors.full_messages).to eq ['Name can\'t be blank']
     end
 
     it 'without a source' do
       record = described_class.new name: 'Test Gem'
-      expect(record.valid?).to be false
+      expect(record).to_not be_a_valid_record
       expect(record.errors.full_messages).to eq ['Source can\'t be blank']
     end
 
     it 'if the same name is used twice' do
       described_class.create name: 'Test Gem', source: described_class::RUBYGEMS
       record = described_class.new name: 'Test Gem', source: described_class::RUBYGEMS
-      expect(record.valid?).to be false
+      expect(record).to_not be_a_valid_record
       expect(record.errors.full_messages).to eq ['Name has already been taken']
     end
   end
