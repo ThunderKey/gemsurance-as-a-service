@@ -50,6 +50,8 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'capybara'
 
+  gem 'simplecov', require: false
+
   gem 'pry'
 end
 
