@@ -15,9 +15,9 @@ describe ResourcesController do
     end
 
     it 'displays 3 resources' do
-      r1 = create :local_resource
-      r2 = create :local_resource
-      r3 = create :local_resource
+      r1 = create :resource
+      r2 = create :resource
+      r3 = create :resource
 
       get :index
       expect(assigns(:resources)).to eq [r1, r2, r3]
@@ -31,13 +31,13 @@ describe ResourcesController do
 
   describe 'GET #show' do
     it 'assigns the requested resource to @resource' do
-      resource = create :local_resource
+      resource = create :resource
       get :show, params: {id: resource}
       expect(assigns(:resource)).to eq(resource)
     end
 
     it 'renders the #show view' do
-      get :show, params: {id: create(:local_resource)}
+      get :show, params: {id: create(:resource)}
       expect(response).to render_template :show
     end
   end
@@ -51,13 +51,13 @@ describe ResourcesController do
 
   describe 'GET #edit' do
     it 'assigns the requested resource to @resource' do
-      resource = create :local_resource
+      resource = create :resource
       get :edit, params: {id: resource}
       expect(assigns(:resource)).to eq(resource)
     end
 
     it 'renders the #edit view' do
-      get :edit, params: {id: create(:local_resource)}
+      get :edit, params: {id: create(:resource)}
       expect(response).to render_template :edit
     end
   end
@@ -66,7 +66,7 @@ describe ResourcesController do
     context 'with valid attributes' do
       it 'creates a new resource' do
         expect{
-          post :create, params: {resource: attributes_for(:local_resource)}
+          post :create, params: {resource: attributes_for(:resource)}
         }.to change(Resource,:count).by(1)
         resource = assigns :resource
         expect(resource.name).to match /\ATest App \d+\z/
@@ -78,7 +78,7 @@ describe ResourcesController do
 
       it 'creates a new resource with optional attributes' do
         expect{
-          post :create, params: {resource: attributes_for(:local_resource), build_url: 'https://test.test/project/1', build_image_url: 'https://test.test/project/1.svg'}
+          post :create, params: {resource: attributes_for(:resource), build_url: 'https://test.test/project/1', build_image_url: 'https://test.test/project/1.svg'}
         }.to change(Resource,:count).by(1)
         resource = assigns :resource
         expect(resource.name).to match /\ATest App \d+\z/
@@ -89,7 +89,7 @@ describe ResourcesController do
       end
 
       it 'redirects to the new resource' do
-        post :create, params: {resource: attributes_for(:local_resource)}
+        post :create, params: {resource: attributes_for(:resource)}
         expect(response).to redirect_to Resource.last
       end
     end
@@ -110,7 +110,7 @@ describe ResourcesController do
 
   describe 'PUT #update' do
     before :each do
-      @resource = create :local_resource, name: 'MyTestApp'
+      @resource = create :resource, name: 'MyTestApp'
       @valid_path = @resource.path
     end
 
@@ -167,7 +167,7 @@ describe ResourcesController do
 
   describe 'DELETE #destroy' do
     before :each do
-      @resource = create :local_resource
+      @resource = create :resource
     end
 
     it "deletes the resource" do
@@ -179,6 +179,22 @@ describe ResourcesController do
     it "redirects to resources#index" do
       delete :destroy, params: {id: @resource}
       expect(response).to redirect_to resources_url
+    end
+  end
+
+  describe 'PUT #update_data' do
+    before :each do
+      @resource = create :resource
+    end
+
+    it 'calls the update resource job' do
+      ActiveJob::Base.queue_adapter = :test
+
+      expect {
+        put :update_data, params: {resource_id: @resource}
+      }.to have_enqueued_job(UpdateResourceJob).with(@resource.id)
+
+      expect(flash.notice).to eq %Q{Started to update "Test App 1"}
     end
   end
 end

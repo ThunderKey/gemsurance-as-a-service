@@ -1,11 +1,10 @@
 table
   tr
     th Name
-    th Source
     th Versions
   - gem_usages.each do |gem_usage|
+    - info = gem_usage.gem_info
     tr
       td
-        = link_to gem_usage.gem_version.gem_info.name, gem_path(gem_usage.gem_version.gem_info)
-      td= link_to_gem_source gem_usage.gem_version.gem_info
+        = link_to info.name, gem_path(info)
       td= gem_usage.gem_version.version

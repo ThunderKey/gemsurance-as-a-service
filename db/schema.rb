@@ -10,13 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170227203409) do
+ActiveRecord::Schema.define(version: 20170302155628) do
 
   create_table "gem_infos", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.string   "source",     null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",              null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "homepage_url"
+    t.string   "source_code_url"
+    t.string   "documentation_url"
   end
 
   create_table "gem_usages", force: :cascade do |t|

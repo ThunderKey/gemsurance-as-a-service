@@ -1,8 +1,4 @@
 module ApplicationHelper
-  def link_to_gem_source gem_info
-    link_to gem_info.source_name, gem_info.full_source, title: gem_info.full_source, target: '_blank'
-  end
-
   def build_image_tag resource
     img = image_tag resource.build_image_url, class: 'build-image'
     if resource.build_url.blank?

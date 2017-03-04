@@ -33,8 +33,7 @@
 
 /config/deploy/production.rb
 
-/private/gemfiles
-/private/ruby_advisory_database
+/private/gemsurance_reports
 
 # ignore simplecov dirs
 /coverage

@@ -1,12 +1,10 @@
 table
   tr
     th Name
-    th Source
     th Resources
     th Versions
   - gem_infos.each do |gem_info|
     tr
       td= link_to gem_info.name, gem_path(gem_info)
-      td= link_to_gem_source gem_info
       td= gem_info.resources.count
       td= gem_info.gem_versions.count

@@ -2,7 +2,7 @@ class UpdateResourceJob < ApplicationJob
   queue_as :default
 
   def perform(resource_id)
-    resource = Resource.find(resource_id)
-    resource.update_gems!
+    service = GemsuranceService.new Resource.find(resource_id)
+    service.update_gems
   end
 end
