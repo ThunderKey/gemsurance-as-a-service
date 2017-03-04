@@ -23,6 +23,8 @@ before_script:
   - bower install
 script:
   - bundle exec rspec
+after_success:
+  - bundle exec codeclimate-test-reporter
 notifications:
   email:
     - nicolasganz37+travis@gmail.com
