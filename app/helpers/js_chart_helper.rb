@@ -1,7 +1,5 @@
 module JsChartHelper
   def generate_colors number, saturation: 1, lightness: 0.7
-    golden_ratio_conjugate = 0.618033988749895
-    color = 0
     steps = 1.0 / number
     number.times.map {|i| hsv_to_rgb_hex (i.to_f / number), saturation, lightness }
   end

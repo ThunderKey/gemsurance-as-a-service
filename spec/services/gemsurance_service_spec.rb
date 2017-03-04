@@ -13,6 +13,15 @@ RSpec.describe GemsuranceService, type: :service do
     end
   end
 
+  it 'calls the update and load methods in the correct order' do
+    record = create :empty_local_resource
+    service = GemsuranceService.new(record)
+
+    expect(service).to receive(:update_gemsurance_report).ordered
+    expect(service).to receive(:load_gems).ordered
+    service.update_gems
+  end
+
   it 'updates the gemsurance report correctly' do
     record = create :empty_local_resource
     service = GemsuranceService.new(record)

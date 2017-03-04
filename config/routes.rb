@@ -9,8 +9,4 @@ Rails.application.routes.draw do
   resources :gems, only: [:index, :show] do
     resources :versions, controller: :gem_versions, only: [:show]
   end
-
-  if Rails.env.test?
-    get '/autologin/:user_id' => 'static#autologin'
-  end
 end

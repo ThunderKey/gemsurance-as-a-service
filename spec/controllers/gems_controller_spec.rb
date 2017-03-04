@@ -30,8 +30,22 @@ describe GemsController do
   describe 'GET #show' do
     it 'assigns the requested gem_info to @gem_info' do
       gem_info = create :gem_info
+      versions = 3.times.map { create :gem_version, gem_info: gem_info }
+      create(:empty_local_resource).gem_usages.create gem_version: versions[1]
+      create(:empty_local_resource).gem_usages.create gem_version: versions[1]
+      create(:empty_local_resource).gem_usages.create gem_version: versions[2]
       get :show, params: {id: gem_info}
       expect(assigns(:gem_info)).to eq(gem_info)
+      expect(assigns(:versions_data)).to eq(
+        labels: ['1.2.3', '2.3.4', '3.4.5'],
+        datasets: [
+          {
+            data: [0, 2, 1],
+            backgroundColor: ['#FF6666', '#66FF66', '#6666FF'],
+            hoverBackgroundColor: ['#FF6666', '#66FF66', '#6666FF']
+          }
+        ]
+      )
     end
 
     it 'renders the #show view' do

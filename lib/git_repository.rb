@@ -15,7 +15,7 @@ class GitRepository
   def clone new_remote
     raise RepositoryAlreadyClonedError, "the repository #{path} is already checked out" if git_repository?
     raise IllegalRepositoryError, "the repository #{path} exists but is not valid" if path_exists?
-    exec Rails.application.config.git_command, 'clone', new_remote, path
+    git_exec 'clone', new_remote, path
   end
 
   def path_exists?
@@ -28,19 +28,21 @@ class GitRepository
 
   def pull
     raise RepositoryNotFoundError, "the repository #{path} does not exist" unless git_repository?
-    exec Rails.application.config.git_command, '-C', path, 'pull', remote, branch
+    git_exec '-C', path, 'pull', remote, branch
   end
 
   private
 
   def git_exec *args
-    exec Rails.application.config.git_command, '-C', path, *args
+    exec Rails.application.config.git_command, *args
   end
 
+  # :nocov:
   def exec *args
     #args << '&>/dev/null'
     unless system *args
       raise GitCommandFailedError, "the command #{args.inspect} failed"
     end
   end
+  # :nocov:
 end

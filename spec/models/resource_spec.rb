@@ -41,6 +41,13 @@ RSpec.describe Resource, type: :model do
       expect(record.errors.full_messages).to eq ['Path does not exist']
     end
 
+    it 'with a file as a path' do
+      FileUtils.touch missing_path
+      record = described_class.new name: 'Test described_class', resource_type: 'local', path: missing_path
+      expect(record).to_not be_a_valid_record
+      expect(record.errors.full_messages).to eq ['Path is not a directory']
+    end
+
     it 'if the same name is used twice' do
       described_class.create name: 'Test described_class', resource_type: 'local', path: valid_path
       record = described_class.new name: 'Test described_class', resource_type: 'local', path: valid_path

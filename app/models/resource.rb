@@ -31,19 +31,4 @@ class Resource < ApplicationRecord
   def gemsurance_service
     @gemsurance_service ||= GemsuranceService.new self
   end
-
-  private
-
-  def source_from_data data
-    source = data['source']
-    case source['type']
-    when 'rubygems'
-      raise "Unknown remotes for rubygems: #{source['remotes'].inspect}" if source['remotes'] != [GemInfo::RUBYGEMS]
-      GemInfo::RUBYGEMS
-    when 'git'
-      source['uri']
-    else
-      raise "Unknown source type: #{data.inspect}"
-    end
-  end
 end
