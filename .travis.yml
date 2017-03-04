@@ -3,6 +3,9 @@ rvm:
   - ruby-2.4.0
 dist: trusty
 #sudo: required
+addons:
+  code_climate:
+    repo_token: 3f12d785dcf81dd2351e408e00f86af458b28a4c776edf55abe641df95a1f87f
 #addons:
 #  apt:
 #    packages:
