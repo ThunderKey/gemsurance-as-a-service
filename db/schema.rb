@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302155628) do
+ActiveRecord::Schema.define(version: 20170305141836) do
 
   create_table "gem_infos", force: :cascade do |t|
     t.string   "name",              null: false
@@ -65,6 +65,17 @@ ActiveRecord::Schema.define(version: 20170302155628) do
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
+  create_table "vulnerabilities", force: :cascade do |t|
+    t.string   "description",      null: false
+    t.string   "cve"
+    t.string   "url"
+    t.string   "patched_versions"
+    t.integer  "gem_version_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["gem_version_id"], name: "index_vulnerabilities_on_gem_version_id"
   end
 
 end

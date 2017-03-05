@@ -6,18 +6,19 @@
       th Newest Version
     - gem_usages.each do |gem_usage|
       - info = gem_usage.gem_info
-      - current_version = gem_usage.gem_version.version
+      - version = gem_usage.gem_version
+      - current_version = version.version
       - newest_version = info.newest_gem_version.version
       - tr_class = ''
       - tr_tooltip = 'Current'
-      - if current_version != newest_version
-        - tr_class = 'outdated-gem'
-        - tr_tooltip = 'Outdated'
-      - elsif false
+      - if version.vulnerabilities.any?
         - tr_class = 'vulnerable-gem'
         - tr_tooltip = 'Vulnerable'
+      - elsif current_version != newest_version
+        - tr_class = 'outdated-gem'
+        - tr_tooltip = 'Outdated'
       tr class=tr_class title=tr_tooltip
         td
           = link_to info.name, gem_path(info)
-        td= gem_usage.gem_version.version
-        td= info.newest_gem_version.version
+        td= link_to current_version, gem_version_path(gem_id: info.id, id: version.id)
+        td= newest_version

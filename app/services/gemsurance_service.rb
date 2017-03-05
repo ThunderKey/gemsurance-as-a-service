@@ -44,6 +44,7 @@ class GemsuranceService
 
   def update_gems
     update_gemsurance_report
+    fix_gemsurance_report
     load_gems
   end
 
@@ -58,9 +59,18 @@ class GemsuranceService
       GemVersion.where(gem_info: info, version: gem_data['newest_version']).first_or_create! if gem_data['newset_version'] != gem_data['bundle_version']
       version = GemVersion.where(gem_info: info, version: gem_data['bundle_version']).first_or_create!
       usage = resource.gem_usages.where(gem_version: version, in_gemfile: gem_data['in_gem_file']).first_or_create!
+      gem_data['vulnerabilities'].try :each do |data|
+        version.vulnerabilities.create description: data['title'], cve: data['cve'], url: data['url'], patched_versions: data['patched_versions']
+      end
       ids_to_keep << usage.id
     end
     resource.gem_usages.where.not(id: ids_to_keep).destroy_all
     resource.gem_usages.reload # because it's destroyed in a seperate ActiveRecord::Relation
+  end
+
+  def fix_gemsurance_report
+    content = File.readlines gemsurance_yaml_file
+    content.each {|line| line.gsub! /^( *[a-zA-Z0-9_]+): (>=.*)$/, '\1: "\2"' }
+    File.write gemsurance_yaml_file, content.join
   end
 end

@@ -5,6 +5,7 @@ class Resource < ApplicationRecord
   has_many :gem_usages
   has_many :gem_versions, through: :gem_usages
   has_many :gem_infos, through: :gem_versions
+  has_many :vulnerabilities, through: :gem_versions
 
   validates :name, presence: true, uniqueness: true
   validates :path, presence: true, format: {with: /\A\//, message: :relative_path}
