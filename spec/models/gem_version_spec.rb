@@ -30,6 +30,18 @@ RSpec.describe GemVersion, type: :model do
     end
   end
 
+  it 'sees the correct versions as outdated' do
+    gem_info_1 = create :gem_info
+    gem_version_1_1 = gem_info_1.gem_versions.create version: '10.0.0'
+    gem_version_1_2 = gem_info_1.gem_versions.create version: '9.1.2'
+    gem_info_2 = create :gem_info
+    gem_version_2_1 = gem_info_2.gem_versions.create version: '9.1.2'
+
+    expect(gem_version_1_1.outdated?).to be false
+    expect(gem_version_1_2.outdated?).to be true
+    expect(gem_version_2_1.outdated?).to be false
+  end
+
   describe 'sorting the versions' do
     before :each do
       gem_info = create :gem_info

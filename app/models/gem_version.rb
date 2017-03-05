@@ -14,4 +14,8 @@ class GemVersion < ApplicationRecord
   def self.newest_version
     sort_by_version.last
   end
+
+  def outdated?
+    version != gem_info.newest_gem_version.version
+  end
 end

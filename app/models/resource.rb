@@ -29,6 +29,16 @@ class Resource < ApplicationRecord
     end
   end
 
+  def gems_status
+    if vulnerabilities.any?
+      :vulnerable
+    elsif gem_versions.any? &:outdated?
+      :outdated
+    else
+      :current
+    end
+  end
+
   def gemsurance_service
     @gemsurance_service ||= GemsuranceService.new self
   end

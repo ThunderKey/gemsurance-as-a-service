@@ -68,6 +68,41 @@ RSpec.describe Resource, type: :model do
     end
   end
 
+  describe '#gems_status' do
+    it 'handles the current status correctly' do
+      resource = create :empty_local_resource
+      expect(resource.gems_status).to eq :current
+
+      resource.gem_versions << create(:gem_version)
+      resource.gem_versions << create(:gem_version)
+      resource.gem_versions << create(:gem_version)
+      expect(resource.gems_status).to eq :current
+    end
+
+    it 'handles the outdated status correctly' do
+      resource = create :empty_local_resource
+
+      info = create :gem_info
+      create :gem_version, gem_info: info, version: '1.2.4'
+      resource.gem_versions << create(:gem_version)
+      resource.gem_versions << create(:gem_version, gem_info: info, version: '1.2.3')
+      resource.gem_versions << create(:gem_version)
+      expect(resource.gems_status).to eq :outdated
+    end
+
+    it 'handles the vulnerable status correctly' do
+      resource = create :empty_local_resource
+
+      info = create :gem_info
+      create :gem_version, gem_info: info, version: '1.2.4'
+      resource.gem_versions << create(:gem_version)
+      resource.gem_versions << create(:gem_version, gem_info: info, version: '1.2.3')
+      resource.gem_versions << create(:gem_version)
+      create :vulnerability, gem_version: resource.gem_versions.last
+      expect(resource.gems_status).to eq :vulnerable
+    end
+  end
+
   it 'generates the correct resource_type data' do
     expect(described_class.resource_types).to eq('local' => 'local')
     expect(described_class.resource_types.keys).to eq GemsuranceService.fetchers.keys

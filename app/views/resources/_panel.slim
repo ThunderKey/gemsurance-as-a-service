@@ -6,6 +6,9 @@ ul.resource-panel
         dt Build
         dd= resource.build_image_url.blank? ? '-' : build_image_tag(resource)
       .dl-item
+        dt Gems
+        dd= resource.gems_status
+      .dl-item
         dt Type
         dd= resource.resource_type
       .dl-item
