@@ -22,4 +22,13 @@ RSpec.describe GemInfo, type: :model do
       expect(record.errors.full_messages).to eq ['Name has already been taken']
     end
   end
+
+  it 'gets the newest gem version correctly' do
+    gem_info = create :gem_info
+    gem_info.gem_versions.create version: '4.3.2.beta'
+    gem_info.gem_versions.create version: '1.2.3'
+    gem_info.gem_versions.create version: '4.3.2'
+
+    expect(gem_info.newest_gem_version.version).to eq '4.3.2'
+  end
 end

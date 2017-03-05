@@ -1,10 +1,23 @@
-table
-  tr
-    th Name
-    th Versions
-  - gem_usages.each do |gem_usage|
-    - info = gem_usage.gem_info
+.table-scroll
+  table
     tr
-      td
-        = link_to info.name, gem_path(info)
-      td= gem_usage.gem_version.version
+      th Name
+      th Version
+      th Newest Version
+    - gem_usages.each do |gem_usage|
+      - info = gem_usage.gem_info
+      - current_version = gem_usage.gem_version.version
+      - newest_version = info.newest_gem_version.version
+      - tr_class = ''
+      - tr_tooltip = 'Current'
+      - if current_version != newest_version
+        - tr_class = 'outdated-gem'
+        - tr_tooltip = 'Outdated'
+      - elsif false
+        - tr_class = 'vulnerable-gem'
+        - tr_tooltip = 'Vulnerable'
+      tr class=tr_class title=tr_tooltip
+        td
+          = link_to info.name, gem_path(info)
+        td= gem_usage.gem_version.version
+        td= info.newest_gem_version.version
