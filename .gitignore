@@ -36,5 +36,4 @@
 /private/gemsurance_reports
 
 # ignore simplecov dirs
-/coverage
 /public/coverage

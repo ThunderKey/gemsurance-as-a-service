@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 SimpleCov.start do
+  coverage_dir 'public/coverage'
+
   # track any files in app or lib
   track_files '{app,lib}/**/*.*'
 
