@@ -1,6 +1,6 @@
 class GemsuranceService::LocalFetcher
   def self.update_gemsurance_report resource, file
-    run_in_seperate_env "cd \"#{resource.path}\"; gemsurance --format yml --output \"#{file}\""
+    run_in_seperate_env %Q{bundle exec gemsurance --format yml --output "#{file}"}, resource.path
   end
 
   def self.errors resource
@@ -19,7 +19,7 @@ class GemsuranceService::LocalFetcher
 
   private
 
-  def self.run_in_seperate_env cmd
-    system 'env', '-i', 'bash', '-l', '-c', cmd
+  def self.run_in_seperate_env cmd, dir
+    Open3.capture2e('env', '-i', 'bash', '-l', '-c', cmd, chdir: dir)
   end
 end

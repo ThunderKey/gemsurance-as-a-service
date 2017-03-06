@@ -26,8 +26,14 @@ class GemsuranceService
 
   def update_gemsurance_report
     FileUtils.mkdir_p dirname unless File.exists? dirname
-    fetcher.update_gemsurance_report resource, gemsurance_yaml_file
+    output, exit_status = fetcher.update_gemsurance_report resource, gemsurance_yaml_file
+    resource.fetch_output = output
+    resource.fetched_at = DateTime.now
+    Rails.logger.debug "!!!#{exit_status}"
+    resource.fetch_status = exit_status == 0 ? 'successful' : 'failed'
+    resource.save!
     reset!
+    resource.fetch_status == 'successful'
   end
 
   def errors
@@ -43,9 +49,13 @@ class GemsuranceService
   end
 
   def update_gems
-    update_gemsurance_report
-    fix_gemsurance_report
-    load_gems
+    if update_gemsurance_report
+      fix_gemsurance_report
+      load_gems
+      true
+    else
+      false
+    end
   end
 
   def load_gems

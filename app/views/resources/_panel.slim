@@ -1,10 +1,20 @@
+.reveal.full(id="fetchModal#{resource.id}" data-reveal)
+  h2 Console Output
+  - if resource.fetch_output.blank?
+    p No Console Output
+  - else
+    pre
+      code= resource.fetch_output
+  button.close-button(data-close aria-label="Close Console Output" type="button")
+    span aria-hidden="true" &times;
 ul.data-panel
   li.title= resource.name
   li.with-dl
     dl.dl-small-4
-      .dl-item
-        dt Build
-        dd= resource.build_image_url.blank? ? '-' : build_image_tag(resource)
+      - unless resource.build_image_url.blank?
+        .dl-item
+          dt Build
+          dd= build_image_tag(resource)
       .dl-item
         dt Gems
         dd= resource.gems_status
@@ -19,7 +29,9 @@ ul.data-panel
         dd= resource.fetched_at ? time_tag(resource.fetched_at) : '-'
       .dl-item
         dt Status
-        dd= resource.fetch_status
+        dd
+          p= resource.fetch_status
+          a.button data-open="fetchModal#{resource.id}" Show Console Output
   li.button-group.buttons-3
     = link_to 'Edit', edit_resource_path(resource), class: 'button'
     = link_to 'Update', resource_update_data_path(resource), class: 'button success', method: :put

@@ -17,7 +17,7 @@ RSpec.describe GemsuranceService, type: :service do
     resource = create :empty_local_resource
     service = GemsuranceService.new(resource)
 
-    expect(service).to receive(:update_gemsurance_report).ordered
+    expect(service).to receive(:update_gemsurance_report).ordered.and_return true
     expect(service).to receive(:fix_gemsurance_report).ordered
     expect(service).to receive(:load_gems).ordered
     service.update_gems
@@ -27,10 +27,20 @@ RSpec.describe GemsuranceService, type: :service do
     resource = create :empty_local_resource
     service = GemsuranceService.new(resource)
 
+    expect(resource.fetched_at).to eq nil
+    expect(resource.fetch_output).to eq ""
+    expect(resource.fetch_status).to eq "pending"
+
+    Timecop.freeze
+
     expect {
-      expect_any_instance_of(Kernel).to receive(:system).with 'env', '-i', 'bash', '-l', '-c', %Q{cd "#{resource.path}"; gemsurance --format yml --output "#{Rails.application.config.private_dir}/gemsurance_reports/1/gemsurance_report.yml"}
+      expect(Open3).to receive(:capture2e).with('env', '-i', 'bash', '-l', '-c', %Q{bundle exec gemsurance --format yml --output "#{Rails.application.config.private_dir}/gemsurance_reports/1/gemsurance_report.yml"}, {chdir: resource.path}).and_return(['test', 0])
       service.update_gemsurance_report
     }.to change { File.exists? service.dirname }.from(false).to(true)
+
+    expect(resource.fetched_at).to eq DateTime.now
+    expect(resource.fetch_output).to eq 'test'
+    expect(resource.fetch_status).to eq 'successful'
   end
 
   it 'loads the gems correctly' do
