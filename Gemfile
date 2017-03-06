@@ -34,7 +34,11 @@ gem 'jquery-turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
+gem 'redis'
+gem 'redis-namespace'
+
+# for ActiveJob workers
+gem 'sidekiq'
 
 gem 'gemsurance'
 
@@ -70,4 +74,5 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano3-puma', require: false
   gem 'capistrano-bower', require: false
+  gem 'capistrano-sidekiq', require: false
 end

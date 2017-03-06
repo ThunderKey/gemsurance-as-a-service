@@ -43,4 +43,6 @@ Rails.application.configure do
   config.private_dir = File.join Rails.root, 'spec', 'tmp', 'private'
 
   config.test_tmp_dir = File.join Rails.root, 'spec', 'tmp'
+
+  config.redis.database = 3
 end
