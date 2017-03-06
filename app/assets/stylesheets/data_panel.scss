@@ -13,6 +13,7 @@
     &:last-child {
       border-bottom: 0;
     }
+    background-color: $body-background;
   }
 
   .title {
@@ -20,6 +21,10 @@
     font-weight: $global-weight-bold;
     font-size: 1.5rem;
     border-bottom: 0;
+
+    &.small {
+      font-size: 1rem;
+    }
   }
 
   .price {

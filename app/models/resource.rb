@@ -1,6 +1,6 @@
 class Resource < ApplicationRecord
   enum resource_type: Hash[GemsuranceService.fetchers.keys.map {|name| [name, name] }]
-  enum status: {pending: 'pending', uptodate: 'uptodate', outdated: 'outdated', vulnerable: 'vulnerable'}
+  enum fetch_status: Hash[[:pending, :successful, :failed].map {|k| [k, k.to_s] }]
 
   has_many :gem_usages
   has_many :gem_versions, through: :gem_usages
@@ -20,13 +20,25 @@ class Resource < ApplicationRecord
   end
 
   before_save do
-    self.status ||= :pending
+    self.fetch_status ||= :pending
   end
 
   def self.resource_type_attributes_for_select
     resource_types.map do |resource_type, key|
       [I18n.t("activerecord.attributes.#{model_name.i18n_key}.resource_types.#{resource_type}"), resource_type]
     end
+  end
+
+  def self.sort_by_gems_status dir = :asc
+    if dir == :asc
+      sort_by(&:numeric_gems_status)
+    else
+      sort_by(&:numeric_gems_status).reverse
+    end
+  end
+
+  def self.status_sorter a, b
+    a.numeric_gems_status <=> b.numeric_gems_status
   end
 
   def gems_status
@@ -36,6 +48,15 @@ class Resource < ApplicationRecord
       :outdated
     else
       :current
+    end
+  end
+
+  def numeric_gems_status
+    case gems_status
+    when :vulnerable; 0
+    when :outdated; 1
+    when :current; 2
+    else raise "Unsupported gems_status #{gems_status.inspect}"
     end
   end
 

@@ -1,4 +1,4 @@
-ul.resource-panel
+ul.data-panel
   li.title= resource.name
   li.with-dl
     dl.dl-small-4
@@ -16,10 +16,11 @@ ul.resource-panel
         dd= resource.path
       .dl-item
         dt Fetched at
-        dd= resource.fetched_at ? l(resource.fetched_at) : '-'
+        dd= resource.fetched_at ? time_tag(resource.fetched_at) : '-'
       .dl-item
         dt Status
-        dd= resource.status
+        dd.has-tip(data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title=resource.fetch_output)
+          = resource.fetch_status
   li.button-group.buttons-3
     = link_to 'Edit', edit_resource_path(resource), class: 'button'
     = link_to 'Update', resource_update_data_path(resource), class: 'button success', method: :put

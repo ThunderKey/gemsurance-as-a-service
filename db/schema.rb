@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170305141836) do
+ActiveRecord::Schema.define(version: 20170306094039) do
 
   create_table "gem_infos", force: :cascade do |t|
     t.string   "name",              null: false
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 20170305141836) do
     t.string   "path",            null: false
     t.string   "resource_type",   null: false
     t.datetime "fetched_at"
-    t.string   "status",          null: false
+    t.string   "fetch_status",    null: false
     t.string   "build_image_url"
     t.string   "build_url"
   end

@@ -2,22 +2,20 @@
 table
   tr
     th Name
-    th Gems
     th Resource
     th Last Fetch
     th Status
     - unless readonly
       th
-  - resources.each do |resource|
-    tr
+  - resources.sort_by(&:numeric_gems_status).each do |resource|
+    = gem_status_tr(resource.gems_status) do
       td
         = link_to resource.name, resource_path(resource)
         - unless resource.build_image_url.blank?
           = build_image_tag resource
-      td= resource.gems_status
       td= resource.resource_type
       td= resource.fetched_at ? l(resource.fetched_at) : '-'
-      td= resource.status
+      td= resource.fetch_status
       - unless readonly
         td.full-width
           .button-group.small

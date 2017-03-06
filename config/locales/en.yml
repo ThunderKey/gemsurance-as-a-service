@@ -15,3 +15,7 @@ en:
       resource:
         resource_types:
           local: Local
+  gem_status:
+    vulnerable: Vulnerable
+    outdated: Outdated
+    current: Current

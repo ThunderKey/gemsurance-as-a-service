@@ -4,7 +4,6 @@
 
 @import "foundation/foundation_and_overrides";
 @import "data_panel";
-@import "resources";
 @import "definition_lists";
 
 form.button_to {
@@ -42,16 +41,14 @@ table {
     max-width:100%;
     white-space: nowrap;
   }
-}
 
-.outdated-gem {
-  background-color: lighten(map-get($foundation-palette, warning), 20%) !important;
-}
+  tr {
+    &.outdated {
+      background-color: lighten(map-get($foundation-palette, warning), 20%) !important;
+    }
 
-.vulnerable-gem {
-  background-color: lighten(map-get($foundation-palette, alert), 20%) !important;
-
-  a {
-    color: darken(map-get($foundation-palette, primary), 10%) !important;
+    &.vulnerable {
+      background-color: saturate(lighten(map-get($foundation-palette, alert), 30%), 50%) !important;
+    }
   }
 }

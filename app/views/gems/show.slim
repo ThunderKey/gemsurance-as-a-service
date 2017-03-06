@@ -37,8 +37,8 @@ h1= @gem_info.name
     table
       tr
         th Name
-      - @gem_info.gem_versions.each do |gem_version|
-        tr
+      - @gem_info.gem_versions.sort_by_version(:desc).each do |gem_version|
+        = gem_status_tr(gem_version.status) do
           td= link_to gem_version.version, gem_version_path(@gem_info, gem_version)
 
 h2 Resources

@@ -18,4 +18,18 @@ class GemVersion < ApplicationRecord
   def outdated?
     version != gem_info.newest_gem_version.version
   end
+
+  def vulnerable?
+    vulnerabilities.any?
+  end
+
+  def status
+    if vulnerable?
+      :vulnerable
+    elsif outdated?
+      :outdated
+    else
+      :current
+    end
+  end
 end

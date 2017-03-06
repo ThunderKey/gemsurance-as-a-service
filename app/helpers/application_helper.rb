@@ -9,6 +9,10 @@ module ApplicationHelper
     end
   end
 
+  def gem_status_tr status, &block
+    content_tag 'tr', class: [status], title: t(status, scope: 'gem_status'), &block
+  end
+
   def translate_flash_type type
     type = type.to_sym
     case type
