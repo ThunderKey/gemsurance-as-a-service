@@ -10,3 +10,5 @@ end
 
 Sidekiq.configure_server {|c| configure_sidekiq c }
 Sidekiq.configure_client {|c| configure_sidekiq c }
+
+Sidekiq.default_worker_options = { retry: false }
