@@ -33,14 +33,42 @@ RSpec.describe GemsuranceService, type: :service do
 
     Timecop.freeze
 
+    report_file = "#{Rails.application.config.private_dir}/gemsurance_reports/1/gemsurance_report.yml"
+    output = %Q{Retrieving gem version information...\nRetrieving latest vulnerability data...\nReading vulnerability data...\nGenerating report...\nGenerated report #{report_file}.}
     expect {
-      expect(Open3).to receive(:capture2e).with('env', '-i', 'bash', '-l', '-c', %Q{bundle exec gemsurance --format yml --output "#{Rails.application.config.private_dir}/gemsurance_reports/1/gemsurance_report.yml"}, {chdir: resource.path}).and_return(['test', 0])
+      expect(Open3).to receive(:capture2e).
+        with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
+        and_return([output, 0])
       service.update_gemsurance_report
     }.to change { File.exists? service.dirname }.from(false).to(true)
 
     expect(resource.fetched_at).to eq DateTime.now
-    expect(resource.fetch_output).to eq 'test'
+    expect(resource.fetch_output).to eq output
     expect(resource.fetch_status).to eq 'successful'
+  end
+
+  it 'updates the status to failed if the command executes unsuccessful' do
+    resource = create :empty_local_resource
+    service = GemsuranceService.new(resource)
+
+    expect(resource.fetched_at).to eq nil
+    expect(resource.fetch_output).to eq ""
+    expect(resource.fetch_status).to eq "pending"
+
+    Timecop.freeze
+
+    report_file = "#{Rails.application.config.private_dir}/gemsurance_reports/1/gemsurance_report.yml"
+    output = %q{An error occured}
+    expect {
+      expect(Open3).to receive(:capture2e).
+        with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
+        and_return([output, 0])
+      service.update_gemsurance_report
+    }.to change { File.exists? service.dirname }.from(false).to(true)
+
+    expect(resource.fetched_at).to eq DateTime.now
+    expect(resource.fetch_output).to eq output
+    expect(resource.fetch_status).to eq 'failed'
   end
 
   it 'loads the gems correctly' do

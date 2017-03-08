@@ -1,4 +1,4 @@
-class GemsuranceService
+class GemsuranceService < ApplicationService
   @@fetchers = {
     'local' => LocalFetcher,
   }
@@ -30,7 +30,7 @@ class GemsuranceService
     resource.fetch_output = output
     resource.fetched_at = DateTime.now
     Rails.logger.debug "!!!#{exit_status}"
-    resource.fetch_status = exit_status == 0 ? 'successful' : 'failed'
+    resource.fetch_status = gemsurance_regex.match?(output) ? 'successful' : 'failed'
     resource.save!
     reset!
     resource.fetch_status == 'successful'

@@ -8,7 +8,7 @@ class Resource < ApplicationRecord
   has_many :vulnerabilities, through: :gem_versions
 
   validates :name, presence: true, uniqueness: true
-  validates :path, presence: true, format: {with: /\A\//, message: :relative_path}
+  validates :path, presence: true, format: {with: ApplicationHelper.absolute_path_regex, message: :relative_path}
   validates :resource_type, presence: true
   validates :build_image_url, format: {with: Rails.application.config.url_regex, message: :invalid_url, allow_blank: true}
   validates :build_url, format: {with: Rails.application.config.url_regex, message: :invalid_url, allow_blank: true}
@@ -37,10 +37,6 @@ class Resource < ApplicationRecord
     end
   end
 
-  def self.status_sorter a, b
-    a.numeric_gems_status <=> b.numeric_gems_status
-  end
-
   def gems_status
     if vulnerabilities.any?
       :vulnerable
@@ -62,5 +58,11 @@ class Resource < ApplicationRecord
 
   def gemsurance_service
     @gemsurance_service ||= GemsuranceService.new self
+  end
+
+  def start_update!
+    self.fetch_status = :pending
+    save!
+    UpdateResourceJob.perform_later id
   end
 end

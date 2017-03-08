@@ -16,7 +16,7 @@
           - unless resource.build_image_url.blank?
             = build_image_tag resource
         td= resource.resource_type
-        td= resource.fetched_at ? l(resource.fetched_at) : '-'
+        td= resource.fetched_at ? time_tag(resource.fetched_at) : '-'
         td= resource.fetch_status
         - unless readonly
           td.full-width

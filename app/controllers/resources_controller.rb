@@ -13,7 +13,7 @@ class ResourcesController < ApplicationController
 
   def update_data
     @resource = Resource.find params[:resource_id]
-    UpdateResourceJob.perform_later @resource.id
+    @resource.start_update!
     flash[:notice] = %Q{Started to update "#{@resource.name}"}
     redirect_back fallback_location: @resource
   end
