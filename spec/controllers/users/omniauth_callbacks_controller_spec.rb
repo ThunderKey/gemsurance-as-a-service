@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Users::OmniauthCallbacksController do
+RSpec.describe Users::OmniauthCallbacksController do
   before :each do
     @request.env['devise.mapping'] = Devise.mappings[:user]
     hash = OmniAuth::AuthHash.new(provider: 'keltec', uid: 1234)

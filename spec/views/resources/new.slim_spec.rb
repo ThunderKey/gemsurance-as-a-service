@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'resources/new.slim' do
+RSpec.describe 'resources/new.slim' do
   it 'displays the form correctly' do
     assign :resource, Resource.new
 

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'gem_versions/show.slim' do
+RSpec.describe 'gem_versions/show.slim' do
   it 'displays the gem version correctly' do
     gem_version = create :gem_version
     r = create :resource

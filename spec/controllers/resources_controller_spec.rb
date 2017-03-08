@@ -1,7 +1,7 @@
 require 'rails_helper'
 # https://everydayrails.com/2012/04/07/testing-series-rspec-controllers.html
 
-describe ResourcesController do
+RSpec.describe ResourcesController do
   valid_path = File.join Rails.root, 'spec', 'assets', 'valid_app'
 
   before :each do

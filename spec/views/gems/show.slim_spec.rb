@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'gems/show.slim' do
+RSpec.describe 'gems/show.slim' do
   it 'displays the gem correctly' do
     assign :gem_info, create(:gem_info)
     assign :versions_data, {

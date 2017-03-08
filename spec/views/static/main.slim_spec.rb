@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'static/main.slim' do
+RSpec.describe 'static/main.slim' do
   it 'gets rendered correctly' do
     render
 

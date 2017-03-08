@@ -37,3 +37,6 @@
 
 # ignore simplecov dirs
 /public/coverage
+
+# ignore spec persistence file
+/spec/persistence.txt

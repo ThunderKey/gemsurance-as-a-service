@@ -1,8 +1,9 @@
 require 'rails_helper'
 
-describe 'resources/index.slim' do
+RSpec.describe 'resources/index.slim' do
   it 'displays all resources correctly' do
-    assign :resources, 3.times.map { create :resource }
+    3.times { create :resource }
+    assign :resources, Resource.all
 
     render
 
