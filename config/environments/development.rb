@@ -52,7 +52,9 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.action_mailer.default_url_options = { host: 'https://dev.gaas.keltec.ch/' }
+  host = 'dev.gaas.keltec.ch'
+  config.action_mailer.default_url_options = { host: host }
+  Rails.application.routes.default_url_options = { host: host }
 
   config.redis.database = 2
 end

@@ -1,3 +1,5 @@
+require 'exception_notification/sidekiq'
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -52,8 +54,6 @@ Rails.application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-  config.action_mailer.default_url_options = { host: 'https://gaas.keltec.ch/' }
-
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "gaas_#{Rails.env}"
@@ -85,6 +85,16 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  host = 'dev.gaas.keltec.ch'
+  config.action_mailer.default_url_options = { host: host }
+  Rails.application.routes.default_url_options = { host: host }
+
+  Rails.application.config.middleware.use ExceptionNotification::Rack, :email => {
+    :email_prefix => "[Gemsurance As A Service] ",
+    :sender_address => %{"error notifier" <gaas@keltec.ch>},
+    :exception_recipients => Rails.application.secrets[:exception_notification][:recipient]
+  }
 
   config.redis.database = 1
 end
