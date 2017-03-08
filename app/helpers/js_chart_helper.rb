@@ -1,11 +1,9 @@
 module JsChartHelper
   def generate_colors number, saturation: 1, lightness: 0.7
-    steps = 1.0 / number
     number.times.map {|i| hsv_to_rgb_hex (i.to_f / number), saturation, lightness }
   end
 
   def hsv_to_rgb hue_percentage, saturation, lightness
-    hue = hue_percentage * 360
     m2 = if lightness <= 0.5
       lightness * (saturation + 1)
     else

@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe GemsuranceService, type: :service do
-  # dir = File.join Rails.root, 'spec', 'tmp', 'private', 'gemsurance_reports', resource.id.to_s
-  # expect(File.exists? gemsurance_report).to be false
-  # expect(File.exists? gemsurance_report).to be true
-
   it 'includes valid fetchers' do
     expect(GemsuranceService.fetchers.keys).to eq ['local']
     GemsuranceService.fetchers.each do |name, fetcher|
@@ -40,7 +36,7 @@ RSpec.describe GemsuranceService, type: :service do
         with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
         and_return([output, 0])
       service.update_gemsurance_report
-    }.to change { File.exists? service.dirname }.from(false).to(true)
+    }.to change { File.exist? service.dirname }.from(false).to(true)
 
     expect(resource.fetched_at).to eq DateTime.now
     expect(resource.fetch_output).to eq output
@@ -64,7 +60,7 @@ RSpec.describe GemsuranceService, type: :service do
         with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
         and_return([output, 0])
       service.update_gemsurance_report
-    }.to change { File.exists? service.dirname }.from(false).to(true)
+    }.to change { File.exist? service.dirname }.from(false).to(true)
 
     expect(resource.fetched_at).to eq DateTime.now
     expect(resource.fetch_output).to eq output

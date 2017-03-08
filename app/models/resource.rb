@@ -24,7 +24,7 @@ class Resource < ApplicationRecord
   end
 
   def self.resource_type_attributes_for_select
-    resource_types.map do |resource_type, key|
+    resource_types.keys.map do |resource_type|
       [I18n.t("activerecord.attributes.#{model_name.i18n_key}.resource_types.#{resource_type}"), resource_type]
     end
   end
@@ -40,7 +40,7 @@ class Resource < ApplicationRecord
   def gems_status
     if vulnerabilities.any?
       :vulnerable
-    elsif gem_versions.any? &:outdated?
+    elsif gem_versions.any?(&:outdated?)
       :outdated
     else
       :current

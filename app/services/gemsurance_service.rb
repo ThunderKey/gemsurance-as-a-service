@@ -25,7 +25,7 @@ class GemsuranceService < ApplicationService
   end
 
   def update_gemsurance_report
-    FileUtils.mkdir_p dirname unless File.exists? dirname
+    FileUtils.mkdir_p dirname unless File.exist? dirname
     output, exit_status = fetcher.update_gemsurance_report resource, gemsurance_yaml_file
     resource.fetch_output = output
     resource.fetched_at = DateTime.now
@@ -80,7 +80,7 @@ class GemsuranceService < ApplicationService
 
   def fix_gemsurance_report
     content = File.readlines gemsurance_yaml_file
-    content.each {|line| line.gsub! /^( *[a-zA-Z0-9_]+): (>=.*)$/, '\1: "\2"' }
+    content.each {|line| line.gsub!(/^( *[a-zA-Z0-9_]+): (>=.*)$/, '\1: "\2"') }
     File.write gemsurance_yaml_file, content.join
   end
 end

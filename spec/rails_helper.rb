@@ -34,7 +34,7 @@ RSpec.configure do |config|
 
   def rebuild_tmp_dir
     dir = Rails.application.config.test_tmp_dir
-    FileUtils.rm_r dir if File.exists? dir
+    FileUtils.rm_r dir if File.exist? dir
     FileUtils.mkdir dir
   end
 

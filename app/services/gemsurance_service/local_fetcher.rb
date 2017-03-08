@@ -7,7 +7,7 @@ class GemsuranceService
     def self.errors resource
       e = []
       unless resource.path.blank?
-        if File.exists? resource.path
+        if File.exist? resource.path
           unless File.directory? resource.path
             e << [:path, :not_a_directory]
           end

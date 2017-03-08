@@ -19,11 +19,11 @@ class GitRepository
   end
 
   def path_exists?
-    File.exists? path
+    File.exist? path
   end
 
   def git_repository?
-    path_exists? && File.exists?(File.join path, '.git')
+    path_exists? && File.exist?(File.join path, '.git')
   end
 
   def pull
@@ -40,7 +40,7 @@ class GitRepository
   # :nocov:
   def exec *args
     #args << '&>/dev/null'
-    unless system *args
+    unless system(*args)
       raise GitCommandFailedError, "the command #{args.inspect} failed"
     end
   end
