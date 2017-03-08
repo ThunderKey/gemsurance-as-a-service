@@ -56,6 +56,9 @@ class GemsuranceService < ApplicationService
     else
       false
     end
+  rescue
+    resource.fetch_status = 'failed'
+    resource.save!
   end
 
   def load_gems
@@ -68,7 +71,9 @@ class GemsuranceService < ApplicationService
       info.save!
       GemVersion.where(gem_info: info, version: gem_data['newest_version']).first_or_create! if gem_data['newset_version'] != gem_data['bundle_version']
       version = GemVersion.where(gem_info: info, version: gem_data['bundle_version']).first_or_create!
-      usage = resource.gem_usages.where(gem_version: version, in_gemfile: gem_data['in_gem_file']).first_or_create!
+      usage = resource.gem_usages.where(gem_version: version).first_or_initialize
+      usage.in_gemfile = gem_data['in_gem_file']
+      usage.save!
       gem_data['vulnerabilities'].try :each do |data|
         version.vulnerabilities.create description: data['title'], cve: data['cve'], url: data['url'], patched_versions: data['patched_versions']
       end
