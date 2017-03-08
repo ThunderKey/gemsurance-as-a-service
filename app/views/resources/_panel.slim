@@ -1,9 +1,9 @@
-.reveal.full(id="fetchModal#{resource.id}" data-reveal)
+.reveal.large(id="fetchModal#{resource.id}" data-reveal)
   h2 Console Output
   - if resource.fetch_output.blank?
     p No Console Output
   - else
-    pre
+    .code-block
       code= resource.fetch_output
   button.close-button(data-close aria-label="Close Console Output" type="button")
     span aria-hidden="true" &times;

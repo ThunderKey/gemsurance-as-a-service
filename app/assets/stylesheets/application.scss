@@ -52,3 +52,12 @@ table {
     }
   }
 }
+
+.code-block {
+  width: 100%;
+  overflow-x: auto;
+
+  code {
+    white-space: pre;
+  }
+}
