@@ -68,15 +68,16 @@ RSpec.describe Resource, type: :model do
     end
   end
 
-  describe '#gems_status' do
+  describe '#gem_status' do
     it 'handles the current status correctly' do
       resource = create :empty_local_resource
-      expect(resource.gems_status).to eq :current
+      expect(resource.gem_status).to eq :current
 
       resource.gem_versions << create(:gem_version)
       resource.gem_versions << create(:gem_version)
       resource.gem_versions << create(:gem_version)
-      expect(resource.gems_status).to eq :current
+      expect(resource.gem_status).to eq :current
+      expect(resource.numeric_gem_status).to eq 2
     end
 
     it 'handles the outdated status correctly' do
@@ -87,7 +88,8 @@ RSpec.describe Resource, type: :model do
       resource.gem_versions << create(:gem_version)
       resource.gem_versions << create(:gem_version, gem_info: info, version: '1.2.3')
       resource.gem_versions << create(:gem_version)
-      expect(resource.gems_status).to eq :outdated
+      expect(resource.gem_status).to eq :outdated
+      expect(resource.numeric_gem_status).to eq 1
     end
 
     it 'handles the vulnerable status correctly' do
@@ -99,7 +101,78 @@ RSpec.describe Resource, type: :model do
       resource.gem_versions << create(:gem_version, gem_info: info, version: '1.2.3')
       resource.gem_versions << create(:gem_version)
       create :vulnerability, gem_version: resource.gem_versions.last
-      expect(resource.gems_status).to eq :vulnerable
+      expect(resource.gem_status).to eq :vulnerable
+      expect(resource.numeric_gem_status).to eq 0
+    end
+  end
+
+  describe '#sort_by_gem_status' do
+    before(:each) do
+      3.times do |i|
+        # current
+        create(:empty_local_resource, name: "Current App #{i}") do |resource|
+          resource.gem_versions << create(:gem_version)
+          resource.gem_versions << create(:gem_version)
+          resource.gem_versions << create(:gem_version)
+        end
+
+        # outdated
+        create(:empty_local_resource, name: "Outdated App #{i}") do |resource|
+          info = create :gem_info
+          create :gem_version, gem_info: info, version: '1.2.4'
+          resource.gem_versions << create(:gem_version)
+          resource.gem_versions << create(:gem_version, gem_info: info, version: '1.2.3')
+          resource.gem_versions << create(:gem_version)
+        end
+
+        # vulnerable
+        create(:empty_local_resource, name: "Vulnerable App #{i}") do |resource|
+          info = create :gem_info
+          create :gem_version, gem_info: info, version: '1.2.4'
+          resource.gem_versions << create(:gem_version)
+          resource.gem_versions << create(:gem_version, gem_info: info, version: '1.2.3')
+          resource.gem_versions << create(:gem_version)
+          create :vulnerability, gem_version: resource.gem_versions.last
+        end
+      end
+    end
+
+    subject { described_class.all }
+
+    it 'has a different default order' do
+      expect(subject.map(&:name)).to eq [
+        'Current App 0', 'Outdated App 0', 'Vulnerable App 0',
+        'Current App 1', 'Outdated App 1', 'Vulnerable App 1',
+        'Current App 2', 'Outdated App 2', 'Vulnerable App 2',
+      ]
+    end
+
+    it 'sorts default ascending' do
+      expect(subject.sort_by_gem_status.map(&:name)).to eq [
+        'Vulnerable App 0', 'Vulnerable App 1', 'Vulnerable App 2',
+        'Outdated App 0', 'Outdated App 1', 'Outdated App 2',
+        'Current App 0', 'Current App 1', 'Current App 2',
+      ]
+    end
+
+    it 'sorts ascending' do
+      expect(subject.sort_by_gem_status(:asc).map(&:name)).to eq [
+        'Vulnerable App 0', 'Vulnerable App 1', 'Vulnerable App 2',
+        'Outdated App 0', 'Outdated App 1', 'Outdated App 2',
+        'Current App 0', 'Current App 1', 'Current App 2',
+      ]
+    end
+
+    it 'sorts descending' do
+      expect(subject.sort_by_gem_status(:desc).map(&:name)).to eq [
+        'Current App 0', 'Current App 1', 'Current App 2',
+        'Outdated App 0', 'Outdated App 1', 'Outdated App 2',
+        'Vulnerable App 0', 'Vulnerable App 1', 'Vulnerable App 2',
+      ]
+    end
+
+    it 'raises an error with an invalid direction' do
+      expect{subject.sort_by_gem_status(:invalid)}.to raise_error "Unknown direction :invalid. Available: :asc and :desc"
     end
   end
 

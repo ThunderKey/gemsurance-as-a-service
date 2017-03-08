@@ -1,4 +1,6 @@
 class Resource < ApplicationRecord
+  include GemStatusSortable
+
   enum resource_type: Hash[GemsuranceService.fetchers.keys.map {|name| [name, name] }]
   enum fetch_status: Hash[[:pending, :successful, :failed].map {|k| [k, k.to_s] }]
 
@@ -29,30 +31,13 @@ class Resource < ApplicationRecord
     end
   end
 
-  def self.sort_by_gems_status dir = :asc
-    if dir == :asc
-      sort_by(&:numeric_gems_status)
-    else
-      sort_by(&:numeric_gems_status).reverse
-    end
-  end
-
-  def gems_status
+  def gem_status
     if vulnerabilities.any?
       :vulnerable
     elsif gem_versions.any?(&:outdated?)
       :outdated
     else
       :current
-    end
-  end
-
-  def numeric_gems_status
-    case gems_status
-    when :vulnerable; 0
-    when :outdated; 1
-    when :current; 2
-    else raise "Unsupported gems_status #{gems_status.inspect}"
     end
   end
 

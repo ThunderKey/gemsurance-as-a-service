@@ -1,4 +1,6 @@
 class GemUsage < ApplicationRecord
+  include GemStatusSortable
+
   belongs_to :gem_version
   belongs_to :resource
   has_one :gem_info, through: :gem_version
@@ -9,4 +11,6 @@ class GemUsage < ApplicationRecord
   validate do
     errors.add :in_gemfile, :blank if in_gemfile.nil?
   end
+
+  delegate :gem_status, to: :gem_version
 end

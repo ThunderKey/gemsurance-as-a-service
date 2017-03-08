@@ -75,7 +75,7 @@ class GemsuranceService < ApplicationService
       usage.in_gemfile = gem_data['in_gem_file']
       usage.save!
       gem_data['vulnerabilities'].try :each do |data|
-        version.vulnerabilities.create description: data['title'], cve: data['cve'], url: data['url'], patched_versions: data['patched_versions']
+        version.vulnerabilities.where(description: data['title'], cve: data['cve'], url: data['url'], patched_versions: data['patched_versions']).first_or_create!
       end
       ids_to_keep << usage.id
     end

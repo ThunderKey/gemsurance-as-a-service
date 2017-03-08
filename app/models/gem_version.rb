@@ -1,4 +1,7 @@
 class GemVersion < ApplicationRecord
+  # TODO: Disabled until https://github.com/rails/rails/issues/28350 is fixed
+  #include GemStatusSortable
+
   belongs_to :gem_info
   has_many :gem_usage, dependent: :destroy
   has_many :resources, through: :gem_usage
@@ -23,7 +26,7 @@ class GemVersion < ApplicationRecord
     vulnerabilities.any?
   end
 
-  def status
+  def gem_status
     if vulnerable?
       :vulnerable
     elsif outdated?

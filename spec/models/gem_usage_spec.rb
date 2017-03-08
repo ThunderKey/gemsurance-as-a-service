@@ -36,4 +36,88 @@ RSpec.describe GemUsage, type: :model do
       expect(record.errors.full_messages).to eq ['Gem version has already been taken']
     end
   end
+
+  describe '#gem_status' do
+    subject { create :gem_usage }
+
+    it 'current' do
+      expect(subject.gem_status).to eq :current
+      expect(subject.numeric_gem_status).to eq 2
+    end
+
+    it 'outdated' do
+      create :gem_version, gem_info: subject.gem_info
+      expect(subject.gem_status).to eq :outdated
+      expect(subject.numeric_gem_status).to eq 1
+    end
+
+    it 'vulnerable' do
+      create :vulnerability, gem_version: subject.gem_version
+      expect(subject.gem_status).to eq :vulnerable
+      expect(subject.numeric_gem_status).to eq 0
+    end
+  end
+
+  describe '#sort_by_gem_status' do
+    before(:each) do
+      @resource = create :empty_local_resource
+      3.times do |i|
+        # current
+        create(:gem_info, name: "Current Gem #{i}") do |gem_info|
+          @resource.gem_versions << create(:gem_version, gem_info: gem_info)
+        end
+
+        # outdated
+        create(:gem_info, name: "Outdated Gem #{i}") do |gem_info|
+          @resource.gem_versions << create(:gem_version, gem_info: gem_info)
+          create :gem_version, gem_info: gem_info
+        end
+
+        # vulnerable
+        create(:gem_info, name: "Vulnerable Gem #{i}") do |gem_info|
+          @resource.gem_versions << create(:gem_version, gem_info: gem_info)
+          create :vulnerability, gem_version: @resource.gem_versions.last
+        end
+      end
+      @resource.reload
+    end
+
+    subject { @resource.gem_usages }
+
+    it 'has a different default order' do
+      expect(subject.map {|v| v.gem_info.name }).to eq [
+        'Current Gem 0', 'Outdated Gem 0', 'Vulnerable Gem 0',
+        'Current Gem 1', 'Outdated Gem 1', 'Vulnerable Gem 1',
+        'Current Gem 2', 'Outdated Gem 2', 'Vulnerable Gem 2',
+      ]
+    end
+
+    it 'sorts default ascending' do
+      expect(subject.sort_by_gem_status.map {|v| v.gem_info.name }).to eq [
+        'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2',
+        'Outdated Gem 0', 'Outdated Gem 1', 'Outdated Gem 2',
+        'Current Gem 0', 'Current Gem 1', 'Current Gem 2',
+      ]
+    end
+
+    it 'sorts ascending' do
+      expect(subject.sort_by_gem_status(:asc).map {|v| v.gem_info.name }).to eq [
+        'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2',
+        'Outdated Gem 0', 'Outdated Gem 1', 'Outdated Gem 2',
+        'Current Gem 0', 'Current Gem 1', 'Current Gem 2',
+      ]
+    end
+
+    it 'sorts descending' do
+      expect(subject.sort_by_gem_status(:desc).map {|v| v.gem_info.name }).to eq [
+        'Current Gem 0', 'Current Gem 1', 'Current Gem 2',
+        'Outdated Gem 0', 'Outdated Gem 1', 'Outdated Gem 2',
+        'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2',
+      ]
+    end
+
+    it 'raises an error with an invalid direction' do
+      expect{subject.sort_by_gem_status(:invalid)}.to raise_error "Unknown direction :invalid. Available: :asc and :desc"
+    end
+  end
 end
