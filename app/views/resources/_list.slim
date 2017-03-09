@@ -1,5 +1,5 @@
 - readonly = defined?(readonly) ? readonly : false
-- color = defined?(color) ? color : true
+- color = (defined?(color) && !color.nil?) ? color : true
 
 - if resources.any?
   table
