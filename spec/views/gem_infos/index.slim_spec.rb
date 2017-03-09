@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'gems/index.slim' do
+RSpec.describe 'gem_infos/index.slim' do
   it 'displays all gems correctly' do
     assign :gem_infos, 3.times.map { create(:gem_info) }
 

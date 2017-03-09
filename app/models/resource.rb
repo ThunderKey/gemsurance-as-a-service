@@ -34,11 +34,13 @@ class Resource < ApplicationRecord
   def gem_status
     if vulnerabilities.any?
       :vulnerable
-    elsif gem_versions.any?(&:outdated?)
-      :outdated
     else
       :current
     end
+  end
+
+  def outdated_gem_versions
+    gem_versions.select(&:outdated?)
   end
 
   def gemsurance_service

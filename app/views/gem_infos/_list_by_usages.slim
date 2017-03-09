@@ -1,0 +1,17 @@
+.table-scroll
+  table
+    tr
+      th Name
+      th Version
+      th Newest Version
+    - gem_usages.sort_by_gem_status.each do |gem_usage|
+      - info = gem_usage.gem_info
+      - version = gem_usage.gem_version
+      - current_version = version.version
+      = gem_status_tr(version.gem_status) do
+        td= link_to info.name, info
+        td= link_to current_version, gem_version_path(gem_info_id: info.id, id: version.id)
+        - if newest_version = info.newest_gem_version
+          td= link_to newest_version.version, gem_version_path(gem_info_id: info.id, id: newest_version)
+        - else
+          td -

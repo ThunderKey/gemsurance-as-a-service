@@ -77,30 +77,54 @@ RSpec.describe GemVersion, type: :model do
     end
   end
 
+  describe '#gem_status' do
+    it 'current' do
+      record = create :gem_version
+      expect(record.gem_status).to eq :current
+      #expect(record.numeric_gem_status).to eq 2
+    end
+
+    it 'current but with a prerelease' do
+      gem_info = create :gem_info
+      record = create :gem_version, version: '1.2.3', gem_info: gem_info
+      create :gem_version, version: '1.2.3.pre1', gem_info: gem_info
+      expect(record.gem_status).to eq :current
+      #expect(record.numeric_gem_status).to eq 2
+    end
+
+    it 'current with only prereleases' do
+      gem_info = create :gem_info
+      record = create :gem_version, version: '1.2.3.pre1', gem_info: gem_info
+      create :gem_version, version: '1.2.3.pre2', gem_info: gem_info
+      expect(record.gem_status).to eq :current
+      #expect(record.numeric_gem_status).to eq 1
+    end
+
+    it 'outdated' do
+      gem_info = create :gem_info
+      record = create :gem_version, gem_info: gem_info
+      create :gem_version, gem_info: gem_info
+      expect(record.gem_status).to eq :outdated
+      #expect(record.numeric_gem_status).to eq 1
+    end
+
+    it 'outdated as a prerelease' do
+      gem_info = create :gem_info
+      record = create :gem_version, version: '1.2.3.pre1', gem_info: gem_info
+      create :gem_version, version: '1.2.4', gem_info: gem_info
+      expect(record.gem_status).to eq :outdated
+      #expect(record.numeric_gem_status).to eq 1
+    end
+
+    it 'vulnerable' do
+      record = create :gem_version
+      create :vulnerability, gem_version: record
+      expect(record.gem_status).to eq :vulnerable
+      #expect(record.numeric_gem_status).to eq 0
+    end
+  end
+
   # TODO: Disabled until https://github.com/rails/rails/issues/28350 is fixed
-  #describe '#gem_status' do
-  #  it 'current' do
-  #    record = create :gem_version
-  #    expect(record.gem_status).to eq :current
-  #    expect(record.numeric_gem_status).to eq 2
-  #  end
-
-  #  it 'outdated' do
-  #    gem_info = create :gem_info
-  #    record = create :gem_version, gem_info: gem_info
-  #    create :gem_version, gem_info: gem_info
-  #    expect(record.gem_status).to eq :outdated
-  #    expect(record.numeric_gem_status).to eq 1
-  #  end
-
-  #  it 'vulnerable' do
-  #    record = create :gem_version
-  #    create :vulnerability, gem_version: record
-  #    expect(record.gem_status).to eq :vulnerable
-  #    expect(record.numeric_gem_status).to eq 0
-  #  end
-  #end
-
   #describe '#sort_by_gem_status' do
   #  before(:each) do
   #    @resource = create :empty_local_resource

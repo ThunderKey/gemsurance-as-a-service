@@ -1,4 +1,4 @@
-class GemsController < ApplicationController
+class GemInfosController < ApplicationController
   include JsChartHelper
 
   def index

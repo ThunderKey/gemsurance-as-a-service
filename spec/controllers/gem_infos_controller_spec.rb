@@ -1,7 +1,7 @@
 require 'rails_helper'
 # https://everydayrails.com/2012/04/07/testing-series-rspec-controllers.html
 
-RSpec.describe GemsController do
+RSpec.describe GemInfosController do
   before :each do
     stub_devise
   end

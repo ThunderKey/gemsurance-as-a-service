@@ -5,6 +5,7 @@
     tr
       th Name
       th Resource
+      th Outdated Gems
       th Last Fetch
       th Status
       - unless readonly
@@ -16,6 +17,7 @@
           - unless resource.build_image_url.blank?
             = build_image_tag resource
         td= resource.resource_type
+        td= resource.outdated_gem_versions.count
         td= resource.fetched_at ? time_tag(resource.fetched_at) : '-'
         td= resource.fetch_status
         - unless readonly

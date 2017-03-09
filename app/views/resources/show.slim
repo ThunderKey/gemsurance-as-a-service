@@ -14,7 +14,7 @@
     .card
       .card-divider In Gemfile
       .card-section
-        = render partial: 'gems/list_by_usages', locals: {gem_usages: @resource.gem_usages.where(in_gemfile: true)}
+        = render partial: 'gem_infos/list_by_usages', locals: {gem_usages: @resource.gem_usages.where(in_gemfile: true)}
       .card-divider Dependencies
       .card-section
-        = render partial: 'gems/list_by_usages', locals: {gem_usages: @resource.gem_usages.where(in_gemfile: false)}
+        = render partial: 'gem_infos/list_by_usages', locals: {gem_usages: @resource.gem_usages.where(in_gemfile: false)}

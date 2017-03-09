@@ -78,6 +78,7 @@ RSpec.describe Resource, type: :model do
       resource.gem_versions << create(:gem_version)
       expect(resource.gem_status).to eq :current
       expect(resource.numeric_gem_status).to eq 2
+      expect(resource.outdated_gem_versions.count).to eq 0
     end
 
     it 'handles the outdated status correctly' do
@@ -88,21 +89,22 @@ RSpec.describe Resource, type: :model do
       resource.gem_versions << create(:gem_version)
       resource.gem_versions << create(:gem_version, gem_info: info, version: '1.2.3')
       resource.gem_versions << create(:gem_version)
-      expect(resource.gem_status).to eq :outdated
-      expect(resource.numeric_gem_status).to eq 1
+      expect(resource.gem_status).to eq :current
+      expect(resource.numeric_gem_status).to eq 2
+      expect(resource.outdated_gem_versions.count).to eq 1
     end
 
     it 'handles the vulnerable status correctly' do
       resource = create :empty_local_resource
 
       info = create :gem_info
-      create :gem_version, gem_info: info, version: '1.2.4'
       resource.gem_versions << create(:gem_version)
       resource.gem_versions << create(:gem_version, gem_info: info, version: '1.2.3')
       resource.gem_versions << create(:gem_version)
       create :vulnerability, gem_version: resource.gem_versions.last
       expect(resource.gem_status).to eq :vulnerable
       expect(resource.numeric_gem_status).to eq 0
+      expect(resource.outdated_gem_versions.count).to eq 0
     end
   end
 
@@ -150,23 +152,26 @@ RSpec.describe Resource, type: :model do
     it 'sorts default ascending' do
       expect(subject.sort_by_gem_status.map(&:name)).to eq [
         'Vulnerable App 0', 'Vulnerable App 1', 'Vulnerable App 2',
-        'Outdated App 0', 'Outdated App 1', 'Outdated App 2',
-        'Current App 0', 'Current App 1', 'Current App 2',
+        'Current App 0', 'Outdated App 0',
+        'Current App 1', 'Outdated App 1',
+        'Current App 2', 'Outdated App 2',
       ]
     end
 
     it 'sorts ascending' do
       expect(subject.sort_by_gem_status(:asc).map(&:name)).to eq [
         'Vulnerable App 0', 'Vulnerable App 1', 'Vulnerable App 2',
-        'Outdated App 0', 'Outdated App 1', 'Outdated App 2',
-        'Current App 0', 'Current App 1', 'Current App 2',
+        'Current App 0', 'Outdated App 0',
+        'Current App 1', 'Outdated App 1',
+        'Current App 2', 'Outdated App 2',
       ]
     end
 
     it 'sorts descending' do
       expect(subject.sort_by_gem_status(:desc).map(&:name)).to eq [
-        'Current App 0', 'Current App 1', 'Current App 2',
-        'Outdated App 0', 'Outdated App 1', 'Outdated App 2',
+        'Current App 0', 'Outdated App 0',
+        'Current App 1', 'Outdated App 1',
+        'Current App 2', 'Outdated App 2',
         'Vulnerable App 0', 'Vulnerable App 1', 'Vulnerable App 2',
       ]
     end

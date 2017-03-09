@@ -1,4 +1,4 @@
-h1 #{link_to @gem_version.gem_info.name, gem_path(@gem_version.gem_info)} - #{@gem_version.version}
+h1 #{link_to @gem_version.gem_info.name, @gem_version.gem_info} - #{@gem_version.version}
 
 - if @gem_version.vulnerabilities.any?
   .callout.alert
