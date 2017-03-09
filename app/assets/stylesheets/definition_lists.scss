@@ -14,7 +14,8 @@ dl {
   }
 
   .dl-item {
-    text-align: left;
+    display: inline-block;
+    width: 100%;
 
     dd {
       display: block;

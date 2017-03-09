@@ -16,8 +16,9 @@ h1 #{link_to @gem_version.gem_info.name, @gem_version.gem_info} - #{@gem_version
             li.with-dl
               dl.dl-small-4
                 .dl-item
-                  dt CVE
-                  dd= vulnerability.cve
+                  dt
+                    = link_to 'CVE', 'https://cve.mitre.org/', title: 'Common Vulnerabilities and Exposure', target: '_blank'
+                  dd= vulnerability.cve.blank? ? '-' : vulnerability.cve
                 .dl-item
                   dt Patched in
                   dd= vulnerability.patched_versions
