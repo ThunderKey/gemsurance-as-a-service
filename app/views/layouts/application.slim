@@ -21,6 +21,11 @@ html
           - if current_user
             li= link_to 'Resources', resources_path
             li= link_to 'Gems', gem_infos_path
+            li= link_to vulnerabilities_path do
+              ' Vulnerabilities
+              - vulnerabilities_count = Vulnerability.joins(:resources).count
+              - if vulnerabilities_count > 0
+                span.badge.alert title="#{vulnerabilities_count} unhandled vulnerabilities"= vulnerabilities_count
       .top-bar-right
         ul.dropdown.menu
           - if current_user

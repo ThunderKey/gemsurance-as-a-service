@@ -61,3 +61,13 @@ table {
     white-space: pre;
   }
 }
+
+.card.alert {
+  background-color: scale-color(map-get($foundation-palette, alert), $lightness: $callout-background-fade);
+  border: $callout-border;
+
+  .card-divider {
+    border: $callout-border;
+    border-width: 0 0 1px 0;
+  }
+}

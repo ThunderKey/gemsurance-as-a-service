@@ -18,8 +18,8 @@ module ApplicationHelper
     end
   end
 
-  def gem_status_tr status, &block
-    content_tag 'tr', class: [status], title: t(status, scope: 'gem_status'), &block
+  def gem_status_tr status, color: true, &block
+    content_tag 'tr', class: (color ? [status] : []), title: t(status, scope: 'gem_status'), &block
   end
 
   def translate_flash_type type

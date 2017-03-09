@@ -7,21 +7,7 @@ h1 #{link_to @gem_version.gem_info.name, @gem_version.gem_info} - #{@gem_version
     .row.small-up-1.medium-up-3.large-up-4
       - @gem_version.vulnerabilities.each do |vulnerability|
         .column.column-block
-          ul.data-panel
-            li.title.small
-              - if vulnerability.url.blank?
-                = vulnerability.description
-              - else
-                = link_to vulnerability.description, vulnerability.url, target: '_blank'
-            li.with-dl
-              dl.dl-small-4
-                .dl-item
-                  dt
-                    = link_to 'CVE', 'https://cve.mitre.org/', title: 'Common Vulnerabilities and Exposure', target: '_blank'
-                  dd= vulnerability.cve.blank? ? '-' : vulnerability.cve
-                .dl-item
-                  dt Patched in
-                  dd= vulnerability.patched_versions
+          = render partial: 'vulnerabilities/panel', locals: {vulnerability: vulnerability}
 
 h2 Resources
 = render partial: 'resources/list', locals: {resources: @gem_version.resources, readonly: true}

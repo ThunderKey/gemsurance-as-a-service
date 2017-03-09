@@ -1,0 +1,15 @@
+ul.data-panel
+  li.title.small
+    - if vulnerability.url.blank?
+      = vulnerability.description
+    - else
+      = link_to vulnerability.description, vulnerability.url, target: '_blank'
+  li.with-dl
+    dl.dl-small-4
+      .dl-item
+        dt
+          = link_to 'CVE', 'https://cve.mitre.org/', title: 'Common Vulnerabilities and Exposure', target: '_blank'
+        dd= vulnerability.cve.blank? ? '-' : vulnerability.cve
+      .dl-item
+        dt Patched in
+        dd= vulnerability.patched_versions

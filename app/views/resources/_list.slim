@@ -1,4 +1,5 @@
 - readonly = defined?(readonly) ? readonly : false
+- color = defined?(color) ? color : true
 
 - if resources.any?
   table
@@ -11,7 +12,7 @@
       - unless readonly
         th
     - resources.sort_by_gem_status.each do |resource|
-      = gem_status_tr(resource.gem_status) do
+      = gem_status_tr(resource.gem_status, color: color) do
         td
           = link_to resource.name, resource_path(resource)
           - unless resource.build_image_url.blank?

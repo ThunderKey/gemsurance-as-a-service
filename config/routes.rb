@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   end
   resources :gem_infos, path: '/gems', only: [:index, :show]
   resources :gem_versions, path: '/gems/:gem_info_id/versions', only: [:show]
+  resources :vulnerabilities, only: [:index]
 end
