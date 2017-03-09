@@ -1,6 +1,5 @@
 class GemVersion < ApplicationRecord
-  # TODO: Disabled until https://github.com/rails/rails/issues/28350 is fixed
-  #include GemStatusSortable
+  include GemStatusSortable
 
   belongs_to :gem_info
   has_many :gem_usage, dependent: :destroy
@@ -21,7 +20,7 @@ class GemVersion < ApplicationRecord
   end
 
   def outdated?
-    newest = gem_info.newest_gem_version
+    newest = self.class.unscoped { gem_info.newest_gem_version }
     !newest.nil? && version_object < newest.version_object
   end
 
