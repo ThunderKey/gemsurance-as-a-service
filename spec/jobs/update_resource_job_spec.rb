@@ -7,6 +7,7 @@ RSpec.describe UpdateResourceJob, type: :job do
   subject(:job) { described_class.perform_later(resource.id) }
 
   it 'queues the job' do
+    expect { resource }.to change(ActiveJob::Base.queue_adapter.enqueued_jobs, :size).by(1)
     expect { job }.to change(ActiveJob::Base.queue_adapter.enqueued_jobs, :size).by(1)
   end
 
@@ -15,6 +16,7 @@ RSpec.describe UpdateResourceJob, type: :job do
   end
 
   it 'executes perform' do
+    resource # create it first so the auto update task is not executed
     expect_any_instance_of(GemsuranceService).to receive(:update_gems).with no_args
     perform_enqueued_jobs { job }
   end

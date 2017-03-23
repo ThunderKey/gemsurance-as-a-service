@@ -25,6 +25,10 @@ class Resource < ApplicationRecord
     self.fetch_status ||= :pending
   end
 
+  after_create do
+    start_update!
+  end
+
   def self.resource_type_attributes_for_select
     resource_types.keys.map do |resource_type|
       [I18n.t("activerecord.attributes.#{model_name.i18n_key}.resource_types.#{resource_type}"), resource_type]
