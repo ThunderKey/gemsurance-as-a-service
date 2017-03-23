@@ -33,7 +33,7 @@ RSpec.describe GemsuranceService, type: :service do
     output = %Q{Retrieving gem version information...\nRetrieving latest vulnerability data...\nReading vulnerability data...\nGenerating report...\nGenerated report #{report_file}.}
     expect {
       expect(Open3).to receive(:capture2e).
-        with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
+        with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" bundle exec gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
         and_return([output, 0])
       service.update_gemsurance_report
     }.to change { File.exist? service.dirname }.from(false).to(true)
@@ -57,7 +57,7 @@ RSpec.describe GemsuranceService, type: :service do
     output = %q{An error occured}
     expect {
       expect(Open3).to receive(:capture2e).
-        with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
+        with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" bundle exec gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
         and_return([output, 0])
       service.update_gemsurance_report
     }.to change { File.exist? service.dirname }.from(false).to(true)
