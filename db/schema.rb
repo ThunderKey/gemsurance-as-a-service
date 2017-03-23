@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20170306101055) do
 
-  create_table "gem_infos", force: :cascade do |t|
+  create_table "gem_infos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",              null: false
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
@@ -21,36 +21,36 @@ ActiveRecord::Schema.define(version: 20170306101055) do
     t.string   "documentation_url"
   end
 
-  create_table "gem_usages", force: :cascade do |t|
+  create_table "gem_usages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "gem_version_id",                 null: false
     t.integer  "resource_id",                    null: false
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
     t.boolean  "in_gemfile",     default: false, null: false
-    t.index ["gem_version_id"], name: "index_gem_usages_on_gem_version_id"
-    t.index ["resource_id"], name: "index_gem_usages_on_resource_id"
+    t.index ["gem_version_id"], name: "index_gem_usages_on_gem_version_id", using: :btree
+    t.index ["resource_id"], name: "index_gem_usages_on_resource_id", using: :btree
   end
 
-  create_table "gem_versions", force: :cascade do |t|
+  create_table "gem_versions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "gem_info_id", null: false
     t.string   "version",     null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["gem_info_id"], name: "index_gem_versions_on_gem_info_id"
+    t.index ["gem_info_id"], name: "index_gem_versions_on_gem_info_id", using: :btree
   end
 
-  create_table "resources", force: :cascade do |t|
-    t.string   "name",                         null: false
-    t.string   "path",                         null: false
-    t.string   "resource_type",                null: false
+  create_table "resources", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name",                          null: false
+    t.string   "path",                          null: false
+    t.string   "resource_type",                 null: false
     t.datetime "fetched_at"
-    t.string   "fetch_status",                 null: false
+    t.string   "fetch_status",                  null: false
     t.string   "build_image_url"
     t.string   "build_url"
-    t.text     "fetch_output",    default: "", null: false
+    t.text     "fetch_output",    limit: 65535, null: false
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "email",               default: "", null: false
     t.string   "encrypted_password",  default: "", null: false
     t.string   "provider"
@@ -65,10 +65,10 @@ ActiveRecord::Schema.define(version: 20170306101055) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
   end
 
-  create_table "vulnerabilities", force: :cascade do |t|
+  create_table "vulnerabilities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "description",      null: false
     t.string   "cve"
     t.string   "url"
@@ -76,7 +76,11 @@ ActiveRecord::Schema.define(version: 20170306101055) do
     t.integer  "gem_version_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-    t.index ["gem_version_id"], name: "index_vulnerabilities_on_gem_version_id"
+    t.index ["gem_version_id"], name: "index_vulnerabilities_on_gem_version_id", using: :btree
   end
 
+  add_foreign_key "gem_usages", "gem_versions"
+  add_foreign_key "gem_usages", "resources"
+  add_foreign_key "gem_versions", "gem_infos"
+  add_foreign_key "vulnerabilities", "gem_versions"
 end
