@@ -10,7 +10,7 @@ RSpec.describe 'gem_versions/show.slim' do
 
     render
 
-    expect(rendered).to match %r{<h1><a href="/gems/1">TestGem#1</a> - 1\.2\.3</h1>}
+    expect(rendered).to match %r{<h1><a href="/gems/#{gem_version.gem_info.id}">TestGem#1</a> - 1\.2\.3</h1>}
     expect(rendered).to match %r{>Test App 1</a>}
     expect(rendered).not_to match %{><h2>Vulnerabilities</h2>}
   end
@@ -26,7 +26,7 @@ RSpec.describe 'gem_versions/show.slim' do
 
     render
 
-    expect(rendered).to match %r{<h1><a href="/gems/1">TestGem#1</a> - 1\.2\.3</h1>}
+    expect(rendered).to match %r{<h1><a href="/gems/#{gem_version.gem_info.id}">TestGem#1</a> - 1\.2\.3</h1>}
     expect(rendered).to match %r{>Test App 1</a>}
     expect(rendered).to match %r{><h2>Vulnerabilities</h2>}
     expect(rendered).to match %r{<li class="title small">Vulnerability 1</li>}

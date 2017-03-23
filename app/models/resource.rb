@@ -4,7 +4,7 @@ class Resource < ApplicationRecord
   enum resource_type: Hash[GemsuranceService.fetchers.keys.map {|name| [name, name] }]
   enum fetch_status: Hash[[:pending, :successful, :failed].map {|k| [k, k.to_s] }]
 
-  has_many :gem_usages
+  has_many :gem_usages, dependent: :destroy
   has_many :gem_versions, through: :gem_usages
   has_many :gem_infos, through: :gem_versions
   has_many :vulnerabilities, through: :gem_versions
@@ -23,6 +23,7 @@ class Resource < ApplicationRecord
 
   before_save do
     self.fetch_status ||= :pending
+    self.fetch_output ||= ''
   end
 
   after_create do

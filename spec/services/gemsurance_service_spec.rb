@@ -29,16 +29,16 @@ RSpec.describe GemsuranceService, type: :service do
 
     Timecop.freeze
 
-    report_file = "#{Rails.application.config.private_dir}/gemsurance_reports/1/gemsurance_report.yml"
+    report_file = "#{Rails.application.config.private_dir}/gemsurance_reports/#{resource.id}/gemsurance_report.yml"
     output = %Q{Retrieving gem version information...\nRetrieving latest vulnerability data...\nReading vulnerability data...\nGenerating report...\nGenerated report #{report_file}.}
     expect {
       expect(Open3).to receive(:capture2e).
-        with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" bundle exec gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
+        with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
         and_return([output, 0])
       service.update_gemsurance_report
     }.to change { File.exist? service.dirname }.from(false).to(true)
 
-    expect(resource.fetched_at).to eq DateTime.now
+    expect(resource.fetched_at).to eq Time.now.change(usec: 0)
     expect(resource.fetch_output).to eq output
     expect(resource.fetch_status).to eq 'successful'
   end
@@ -53,16 +53,16 @@ RSpec.describe GemsuranceService, type: :service do
 
     Timecop.freeze
 
-    report_file = "#{Rails.application.config.private_dir}/gemsurance_reports/1/gemsurance_report.yml"
+    report_file = "#{Rails.application.config.private_dir}/gemsurance_reports/#{resource.id}/gemsurance_report.yml"
     output = %q{An error occured}
     expect {
       expect(Open3).to receive(:capture2e).
-        with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" bundle exec gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
+        with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
         and_return([output, 0])
       service.update_gemsurance_report
     }.to change { File.exist? service.dirname }.from(false).to(true)
 
-    expect(resource.fetched_at).to eq DateTime.now
+    expect(resource.fetched_at).to eq Time.now.change(usec: 0)
     expect(resource.fetch_output).to eq output
     expect(resource.fetch_status).to eq 'failed'
   end

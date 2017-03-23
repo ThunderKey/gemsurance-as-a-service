@@ -28,8 +28,6 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   config.before(:each) do
-    allow(Open3).to receive(:capture2e).and_raise('This method must be mocked!')
-
     rebuild_tmp_dir
     build_stubs
   end
