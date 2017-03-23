@@ -2,25 +2,28 @@ language: ruby
 rvm:
   - ruby-2.4.0
 dist: trusty
-#sudo: required
 addons:
   code_climate:
     repo_token: 3f12d785dcf81dd2351e408e00f86af458b28a4c776edf55abe641df95a1f87f
-#addons:
-#  apt:
-#    packages:
-#    - mysql-server-5.6
-#    - mysql-client-core-5.6
-#    - mysql-client-5.6
+sudo: required
+addons:
+  apt:
+    packages:
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
 services:
   - redis-server
-#  - mysql
+  - mysql
 env:
   - "RAILS_ENV=test"
-before_script:
-  - cp config/secrets.yml.testing config/secrets.yml
-  - bundle exec rake db:migrate
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS gaas_test'
   - npm install -g bower
+before_script:
+  - cp config/secrets.yml.travis config/secrets.yml
+  - cp config/database.yml.travis config/database.yml
+  - bundle exec rake db:migrate
   - bower install
 script:
   - bundle exec rspec
