@@ -1,5 +1,5 @@
 module ApplicationHelper
-  @@absolute_path_content_regex = /\/(?:[\w-]+\/)*[\w-]*/
+  @@absolute_path_content_regex = /\/(?:[\w\-\.]+\/)*[\w\-\.]*/
   @@absolute_path_regex = /\A#{@@absolute_path_content_regex}\z/
   @@gemsurance_regex = /\A\s*Retrieving gem version information\.\.\.\s+Retrieving latest vulnerability data\.\.\.\s+Reading vulnerability data\.\.\.\s+Generating report\.\.\.\s+Generated report #{Rails.application.config.private_dir}\/gemsurance_reports\/\d+\/gemsurance_report\.yml\.\s*\Z/
 

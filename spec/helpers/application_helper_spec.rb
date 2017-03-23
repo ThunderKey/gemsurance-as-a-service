@@ -48,6 +48,7 @@ RSpec.describe ApplicationHelper, type: :helper do
     it { expect('/').to match helper.absolute_path_regex }
     it { expect('/test').to match helper.absolute_path_regex }
     it { expect('/test/directory/').to match helper.absolute_path_regex }
+    it { expect('/test/directory/my-test_project.git').to match helper.absolute_path_regex }
     it { expect('/abcdefghijklmnop').to match helper.absolute_path_regex }
     it { expect('/qrstuvwxyz').to match helper.absolute_path_regex }
     it { expect('/0123456789').to match helper.absolute_path_regex }
