@@ -8,7 +8,6 @@
 #= require turbolinks
 
 initPage = () ->
-  console.debug 'init'
   $(document).foundation()
 
   # Fix for stiky with turbolinks
