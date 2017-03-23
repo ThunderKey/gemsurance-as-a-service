@@ -1,7 +1,7 @@
 class GemsuranceService
   class LocalFetcher < BaseFetcher
     def self.update_gemsurance_report resource, file
-      run_in_seperate_env 'gemsurance', '--format', 'yml', '--output', file, chdir: resource.path
+      run_in_seperate_env 'bundle', 'exec', 'gemsurance', '--format', 'yml', '--output', file, chdir: resource.path
     end
 
     def self.errors resource
