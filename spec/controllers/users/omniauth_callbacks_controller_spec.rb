@@ -27,7 +27,7 @@ RSpec.describe Users::OmniauthCallbacksController do
 
     it 'users the existing user if it exists' do
       user = create :user, provider: 'keltec', uid: 1234
-      expect(user.email).to eq 'peter.tester@example.com'
+      expect(user.email).to eq 'peter.tester.1@example.com'
 
       expect { get :keltec }.not_to change{User.count}
       expect(response).to redirect_to root_path

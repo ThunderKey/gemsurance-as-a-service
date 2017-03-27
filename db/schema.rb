@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170306101055) do
+ActiveRecord::Schema.define(version: 20170327072018) do
 
   create_table "gem_infos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",              null: false
@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(version: 20170306101055) do
     t.string   "build_image_url"
     t.string   "build_url"
     t.text     "fetch_output",    limit: 65535, null: false
+    t.integer  "owner_id"
+    t.index ["owner_id"], name: "index_resources_on_owner_id", using: :btree
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

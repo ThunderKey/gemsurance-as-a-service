@@ -8,6 +8,7 @@ class Resource < ApplicationRecord
   has_many :gem_versions, through: :gem_usages
   has_many :gem_infos, through: :gem_versions
   has_many :vulnerabilities, through: :gem_versions
+  belongs_to :owner, class_name: User
 
   validates :name, presence: true, uniqueness: true
   validates :path, presence: true, format: {with: ApplicationHelper.absolute_path_regex, message: :relative_path}

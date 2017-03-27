@@ -20,6 +20,7 @@ class ResourcesController < ApplicationController
 
   def create
     @resource = Resource.new resource_params
+    @resource.owner = current_user
     if @resource.save
       flash[:notice] = %Q{Successfuly saved "#{@resource.name}"}
       redirect_to @resource
