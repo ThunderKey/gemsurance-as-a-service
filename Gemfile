@@ -42,6 +42,8 @@ gem 'sidekiq'
 
 gem 'gemsurance'
 
+gem 'whenever'
+
 group :production do
   gem 'exception_notification'
 end
