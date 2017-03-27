@@ -48,17 +48,15 @@ class GemsuranceService < ApplicationService
     @gems ||= YAML.load_file gemsurance_yaml_file
   end
 
-  def update_gems
+  def update_gems skip_mail: false
     if update_gemsurance_report
       fix_gemsurance_report
       load_gems
+      send_mail if !skip_mail && resource.gem_status == :vulnerable
       true
     else
       false
     end
-  rescue
-    resource.fetch_status = 'failed'
-    resource.save!
   end
 
   def load_gems
@@ -81,6 +79,10 @@ class GemsuranceService < ApplicationService
     end
     resource.gem_usages.where.not(id: ids_to_keep).destroy_all
     resource.gem_usages.reload # because it's destroyed in a seperate ActiveRecord::Relation
+  end
+
+  def send_mail
+    ResourceMailer.vulnerable_mail(resource).deliver_now
   end
 
   def fix_gemsurance_report
