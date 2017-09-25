@@ -21,7 +21,7 @@ set :repo_url, 'git@github.com:ThunderKey/gemsurance-as-a-service.git'
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, 'config/secrets.yml'
+append :linked_files, 'config/secrets.yml.key'
 
 # Default value for linked_dirs is []
 append :linked_dirs, 'log', 'tmp/sockets', 'tmp/pids'

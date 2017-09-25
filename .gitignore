@@ -40,3 +40,6 @@
 
 # ignore spec persistence file
 /spec/persistence.txt
+
+# Ignore encrypted secrets key file.
+config/secrets.yml.key
