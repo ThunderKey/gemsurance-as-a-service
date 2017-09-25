@@ -12,6 +12,6 @@ h1 Vulnerabilities
 
     .card-section
       .row.small-up-1.medium-up-3.large-up-4
-        - vulnerabilities.each do |vulnerability|
+        - vulnerabilities.uniq.each do |vulnerability|
           .column.column-block
             = render partial: 'panel', locals: {vulnerability: vulnerability}
