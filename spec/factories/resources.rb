@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :empty_resource, class: Resource do
     sequence(:name) {|n| "Test App #{n}" }
     owner { User.first || create(:user) }

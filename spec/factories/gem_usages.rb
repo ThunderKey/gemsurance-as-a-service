@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :gem_usage do
     gem_version { create :gem_version }
     resource { create :resource }
