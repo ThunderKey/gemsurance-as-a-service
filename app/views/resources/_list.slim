@@ -2,7 +2,7 @@
 - color = (defined?(color) && !color.nil?) ? color : true
 
 - if resources.any?
-  - resources = resources.includes(gem_versions: :gem_info)
+  - resources = resources.includes(:vulnerabilities_count)
   table
     tr
       th Name
@@ -19,7 +19,7 @@
           - unless resource.build_image_url.blank?
             = build_image_tag resource
         td= resource.resource_type
-        td= resource.outdated_gem_versions.count
+        td= resource.gem_versions.outdated.count
         td= resource.fetched_at ? time_tag(resource.fetched_at) : '-'
         td= resource.fetch_status
         - unless readonly

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170327072018) do
+ActiveRecord::Schema.define(version: 20180109125155) do
 
   create_table "gem_infos", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", null: false
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20170327072018) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "version", null: false
+    t.boolean "outdated"
     t.index ["gem_info_id"], name: "index_gem_versions_on_gem_info_id"
   end
 

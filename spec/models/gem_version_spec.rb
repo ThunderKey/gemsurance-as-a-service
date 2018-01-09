@@ -8,6 +8,27 @@ RSpec.describe GemVersion, type: :model do
     end
   end
 
+  describe 'outdated' do
+    subject { create :gem_version }
+
+    it 'prevents the access to the db getter' do
+      expect { subject.outdated }.to raise_error "private method `outdated' called for #{subject}"
+    end
+
+    it 'would return the correct value if accessed with send' do
+      expect(subject.outdated?).to eq false
+      expect(subject.send :outdated).to eq false
+
+      subject.outdated = true
+      expect(subject.outdated?).to eq true
+      expect(subject.send :outdated).to eq true
+
+      subject.outdated = nil
+      expect { subject.outdated? }.to raise_error 'the GemInfo#update_new_gem_versions! did not get called!'
+      expect(subject.send :outdated).to eq nil
+    end
+  end
+
   describe 'is not valid' do
     it 'without a version' do
       record = described_class.new gem_info: create(:gem_info)
@@ -53,7 +74,7 @@ RSpec.describe GemVersion, type: :model do
     end
 
     it 'in ascending order' do
-      expect(GemVersion.sort_by_version.map(&:version)).to eq [
+      expect(GemVersion.all.sort_by(&:version_object).map(&:version)).to eq [
         '1.2.3',
         '1.2.3.1.beta',
         '1.2.3.1',
@@ -63,17 +84,13 @@ RSpec.describe GemVersion, type: :model do
     end
 
     it 'in descending order' do
-      expect(GemVersion.sort_by_version(:desc).map(&:version)).to eq [
+      expect(GemVersion.all.sort_by(&:version_object).reverse.map(&:version)).to eq [
         '10.0.0',
         '9.1.2',
         '1.2.3.1',
         '1.2.3.1.beta',
         '1.2.3',
       ]
-    end
-
-    it 'gets the correct newest version' do
-      expect(GemVersion.newest_version.version).to eq '10.0.0'
     end
   end
 
@@ -86,16 +103,16 @@ RSpec.describe GemVersion, type: :model do
 
     it 'current but with a prerelease' do
       gem_info = create :gem_info
-      record = create :gem_version, version: '1.2.3', gem_info: gem_info
       create :gem_version, version: '1.2.3.pre1', gem_info: gem_info
+      record = create :gem_version, version: '1.2.3', gem_info: gem_info
       expect(record.gem_status).to eq :current
       expect(record.numeric_gem_status).to eq 2
     end
 
     it 'current with only prereleases' do
       gem_info = create :gem_info
-      record = create :gem_version, version: '1.2.3.pre1', gem_info: gem_info
       create :gem_version, version: '1.2.3.pre2', gem_info: gem_info
+      record = create :gem_version, version: '1.2.3.pre1', gem_info: gem_info
       expect(record.gem_status).to eq :current
       expect(record.numeric_gem_status).to eq 2
     end
@@ -104,14 +121,15 @@ RSpec.describe GemVersion, type: :model do
       gem_info = create :gem_info
       record = create :gem_version, gem_info: gem_info
       create :gem_version, gem_info: gem_info
+      record.reload
       expect(record.gem_status).to eq :outdated
       expect(record.numeric_gem_status).to eq 1
     end
 
     it 'outdated as a prerelease' do
       gem_info = create :gem_info
-      record = create :gem_version, version: '1.2.3.pre1', gem_info: gem_info
       create :gem_version, version: '1.2.4', gem_info: gem_info
+      record = create :gem_version, version: '1.2.3.pre1', gem_info: gem_info
       expect(record.gem_status).to eq :outdated
       expect(record.numeric_gem_status).to eq 1
     end
@@ -148,7 +166,7 @@ RSpec.describe GemVersion, type: :model do
       @resource.reload
     end
 
-    subject { @resource.gem_versions.includes(:vulnerabilities_count) }
+    subject { @resource.gem_versions }
 
     it 'has a different default order' do
       expect(subject.map {|v| v.gem_info.name }).to eq [
@@ -159,7 +177,7 @@ RSpec.describe GemVersion, type: :model do
     end
 
     it 'sorts default ascending' do
-      expect(subject.sort_by_gem_status.map {|v| v.gem_info.name }).to eq [
+      expect(subject.includes(:vulnerabilities_count).sort_by_gem_status.map {|v| v.gem_info.name }).to eq [
         'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2',
         'Outdated Gem 0', 'Outdated Gem 1', 'Outdated Gem 2',
         'Current Gem 0', 'Current Gem 1', 'Current Gem 2',
@@ -167,7 +185,7 @@ RSpec.describe GemVersion, type: :model do
     end
 
     it 'sorts ascending' do
-      expect(subject.sort_by_gem_status(:asc).map {|v| v.gem_info.name }).to eq [
+      expect(subject.includes(:vulnerabilities_count).sort_by_gem_status(:asc).map {|v| v.gem_info.name }).to eq [
         'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2',
         'Outdated Gem 0', 'Outdated Gem 1', 'Outdated Gem 2',
         'Current Gem 0', 'Current Gem 1', 'Current Gem 2',
@@ -175,7 +193,7 @@ RSpec.describe GemVersion, type: :model do
     end
 
     it 'sorts descending' do
-      expect(subject.sort_by_gem_status(:desc).map {|v| v.gem_info.name }).to eq [
+      expect(subject.includes(:vulnerabilities_count).sort_by_gem_status(:desc).map {|v| v.gem_info.name }).to eq [
         'Current Gem 0', 'Current Gem 1', 'Current Gem 2',
         'Outdated Gem 0', 'Outdated Gem 1', 'Outdated Gem 2',
         'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2',
@@ -183,7 +201,7 @@ RSpec.describe GemVersion, type: :model do
     end
 
     it 'raises an error with an invalid direction' do
-      expect{subject.sort_by_gem_status(:invalid)}.to raise_error "Unknown direction :invalid. Available: :asc and :desc"
+      expect{subject.includes(:vulnerabilities_count).sort_by_gem_status(:invalid)}.to raise_error "Unknown direction :invalid. Available: :asc and :desc"
     end
   end
 end

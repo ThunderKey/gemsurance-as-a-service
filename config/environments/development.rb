@@ -59,18 +59,10 @@ Rails.application.configure do
   config.redis.database = 2
 
   config.after_initialize do
-    Bullet.enable = true
-
-    Bullet.rails_logger = true
+    Bullet.enable        = true
+    Bullet.rails_logger  = true
     Bullet.bullet_logger = true
-    Bullet.alert = true
-    Bullet.console = true
+    Bullet.console       = true
     Bullet.add_footer    = true
-
-    # because the *_count from activerecord-precount doesn't get handled correctly
-    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'GemVersion', association: :vulnerabilities_count
-
-    # because sub-eager-loads are used
-    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'GemInfo', association: :gem_versions
   end
 end

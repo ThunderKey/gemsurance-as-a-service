@@ -47,6 +47,7 @@ RSpec.describe GemUsage, type: :model do
 
     it 'outdated' do
       create :gem_version, gem_info: subject.gem_info
+      subject.reload
       expect(subject.gem_status).to eq :outdated
       expect(subject.numeric_gem_status).to eq 1
     end

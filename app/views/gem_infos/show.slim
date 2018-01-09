@@ -37,7 +37,7 @@ h1= @gem_info.name
     table
       tr
         th Name
-      - @gem_info.gem_versions.includes(:vulnerabilities_count).sort_by_version(:desc).each do |gem_version|
+      - @gem_info.gem_versions.includes(:vulnerabilities_count).sort_by(&:version_object).reverse.each do |gem_version|
         = gem_status_tr(gem_version.gem_status) do
           td= link_to gem_version.version, gem_version_path(@gem_info, gem_version)
 

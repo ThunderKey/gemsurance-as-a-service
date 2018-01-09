@@ -84,7 +84,7 @@ RSpec.describe Resource, type: :model do
       resource.gem_versions << create(:gem_version)
       expect(resource.gem_status).to eq :current
       expect(resource.numeric_gem_status).to eq 2
-      expect(resource.outdated_gem_versions.count).to eq 0
+      expect(resource.gem_versions.outdated.count).to eq 0
     end
 
     it 'handles the outdated status correctly' do
@@ -97,7 +97,7 @@ RSpec.describe Resource, type: :model do
       resource.gem_versions << create(:gem_version)
       expect(resource.gem_status).to eq :current
       expect(resource.numeric_gem_status).to eq 2
-      expect(resource.outdated_gem_versions.count).to eq 1
+      expect(resource.gem_versions.outdated.count).to eq 1
     end
 
     it 'handles the vulnerable status correctly' do
@@ -110,7 +110,7 @@ RSpec.describe Resource, type: :model do
       create :vulnerability, gem_version: resource.gem_versions.last
       expect(resource.gem_status).to eq :vulnerable
       expect(resource.numeric_gem_status).to eq 0
-      expect(resource.outdated_gem_versions.count).to eq 0
+      expect(resource.gem_versions.outdated.count).to eq 0
     end
   end
 

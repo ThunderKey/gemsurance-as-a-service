@@ -1,27 +1,27 @@
 class GemVersion < ApplicationRecord
   include GemStatusSortable
 
-  belongs_to :gem_info
+  belongs_to :gem_info, inverse_of: :gem_versions
   has_many :gem_usage, dependent: :destroy
   has_many :resources, through: :gem_usage
   has_many :vulnerabilities, count_loader: true, dependent: :destroy
 
   validates :version, presence: true, uniqueness: {scope: :gem_info}
 
-  def self.sort_by_version dir = :asc
-    sorted = all.sort_by &:version_object
-    dir == :asc ? sorted : sorted.reverse
-  end
+  after_create { gem_info.update_new_gem_versions!; reload }
+  after_destroy { gem_info.update_all_gem_versions! }
 
-  def self.newest_version
-    sort_by_version.select do |gv|
-      gv.version_object == gv.version_object.release
-    end.last
-  end
+  scope :outdated, ->() {
+    where(outdated: true)
+  }
+
+  scope :not_outdated, ->() {
+    where(outdated: [false, nil])
+  }
 
   def outdated?
-    newest = self.class.unscoped { gem_info.newest_gem_version }
-    !newest.nil? && version_object < newest.version_object
+    raise 'the GemInfo#update_new_gem_versions! did not get called!' if outdated.nil?
+    outdated
   end
 
   def version_object
@@ -40,5 +40,11 @@ class GemVersion < ApplicationRecord
     else
       :current
     end
+  end
+
+  private
+
+  def outdated
+    self[:outdated]
   end
 end

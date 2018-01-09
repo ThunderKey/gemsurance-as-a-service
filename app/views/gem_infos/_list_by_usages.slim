@@ -4,7 +4,7 @@
       th Name
       th Version
       th Newest Version
-    - gem_usages = gem_usages.includes(gem_version: :vulnerabilities_count, gem_info: {gem_versions: :vulnerabilities_count})
+    - gem_usages = gem_usages.includes(gem_version: :vulnerabilities_count, gem_info: :gem_versions)
     - gem_usages.sort_by_gem_status.each do |gem_usage|
       - info = gem_usage.gem_info
       - version = gem_usage.gem_version

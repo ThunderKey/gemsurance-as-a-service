@@ -1,10 +1,32 @@
 class GemInfo < ApplicationRecord
-  has_many :gem_versions, dependent: :destroy
+  has_many :gem_versions, inverse_of: :gem_info, dependent: :destroy
   has_many :resources, through: :gem_versions
 
   validates :name, presence: true, uniqueness: true
 
   def newest_gem_version
-    gem_versions.newest_version
+    gem_versions.sort_by(&:version_object).select do |gv|
+      gv.version_object == gv.version_object.release
+    end.last
+  end
+
+  def update_all_gem_versions!
+    update_gem_versions! gem_versions
+  end
+
+  def update_new_gem_versions!
+    update_gem_versions! gem_versions.not_outdated
+  end
+
+  private
+
+  def update_gem_versions! versions
+    newest_gem_version = versions.sort_by(&:version_object).select do |v|
+      v.version_object == v.version_object.release
+    end.last&.version_object
+    versions.each do |v|
+      v.outdated = !newest_gem_version.nil? && v.version_object < newest_gem_version
+      v.save!
+    end
   end
 end

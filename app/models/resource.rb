@@ -7,7 +7,7 @@ class Resource < ApplicationRecord
   has_many :gem_usages, dependent: :destroy
   has_many :gem_versions, through: :gem_usages
   has_many :gem_infos, through: :gem_versions
-  has_many :vulnerabilities, through: :gem_versions
+  has_many :vulnerabilities, through: :gem_versions, count_loader: true
   belongs_to :owner, class_name: 'User'
 
   validates :name, presence: true, uniqueness: true
@@ -38,15 +38,11 @@ class Resource < ApplicationRecord
   end
 
   def gem_status
-    if vulnerabilities.any?
+    if vulnerabilities_count > 0
       :vulnerable
     else
       :current
     end
-  end
-
-  def outdated_gem_versions
-    gem_versions.select(&:outdated?)
   end
 
   def gemsurance_service
