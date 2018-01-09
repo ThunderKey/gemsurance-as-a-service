@@ -46,6 +46,13 @@ gem 'whenever'
 
 gem 'activerecord-precount'
 
+source 'https://rails-assets.org' do
+  gem 'rails-assets-foundation-sites'
+  gem 'rails-assets-jquery'
+  gem 'rails-assets-jquery-ujs', '~> 1.2.0'
+  gem 'rails-assets-chart.js'
+end
+
 group :production do
   gem 'exception_notification'
 end
@@ -83,6 +90,5 @@ group :development do
   gem 'capistrano-rvm', require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano3-puma', require: false
-  gem 'capistrano-bower', require: false
   gem 'capistrano-sidekiq', require: false
 end

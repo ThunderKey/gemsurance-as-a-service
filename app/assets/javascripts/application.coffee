@@ -1,6 +1,6 @@
-#= require jquery/dist/jquery
+#= require jquery
 #= require jquery.turbolinks
-#= require jquery-ujs/src/rails
+#= require jquery-ujs
 #= require foundation/foundation_and_overrides
 #= require charts
 #= require cable

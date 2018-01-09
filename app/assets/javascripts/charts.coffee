@@ -1,4 +1,4 @@
-#= require chart.js/dist/Chart.bundle.js
+#= require chart.js/Chart.bundle.js
 #= require_self
 
 window.drawChart = (id, type, data, options = {}) ->

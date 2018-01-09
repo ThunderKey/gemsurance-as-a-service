@@ -1,4 +1,4 @@
-#= require foundation-sites/dist/js/foundation
+#= require foundation-sites
 # Disabled, since they use ES6, which is currently not copatible with uglifier
 # require foundation-sites/js/foundation.core
 # require foundation-sites/js/foundation.util.mediaQuery

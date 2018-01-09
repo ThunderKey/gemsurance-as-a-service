@@ -35,7 +35,6 @@ require 'capistrano/rails/migrations'
 # require 'capistrano/passenger'
 require 'capistrano/puma'
 install_plugin Capistrano::Puma
-require 'capistrano/bower'
 require 'capistrano/sidekiq'
 require 'whenever/capistrano'
 
