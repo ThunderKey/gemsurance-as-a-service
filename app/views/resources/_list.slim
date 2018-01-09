@@ -2,6 +2,7 @@
 - color = (defined?(color) && !color.nil?) ? color : true
 
 - if resources.any?
+  - resources = resources.includes(gem_versions: :gem_info)
   table
     tr
       th Name

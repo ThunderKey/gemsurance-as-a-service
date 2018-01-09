@@ -148,7 +148,7 @@ RSpec.describe GemVersion, type: :model do
       @resource.reload
     end
 
-    subject { @resource.gem_versions }
+    subject { @resource.gem_versions.includes(:vulnerabilities_count) }
 
     it 'has a different default order' do
       expect(subject.map {|v| v.gem_info.name }).to eq [

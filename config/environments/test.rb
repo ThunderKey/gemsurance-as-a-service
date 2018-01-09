@@ -45,4 +45,16 @@ Rails.application.configure do
   config.test_tmp_dir = File.join Rails.root, 'spec', 'tmp'
 
   config.redis.database = 3
+
+  config.after_initialize do
+    Bullet.enable        = true
+    Bullet.bullet_logger = true
+    Bullet.raise         = true # raise an error if n+1 query occurs
+
+    # because the *_count from activerecord-precount doesn't get handled correctly
+    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'GemVersion', association: :vulnerabilities_count
+
+    # because sub-eager-loads are used
+    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'GemInfo', association: :gem_versions
+  end
 end

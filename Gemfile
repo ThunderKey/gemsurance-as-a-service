@@ -44,6 +44,8 @@ gem 'gemsurance'
 
 gem 'whenever'
 
+gem 'activerecord-precount'
+
 group :production do
   gem 'exception_notification'
 end
@@ -59,6 +61,8 @@ group :development, :test do
   gem 'capybara'
 
   gem 'pry'
+
+  gem 'bullet'
 end
 
 group :test do

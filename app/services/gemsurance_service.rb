@@ -67,7 +67,7 @@ class GemsuranceService < ApplicationService
       info.source_code_url = gem_data['source_code_url']
       info.documentation_url = gem_data['documentation_url']
       info.save!
-      GemVersion.where(gem_info: info, version: gem_data['newest_version']).first_or_create! if gem_data['newset_version'] != gem_data['bundle_version']
+      GemVersion.where(gem_info: info, version: gem_data['newest_version']).first_or_create! if gem_data['newest_version'] != gem_data['bundle_version']
       version = GemVersion.where(gem_info: info, version: gem_data['bundle_version']).first_or_create!
       usage = resource.gem_usages.where(gem_version: version).first_or_initialize
       usage.in_gemfile = gem_data['in_gem_file']
