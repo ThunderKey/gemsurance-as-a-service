@@ -52,7 +52,7 @@ class GemsuranceService < ApplicationService
     if update_gemsurance_report
       fix_gemsurance_report
       load_gems
-      send_mail if !skip_mail && resource.gem_status == :vulnerable
+      send_mail if !skip_mail && resource.reload.gem_status == :vulnerable
       true
     else
       false
@@ -78,7 +78,7 @@ class GemsuranceService < ApplicationService
       ids_to_keep << usage.id
     end
     resource.gem_usages.where.not(id: ids_to_keep).destroy_all
-    resource.gem_usages.reload # because it's destroyed in a seperate ActiveRecord::Relation
+    resource.send :clear_association_cache # because it's destroyed in a seperate ActiveRecord::Relation
   end
 
   def send_mail

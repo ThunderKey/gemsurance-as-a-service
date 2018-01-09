@@ -13,6 +13,7 @@ FactoryGirl.define do
         if resource.gem_usages.empty?
           3.times { create :gem_usage, resource: resource }
         end
+        resource.reload
       end
     end
 

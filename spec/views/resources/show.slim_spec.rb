@@ -32,10 +32,10 @@ RSpec.describe 'resources/show.slim' do
   it 'displays the resource correctly with an outdated gem' do
     resource = create :resource, name: 'Test Resource'
     2.times do
-      create :vulnerability, gem_version: resource.gem_versions.first
+      create :vulnerability, gem_version: resource.gem_versions.first!
     end
     3.times do
-      create :vulnerability, gem_version: resource.gem_versions.last
+      create :vulnerability, gem_version: resource.gem_versions.last!
     end
     assign :resource, resource
 

@@ -44,8 +44,6 @@ gem 'gemsurance'
 
 gem 'whenever'
 
-gem 'activerecord-precount'
-
 source 'https://rails-assets.org' do
   gem 'rails-assets-foundation-sites'
   gem 'rails-assets-jquery'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180109125155) do
+ActiveRecord::Schema.define(version: 20180109170958) do
 
   create_table "gem_infos", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", null: false
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20180109125155) do
     t.datetime "updated_at", null: false
     t.string "version", null: false
     t.boolean "outdated"
+    t.integer "vulnerabilities_count", default: 0
     t.index ["gem_info_id"], name: "index_gem_versions_on_gem_info_id"
   end
 
@@ -50,6 +51,7 @@ ActiveRecord::Schema.define(version: 20180109125155) do
     t.string "build_url"
     t.text "fetch_output", null: false
     t.integer "owner_id"
+    t.integer "vulnerabilities_count", default: 0
     t.index ["owner_id"], name: "index_resources_on_owner_id"
   end
 

@@ -74,9 +74,9 @@ RSpec.describe GemsuranceService, type: :service do
     expect(gem_usages_to_arrays resource.gem_usages).to eq [
       ['TestGem#1', '1.2.3', false],
     ]
-    expect(resource.gem_usages.size).to be 1
-    expect(resource.gem_versions.size).to be 1
-    expect(resource.gem_infos.size).to be 1
+    expect(resource.gem_usages.size).to eq 1
+    expect(resource.gem_versions.size).to eq 1
+    expect(resource.gem_infos.size).to eq 1
 
     report_file = service.gemsurance_yaml_file
     expect{service.load_gems}.to raise_exception %Q{No such file or directory @ rb_sysopen - #{report_file}}

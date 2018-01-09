@@ -12,7 +12,7 @@ RSpec.describe GemVersion, type: :model do
     subject { create :gem_version }
 
     it 'prevents the access to the db getter' do
-      expect { subject.outdated }.to raise_error "private method `outdated' called for #{subject}"
+      expect { subject.outdated }.to raise_error /\Aprivate method `outdated' called for #{subject}/
     end
 
     it 'would return the correct value if accessed with send' do
@@ -177,7 +177,7 @@ RSpec.describe GemVersion, type: :model do
     end
 
     it 'sorts default ascending' do
-      expect(subject.includes(:vulnerabilities_count).sort_by_gem_status.map {|v| v.gem_info.name }).to eq [
+      expect(subject.sort_by_gem_status.map {|v| v.gem_info.name }).to eq [
         'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2',
         'Outdated Gem 0', 'Outdated Gem 1', 'Outdated Gem 2',
         'Current Gem 0', 'Current Gem 1', 'Current Gem 2',
@@ -185,7 +185,7 @@ RSpec.describe GemVersion, type: :model do
     end
 
     it 'sorts ascending' do
-      expect(subject.includes(:vulnerabilities_count).sort_by_gem_status(:asc).map {|v| v.gem_info.name }).to eq [
+      expect(subject.sort_by_gem_status(:asc).map {|v| v.gem_info.name }).to eq [
         'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2',
         'Outdated Gem 0', 'Outdated Gem 1', 'Outdated Gem 2',
         'Current Gem 0', 'Current Gem 1', 'Current Gem 2',
@@ -193,7 +193,7 @@ RSpec.describe GemVersion, type: :model do
     end
 
     it 'sorts descending' do
-      expect(subject.includes(:vulnerabilities_count).sort_by_gem_status(:desc).map {|v| v.gem_info.name }).to eq [
+      expect(subject.sort_by_gem_status(:desc).map {|v| v.gem_info.name }).to eq [
         'Current Gem 0', 'Current Gem 1', 'Current Gem 2',
         'Outdated Gem 0', 'Outdated Gem 1', 'Outdated Gem 2',
         'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2',
@@ -201,7 +201,7 @@ RSpec.describe GemVersion, type: :model do
     end
 
     it 'raises an error with an invalid direction' do
-      expect{subject.includes(:vulnerabilities_count).sort_by_gem_status(:invalid)}.to raise_error "Unknown direction :invalid. Available: :asc and :desc"
+      expect{subject.sort_by_gem_status(:invalid)}.to raise_error "Unknown direction :invalid. Available: :asc and :desc"
     end
   end
 end

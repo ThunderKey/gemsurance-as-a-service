@@ -1,10 +1,10 @@
 class GemVersion < ApplicationRecord
   include GemStatusSortable
 
-  belongs_to :gem_info, inverse_of: :gem_versions
-  has_many :gem_usage, dependent: :destroy
-  has_many :resources, through: :gem_usage
-  has_many :vulnerabilities, count_loader: true, dependent: :destroy
+  belongs_to :gem_info
+  has_many :gem_usages, dependent: :destroy
+  has_many :resources, through: :gem_usages
+  has_many :vulnerabilities, dependent: :destroy
 
   validates :version, presence: true, uniqueness: {scope: :gem_info}
 

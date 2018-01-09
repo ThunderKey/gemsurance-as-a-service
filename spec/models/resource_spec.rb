@@ -108,6 +108,7 @@ RSpec.describe Resource, type: :model do
       resource.gem_versions << create(:gem_version, gem_info: info, version: '1.2.3')
       resource.gem_versions << create(:gem_version)
       create :vulnerability, gem_version: resource.gem_versions.last
+      resource.reload
       expect(resource.gem_status).to eq :vulnerable
       expect(resource.numeric_gem_status).to eq 0
       expect(resource.gem_versions.outdated.count).to eq 0
@@ -193,5 +194,23 @@ RSpec.describe Resource, type: :model do
     expect(described_class.resource_type_attributes_for_select).to eq [
       ['Local', 'local'],
     ]
+  end
+
+  describe 'update the vulnerabilities_count' do
+    subject { create :resource }
+
+    it 'updates if vulnerabilities get added and removed to/from an existing gem version' do
+      expect do
+        subject.gem_versions.each.with_index do |v, i|
+          (i + 1).times { create :vulnerability, gem_version: v }
+        end
+      end.to change { subject.reload.vulnerabilities_count }.by 6
+
+      expect do
+        subject.gem_versions.each do |v|
+          v.vulnerabilities.last!.destroy
+        end
+      end.to change { subject.reload.vulnerabilities_count }.by -3
+    end
   end
 end

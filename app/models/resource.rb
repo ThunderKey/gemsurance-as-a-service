@@ -7,7 +7,7 @@ class Resource < ApplicationRecord
   has_many :gem_usages, dependent: :destroy
   has_many :gem_versions, through: :gem_usages
   has_many :gem_infos, through: :gem_versions
-  has_many :vulnerabilities, through: :gem_versions, count_loader: true
+  has_many :vulnerabilities, through: :gem_versions
   belongs_to :owner, class_name: 'User'
 
   validates :name, presence: true, uniqueness: true
@@ -27,14 +27,24 @@ class Resource < ApplicationRecord
     self.fetch_output ||= ''
   end
 
-  after_create do
-    start_update!
-  end
+  before_create { update_vulnerabilities_count }
+
+  after_create { start_update! }
 
   def self.resource_type_attributes_for_select
     resource_types.keys.map do |resource_type|
       [I18n.t("activerecord.attributes.#{model_name.i18n_key}.resource_types.#{resource_type}"), resource_type]
     end
+  end
+
+  def update_vulnerabilities_count
+    clear_association_cache
+    self.vulnerabilities_count = vulnerabilities.reload.count
+  end
+
+  def update_vulnerabilities_count!
+    update_vulnerabilities_count
+    save!
   end
 
   def gem_status
