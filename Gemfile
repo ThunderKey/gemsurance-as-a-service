@@ -45,7 +45,7 @@ gem 'gemsurance'
 gem 'whenever'
 
 source 'https://rails-assets.org' do
-  gem 'rails-assets-foundation-sites'
+  gem 'rails-assets-foundation-sites', '~> 6.4'
   gem 'rails-assets-jquery'
   gem 'rails-assets-jquery-ujs'
   gem 'rails-assets-chart.js'

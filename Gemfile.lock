@@ -350,7 +350,7 @@ DEPENDENCIES
   puma
   rails (~> 5.1.0)
   rails-assets-chart.js!
-  rails-assets-foundation-sites!
+  rails-assets-foundation-sites (~> 6.4)!
   rails-assets-jquery!
   rails-assets-jquery-ujs!
   rails-controller-testing
