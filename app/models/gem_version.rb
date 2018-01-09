@@ -1,7 +1,7 @@
 class GemVersion < ApplicationRecord
   include GemStatusSortable
 
-  belongs_to :gem_info
+  belongs_to :gem_info, inverse_of: :gem_versions
   has_many :gem_usages, dependent: :destroy
   has_many :resources, through: :gem_usages
   has_many :vulnerabilities, dependent: :destroy
@@ -40,6 +40,11 @@ class GemVersion < ApplicationRecord
     else
       :current
     end
+  end
+
+  def destroy_if_not_used
+    clear_association_cache
+    destroy if gem_info.newest_gem_version != self && gem_usages.empty?
   end
 
   private

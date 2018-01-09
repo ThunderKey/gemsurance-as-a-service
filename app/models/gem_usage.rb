@@ -6,6 +6,10 @@ class GemUsage < ApplicationRecord
   has_one :gem_info, through: :gem_version
   has_many :vulnerabilities, through: :gem_version
 
+  after_destroy do
+    gem_version.destroy_if_not_used
+  end
+
   validates :gem_version, uniqueness: {scope: :resource}
 
   validate do

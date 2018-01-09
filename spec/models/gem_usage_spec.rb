@@ -60,30 +60,30 @@ RSpec.describe GemUsage, type: :model do
   end
 
   describe '#sort_by_gem_status' do
+    let(:resource) { create :empty_local_resource }
     before(:each) do
-      @resource = create :empty_local_resource
       3.times do |i|
         # current
         create(:gem_info, name: "Current Gem #{i}") do |gem_info|
-          @resource.gem_versions << create(:gem_version, gem_info: gem_info)
+          resource.gem_versions << create(:gem_version, gem_info: gem_info)
         end
 
         # outdated
         create(:gem_info, name: "Outdated Gem #{i}") do |gem_info|
-          @resource.gem_versions << create(:gem_version, gem_info: gem_info)
+          resource.gem_versions << create(:gem_version, gem_info: gem_info)
           create :gem_version, gem_info: gem_info
         end
 
         # vulnerable
         create(:gem_info, name: "Vulnerable Gem #{i}") do |gem_info|
-          @resource.gem_versions << create(:gem_version, gem_info: gem_info)
-          create :vulnerability, gem_version: @resource.gem_versions.last
+          resource.gem_versions << create(:gem_version, gem_info: gem_info)
+          create :vulnerability, gem_version: resource.gem_versions.last
         end
       end
-      @resource.reload
+      resource.reload
     end
 
-    subject { @resource.gem_usages }
+    subject { resource.gem_usages }
 
     it 'has a different default order' do
       expect(subject.map {|v| v.gem_info.name }).to eq [
@@ -119,6 +119,34 @@ RSpec.describe GemUsage, type: :model do
 
     it 'raises an error with an invalid direction' do
       expect{subject.sort_by_gem_status(:invalid)}.to raise_error "Unknown direction :invalid. Available: :asc and :desc"
+    end
+  end
+
+  describe 'on destroy' do
+    let(:gem_info) { create :gem_info }
+    let(:gem_version) { create :gem_version, gem_info: gem_info }
+    subject! { create :gem_usage, gem_version: gem_version }
+
+    it 'deletes its gem version if there are no other usages' do
+      create :gem_version, gem_info: gem_info
+      expect do
+        subject.destroy
+      end.to change { GemVersion.exists? gem_version.id }.from(true).to false
+    end
+
+    it 'keeps its gem version if there are no other usages' do
+      create :gem_version, gem_info: gem_info
+      create :gem_usage, gem_version: gem_version
+      expect do
+        subject.destroy
+      end.to_not change { GemVersion.exists? gem_version.id }
+    end
+
+    it 'keeps its gem version if its the newest version' do
+      create :gem_usage, gem_version: gem_version
+      expect do
+        subject.destroy
+      end.to_not change { GemVersion.exists? gem_version.id }
     end
   end
 end
