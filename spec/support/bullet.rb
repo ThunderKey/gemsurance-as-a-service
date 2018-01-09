@@ -1,5 +1,7 @@
 RSpec.configure do |config|
-  config.around(:each) do |example|
-    Bullet.profile { example.run }
+  unless ENV['SKIP_BULLET'] == 'true'
+    config.around(:each) do |example|
+      Bullet.profile { example.run }
+    end
   end
 end
