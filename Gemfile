@@ -47,7 +47,7 @@ gem 'whenever'
 source 'https://rails-assets.org' do
   gem 'rails-assets-foundation-sites'
   gem 'rails-assets-jquery'
-  gem 'rails-assets-jquery-ujs', '~> 1.2.0'
+  gem 'rails-assets-jquery-ujs'
   gem 'rails-assets-chart.js'
 end
 
