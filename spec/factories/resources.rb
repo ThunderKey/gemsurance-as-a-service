@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :empty_resource, class: Resource do
-    sequence :name {|n| "Test App #{n}" }
+    sequence(:name) {|n| "Test App #{n}" }
     owner { User.first || create(:user) }
 
     trait :local do
@@ -22,7 +22,7 @@ FactoryGirl.define do
   end
 
   factory :invalid_resource, class: Resource do
-    sequence :name {|n| "Invalid App #{n}" }
+    sequence(:name) {|n| "Invalid App #{n}" }
     path ''
   end
 end
