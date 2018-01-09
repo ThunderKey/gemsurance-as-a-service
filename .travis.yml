@@ -19,12 +19,10 @@ env:
   - "RAILS_ENV=test"
 before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS gaas_test'
-  - npm install -g bower
 before_script:
   - cp config/secrets.yml.travis config/secrets.yml
   - cp config/database.yml.travis config/database.yml
   - bundle exec rake db:migrate
-  - bower install
 script:
   - bundle exec rspec
 after_success:
