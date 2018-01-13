@@ -8,6 +8,7 @@
   border: $outer-border;
 
   li {
+    list-style: none;
     border-bottom: $inner-border;
     padding: $item-padding;
     &:last-child {
