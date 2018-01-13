@@ -1,3 +1,14 @@
 h1 Gems
 
-= render partial: 'list', locals: {gem_infos: @gem_infos}
+ul#gems-tabs.tabs(data-tabs)
+  li.tabs-title.is-active= link_to 'Outdated Gems', '#outdated-gems', aria: {selected: true}
+  li.tabs-title= link_to 'Current Gems', '#current-gems'
+  li.tabs-title= link_to 'All Gems', '#all-gems'
+
+.tabs-content data-tabs-content='gems-tabs'
+  #outdated-gems.tabs-panel.is-active
+    = render partial: 'list', locals: {gem_infos: @outdated_gem_infos}
+  #current-gems.tabs-panel
+    = render partial: 'list', locals: {gem_infos: @current_gem_infos}
+  #all-gems.tabs-panel
+    = render partial: 'list', locals: {gem_infos: @gem_infos}

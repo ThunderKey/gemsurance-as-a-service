@@ -2,7 +2,16 @@ class GemInfosController < ApplicationController
   include JsChartHelper
 
   def index
-    @gem_infos = GemInfo.all
+    @gem_infos = GemInfo.includes(:gem_versions)
+    @outdated_gem_infos = []
+    @current_gem_infos = []
+    @gem_infos.each do |info|
+      if info.gem_versions.any? &:outdated?
+        @outdated_gem_infos << info
+      else
+        @current_gem_infos << info
+      end
+    end
   end
 
   def show
