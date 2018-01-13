@@ -11,8 +11,8 @@ RSpec.describe 'resources/show.slim' do
     expect(rendered).to match %r{TestGem#1}
     expect(rendered).to match %r{TestGem#2}
     expect(rendered).to match %r{TestGem#3}
-    expect(rendered).not_to match %r{outdated}
-    expect(rendered).not_to match %r{vulnerable}
+    expect(rendered).to_not match %r{outdated}
+    expect(rendered).to_not match %r{vulnerable}
   end
 
   it 'displays the resource correctly with an outdated gem' do
@@ -26,7 +26,7 @@ RSpec.describe 'resources/show.slim' do
     expect(rendered).to match %r{TestGem#1}
     expect(rendered).to match %r{TestGem#2}
     expect(rendered).to match %r{<tr class="outdated"[^>]*><td><a[^>]*>TestGem#3</a>}
-    expect(rendered).not_to match %r{vulnerable}
+    expect(rendered).to_not match %r{vulnerable}
   end
 
   it 'displays the resource correctly with an outdated gem' do
@@ -45,6 +45,6 @@ RSpec.describe 'resources/show.slim' do
     expect(rendered).to match %r{<tr class="vulnerable"[^>]*><td><a[^>]*>TestGem#1</a>}
     expect(rendered).to match %r{TestGem#2}
     expect(rendered).to match %r{<tr class="vulnerable"[^>]*><td><a[^>]*>TestGem#3</a>}
-    expect(rendered).not_to match %r{outdated}
+    expect(rendered).to_not match %r{outdated}
   end
 end

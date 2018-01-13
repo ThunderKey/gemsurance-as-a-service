@@ -53,8 +53,8 @@ RSpec.describe ApplicationHelper, type: :helper do
     it { expect('/qrstuvwxyz').to match helper.absolute_path_regex }
     it { expect('/0123456789').to match helper.absolute_path_regex }
     it { expect('/-_').to match helper.absolute_path_regex }
-    it { expect('test/directory/').not_to match helper.absolute_path_regex }
-    it { expect('/test /directory/').not_to match helper.absolute_path_regex }
+    it { expect('test/directory/').to_not match helper.absolute_path_regex }
+    it { expect('/test /directory/').to_not match helper.absolute_path_regex }
   end
 
   describe '#gemsurance_regex' do
@@ -77,15 +77,15 @@ TXT
 
     describe "doesn't match an output" do
       it 'with an invalid path' do
-        expect(%Q{Retrieving gem version information...\nRetrieving latest vulnerability data...\nReading vulnerability data...\nGenerating report...\nGenerated report #{Rails.application.config.private_dir}/gemsurance_reports/1 /gemsurance_report.yml.}).not_to match helper.gemsurance_regex
+        expect(%Q{Retrieving gem version information...\nRetrieving latest vulnerability data...\nReading vulnerability data...\nGenerating report...\nGenerated report #{Rails.application.config.private_dir}/gemsurance_reports/1 /gemsurance_report.yml.}).to_not match helper.gemsurance_regex
       end
 
       it 'with only an error message' do
-        expect(%Q{Could not find bunlder}).not_to match helper.gemsurance_regex
+        expect(%Q{Could not find bunlder}).to_not match helper.gemsurance_regex
       end
 
       it 'with an additional error message' do
-        expect(%Q{Retrieving gem version information...\nRetrieving latest vulnerability data...\nReading vulnerability data...\nGenerating report...\nGenerated report #{Rails.application.config.private_dir}/gemsurance_reports/1/gemsurance_report.yml.But something failed!}).not_to match helper.gemsurance_regex
+        expect(%Q{Retrieving gem version information...\nRetrieving latest vulnerability data...\nReading vulnerability data...\nGenerating report...\nGenerated report #{Rails.application.config.private_dir}/gemsurance_reports/1/gemsurance_report.yml.But something failed!}).to_not match helper.gemsurance_regex
       end
     end
   end
