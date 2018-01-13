@@ -1,9 +1,9 @@
 #= require jquery
 #= require jquery.turbolinks
 #= require jquery-ujs
-#= require foundation/foundation_and_overrides
-#= require charts
-#= require cable
+#= require foundation/_foundation_and_overrides
+#= require _charts
+#= require _cable
 #= require_self
 #= require turbolinks
 
