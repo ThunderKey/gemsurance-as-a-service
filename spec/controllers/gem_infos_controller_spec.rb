@@ -16,9 +16,13 @@ RSpec.describe GemInfosController do
       g1 = create :gem_info
       g2 = create :gem_info
       g3 = create :gem_info
+      create :gem_version, gem_info: g3, version: '0.0.1'
+      create :gem_version, gem_info: g3, version: '0.0.2'
 
       get :index
       expect(assigns(:gem_infos)).to eq [g1, g2, g3]
+      expect(assigns(:current_gem_infos)).to eq [g1, g2]
+      expect(assigns(:outdated_gem_infos)).to eq [g3]
     end
 
     it 'renders the :index view' do
