@@ -7,5 +7,4 @@ ul
     - gv = @resource.gem_versions.joins(:vulnerabilities).where(vulnerabilities: {id: v.id}).first!
     li #{link_to gv.gem_info.name, gem_info_url(gv.gem_info)} - #{link_to gv.version, gem_version_url(gv.gem_info, gv)}: #{v.description}
 
-Greetings,
-Gemsurance As A Service
+p Greetings, Gemsurance As A Service

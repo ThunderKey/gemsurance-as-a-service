@@ -46,6 +46,10 @@ Rails.application.configure do
 
   config.redis.database = 3
 
+  host = 'test.gaas.keltec.ch'
+  config.action_mailer.default_url_options = { host: host }
+  Rails.application.routes.default_url_options = { host: host }
+
   config.after_initialize do
     Bullet.enable        = true
     Bullet.bullet_logger = true
