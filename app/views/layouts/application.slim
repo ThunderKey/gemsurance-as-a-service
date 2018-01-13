@@ -16,7 +16,7 @@ html
   body
     nav.top-bar
       .top-bar-left
-        ul.dropdown.menu
+        ul.dropdown.menu(data-dropdown-menu)
           li.title-text= link_to 'Gemsurance As A Service', root_path
           - if current_user
             li= link_to 'Resources', resources_path
@@ -29,7 +29,7 @@ html
       .top-bar-right
         ul.dropdown.menu
           - if current_user
-            li= current_user.fullname
+            li.menu-text= current_user.fullname
             li= link_to 'Logout', destroy_user_session_path, method: :delete
           - else
             li= link_to 'Login', new_user_session_path

@@ -15,13 +15,17 @@ form.button_to {
 }
 
 .title-text {
-  font-size: 1.4em;
+  font-weight: $global-weight-bold;
   display: inline;
 }
 
 .top-bar {
-  li, a {
+  &, a {
     color: $white;
+  }
+
+  .menu-text {
+    font-weight: inherit;
   }
 }
 
