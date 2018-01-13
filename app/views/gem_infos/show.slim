@@ -1,20 +1,18 @@
 - content_for :body_js do
   javascript:
-    $(document).on('turbolinks:load', function() {
-      var data = #{@versions_data.to_json.html_safe};
-      data.datasets[0].label = '# of installations';
-      drawChart('versionsChart', 'bar', data, {
-        legend: { display: false },
-        scales: {
-          yAxes: [{
-            ticks: {
-              max: #{@versions_data[:datasets][0][:data].max},
-              min: 0,
-              stepSize: 1,
-            }
-          }]
-        }
-      });
+    var data = #{@versions_data.to_json.html_safe};
+    data.datasets[0].label = '# of installations';
+    drawChart('versionsChart', 'bar', data, {
+      legend: { display: false },
+      scales: {
+        yAxes: [{
+          ticks: {
+            max: #{@versions_data[:datasets][0][:data].max},
+            min: 0,
+            stepSize: 1,
+          }
+        }]
+      }
     });
 
 h1= @gem_info.name
