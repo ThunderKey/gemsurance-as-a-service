@@ -7,6 +7,7 @@ class GemInfosController < ApplicationController
 
   def show
     @gem_info = GemInfo.find params[:id]
-    @versions_data = transform_to_chart_data @gem_info.gem_versions.map {|v| {name: v.version, data: v.resources.count} }
+    sorted = @gem_info.gem_versions.sort_by(&:version_object)
+    @versions_data = transform_to_chart_data sorted.map {|v| {name: v.version, data: v.resources.count} }
   end
 end
