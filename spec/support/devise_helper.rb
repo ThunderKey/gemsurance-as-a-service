@@ -1,6 +1,10 @@
 RSpec.configure do |config|
   include Warden::Test::Helpers
 
+  config.before(with_login: true) do
+    login_as create(:user), scope: :user
+  end
+
   def sign_in(resource_or_scope, resource = nil)
     resource ||= resource_or_scope
     scope = Devise::Mapping.find_scope!(resource_or_scope)
