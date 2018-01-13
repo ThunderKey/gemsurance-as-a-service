@@ -5,7 +5,7 @@ namespace :gemsurance do
       service = GemsuranceService.new r
       service.update_gems
       if r.fetch_status != 'successful'
-        puts "#{r.name} failed to update:\n#{r.fetch_output}\n#{r.inspect}"
+        puts "#{r.name} (##{r.id}) has the status #{r.fetch_status.inspect} after the update:\n#{r.fetch_output}"
       end
     end
   end
