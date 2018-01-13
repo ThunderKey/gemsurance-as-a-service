@@ -1,17 +1,20 @@
 h1 Vulnerabilities
-- @vulnerabilities.group_by(&:gem_version).each do |gem_version, vulnerabilities|
-  .card.alert
-    .card-divider
-      h2
-        - gem_info = gem_version.gem_info
-        = link_to gem_info.name, gem_info
-        span<> -
-        = link_to gem_version.version, gem_version_path(id: gem_version, gem_info_id: gem_info)
-    .card-section
-      = render partial: 'resources/list', locals: {resources: gem_version.resources, readonly: true, color: false}
+- if @vulnerabilities.any?
+  - @vulnerabilities.group_by(&:gem_version).each do |gem_version, vulnerabilities|
+    .card.alert
+      .card-divider
+        h2
+          - gem_info = gem_version.gem_info
+          = link_to gem_info.name, gem_info
+          span<> -
+          = link_to gem_version.version, gem_version_path(id: gem_version, gem_info_id: gem_info)
+      .card-section
+        = render partial: 'resources/list', locals: {resources: gem_version.resources, readonly: true, color: false}
 
-    .card-section
-      .row.small-up-1.medium-up-3.large-up-4
-        - vulnerabilities.uniq.each do |vulnerability|
-          .column.column-block
-            = render partial: 'panel', locals: {vulnerability: vulnerability}
+      .card-section
+        .row.small-up-1.medium-up-3.large-up-4
+          - vulnerabilities.uniq.each do |vulnerability|
+            .column.column-block
+              = render partial: 'panel', locals: {vulnerability: vulnerability}
+- else
+  .callout.success There are currently no known vulnerabilities in the used gems.
