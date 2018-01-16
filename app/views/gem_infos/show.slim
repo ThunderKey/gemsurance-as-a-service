@@ -22,11 +22,11 @@ h1= @gem_info.name
     .data-panel
       li.title= @gem_info.name
       - if @gem_info.homepage_url
-        li= link_to 'Homepage', @gem_info.homepage_url, target: '_blank'
+        li= link_to 'Homepage', safe_url!(@gem_info.homepage_url), target: '_blank'
       - if @gem_info.source_code_url
-        li= link_to 'Source Code', @gem_info.source_code_url, target: '_blank'
+        li= link_to 'Source Code', safe_url!(@gem_info.source_code_url), target: '_blank'
       - if @gem_info.documentation_url
-        li= link_to 'Documentation', @gem_info.documentation_url, target: '_blank'
+        li= link_to 'Documentation', safe_url!(@gem_info.documentation_url), target: '_blank'
   .small-12.large-6.columns
     h2 Versions
 

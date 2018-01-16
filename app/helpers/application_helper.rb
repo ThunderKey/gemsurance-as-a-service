@@ -30,4 +30,13 @@ module ApplicationHelper
       else type
     end
   end
+
+  # nil for relative and absolute URLs
+  ALLOWED_PROTOCOLS = ['http', 'https', nil]
+  def safe_url! url
+    return url if url.blank?
+    uri = URI.parse url
+    return url if ALLOWED_PROTOCOLS.include? uri.scheme
+    raise "Insecure URL scheme #{uri.scheme.inspect} (allowed: #{ALLOWED_PROTOCOLS.inspect})"
+  end
 end
