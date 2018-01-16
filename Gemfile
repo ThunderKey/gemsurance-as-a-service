@@ -73,7 +73,6 @@ end
 group :test do
   gem 'timecop'
   gem 'simplecov'
-  gem 'codeclimate-test-reporter', '~> 1.0.0'
 end
 
 group :development do
