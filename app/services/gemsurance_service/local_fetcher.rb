@@ -5,15 +5,14 @@ class GemsuranceService
     end
 
     def self.errors resource
+      return [] if resource.path.blank?
       e = []
-      unless resource.path.blank?
-        if File.exist? resource.path
-          unless File.directory? resource.path
-            e << [:path, :not_a_directory]
-          end
-        else
-          e << [:path, :does_not_exist]
+      if File.exist? resource.path
+        unless File.directory? resource.path
+          e << [:path, :not_a_directory]
         end
+      else
+        e << [:path, :does_not_exist]
       end
       e
     end
