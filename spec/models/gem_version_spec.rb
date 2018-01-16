@@ -140,6 +140,12 @@ RSpec.describe GemVersion, type: :model do
       expect(record.gem_status).to eq :vulnerable
       expect(record.numeric_gem_status).to eq 0
     end
+
+    it 'unknown' do
+      # 2 times because checking the value and again in the raise statement
+      expect(subject).to receive(:gem_status).exactly(2).times.and_return :unknown
+      expect{subject.numeric_gem_status}.to raise_error 'Unsupported gem_status :unknown'
+    end
   end
 
   describe '#sort_by_gem_status' do
