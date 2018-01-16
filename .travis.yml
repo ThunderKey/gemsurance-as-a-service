@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - ruby-2.4.0
+  - ruby-2.4.3
 dist: trusty
 addons:
   code_climate:
