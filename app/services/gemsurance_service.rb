@@ -29,7 +29,6 @@ class GemsuranceService < ApplicationService
     output, exit_status = fetcher.update_gemsurance_report resource, gemsurance_yaml_file
     resource.fetch_output = output
     resource.fetched_at = DateTime.now
-    Rails.logger.debug "!!!#{exit_status}"
     resource.fetch_status = gemsurance_regex.match?(output) ? 'successful' : 'failed'
     resource.save!
     reset!
