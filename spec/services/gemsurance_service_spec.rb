@@ -9,7 +9,7 @@ RSpec.describe GemsuranceService, type: :service do
     end
   end
 
-  describe '#update_gems', with_emails: true do
+  describe '#update_gems', with_mails: true do
     it 'calls the update and load methods in the correct order' do
       resource = create :empty_local_resource
       service = GemsuranceService.new(resource)
@@ -17,7 +17,38 @@ RSpec.describe GemsuranceService, type: :service do
       expect(service).to receive(:update_gemsurance_report).ordered.and_return true
       expect(service).to receive(:fix_gemsurance_report).ordered
       expect(service).to receive(:load_gems).ordered
-      service.update_gems
+      expect(service.update_gems).to eq true
+    end
+    it 'does not call load methods if the update fails' do
+      resource = create :empty_local_resource
+      service = GemsuranceService.new(resource)
+
+      expect(service).to receive(:update_gemsurance_report).and_return false
+      expect(service).to_not receive(:fix_gemsurance_report)
+      expect(service).to_not receive(:load_gems)
+      expect(service.update_gems).to eq false
+    end
+
+    it 'sends a mail if the resource is vulnerable' do
+      resource = create :resource
+      create :vulnerability, gem_version: resource.gem_versions.first!
+      service = GemsuranceService.new(resource)
+
+      expect(service).to receive(:update_gemsurance_report).and_return true
+      expect(service).to receive(:fix_gemsurance_report)
+      expect(service).to receive(:load_gems)
+      expect(ResourceMailer).to receive(:vulnerable_mail).and_call_original
+      expect do
+        expect(service.update_gems).to eq true
+      end.to change(ActionMailer::Base.deliveries, :count).by 1
+
+      mail = sent_mails.last
+      expect(mail.subject).to eq 'Vulnerabilities in Test App 1'
+      expect(mail.to).to eq ['peter.tester.1@example.com']
+      expect(mail.from).to eq ['gaas@keltec.ch']
+      expect(mail.cc).to eq nil
+      expect(mail.bcc).to eq nil
+      expect(mail.body.encoded).to match /TestGem#1/
     end
   end
 

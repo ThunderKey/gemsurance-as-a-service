@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ResourceMailer do
-  context 'vulnerable_mail' do
+  context '#vulnerable_mail' do
     let(:resource) do
       create :resource do |r|
         create :gem_usage, resource: r do |u|
@@ -16,6 +16,8 @@ RSpec.describe ResourceMailer do
       expect(mail.subject).to eq 'Vulnerabilities in Test App 1'
       expect(mail.to).to eq ['peter.tester.1@example.com']
       expect(mail.from).to eq ['gaas@keltec.ch']
+      expect(mail.cc).to eq nil
+      expect(mail.bcc).to eq nil
     end
 
     it 'renders the body' do
