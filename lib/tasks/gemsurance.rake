@@ -3,9 +3,15 @@ namespace :gemsurance do
   task update: :environment do
     Resource.all.each do |r|
       service = GemsuranceService.new r
-      service.update_gems
-      if r.fetch_status != 'successful'
-        puts "#{r.name} (##{r.id}) has the status #{r.fetch_status.inspect} after the update:\n#{r.fetch_output}"
+      begin
+        service.update_gems
+        if r.fetch_status != 'successful'
+          puts "#{r.name} (##{r.id}) has the status #{r.fetch_status.inspect} after the update:\n#{r.fetch_output}"
+        end
+      rescue StandardError => e
+        puts "Error in Resource##{r.id} #{r.name}"
+        puts e.message
+        puts e.backtrace.join("\n")
       end
     end
   end
