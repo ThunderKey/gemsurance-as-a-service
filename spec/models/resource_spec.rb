@@ -114,6 +114,20 @@ RSpec.describe Resource, type: :model do
       expect(resource.gem_versions.outdated.count).to eq 0
     end
 
+    it 'handles the vulnerable status correctly if it uses an existing version' do
+      resource = create :empty_local_resource
+
+      info = create :gem_info
+      resource.gem_versions << create(:gem_version)
+      resource.gem_versions << create(:gem_version, gem_info: info, version: '1.2.3')
+      resource.gem_versions << create(:gem_version, :vulnerable)
+
+      resource.reload
+      expect(resource.gem_status).to eq :vulnerable
+      expect(resource.numeric_gem_status).to eq 0
+      expect(resource.gem_versions.outdated.count).to eq 0
+    end
+
     it 'unknown' do
       # 2 times because checking the value and again in the raise statement
       expect(subject).to receive(:gem_status).exactly(2).times.and_return :unknown
