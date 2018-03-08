@@ -4,9 +4,7 @@ RSpec.describe ResourceMailer do
   context '#vulnerable_mail' do
     let(:resource) do
       create :resource do |r|
-        create :gem_usage, resource: r do |u|
-          create :vulnerability, gem_version: u.gem_version
-        end
+        create :gem_usage, :vulnerable, resource: r
       end
     end
 
