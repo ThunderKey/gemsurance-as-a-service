@@ -44,7 +44,7 @@ class Resource < ApplicationRecord
 
   def update_vulnerabilities_count!
     update_vulnerabilities_count
-    save!
+    save! validate: false
   end
 
   def gem_status
