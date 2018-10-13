@@ -4,7 +4,7 @@ FactoryBot.define do
     owner { User.first || create(:user) }
 
     trait :local do
-      resource_type :local
+      resource_type { :local }
       path { File.join Rails.root, 'spec', 'assets', 'valid_app' }
     end
 
@@ -24,6 +24,6 @@ FactoryBot.define do
 
   factory :invalid_resource, class: Resource do
     sequence(:name) {|n| "Invalid App #{n}" }
-    path ''
+    path { '' }
   end
 end
