@@ -36,7 +36,7 @@
 /private/gemsurance_reports
 
 # ignore simplecov dirs
-/public/coverage
+coverage
 
 # ignore spec persistence file
 /spec/persistence.txt
