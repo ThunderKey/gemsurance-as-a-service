@@ -71,8 +71,7 @@ group :development, :test do
 
   gem 'bullet'
 
-  gem 'rubocop'
-  gem 'rubocop-rspec'
+  gem 'ThunderKey-rubocop'
 end
 
 group :test do
