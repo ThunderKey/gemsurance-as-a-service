@@ -1,7 +1,11 @@
+# frozen_string_literal: true
+
 class ApplicationService
-  include ApplicationHelper
+  include ::ApplicationHelper
 
   mattr_accessor :logger
   self.logger = Rails.logger
-  def logger() self.class.logger; end
+  def logger
+    self.class.logger
+  end
 end

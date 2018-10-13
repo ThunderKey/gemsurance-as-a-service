@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GemsuranceService, type: :service do
   it 'includes valid fetchers' do
     expect(GemsuranceService.fetchers.keys).to eq ['local']
-    GemsuranceService.fetchers.each do |name, fetcher|
+    GemsuranceService.fetchers.each do |_name, fetcher|
       expect(fetcher).to respond_to :update_gemsurance_report
       expect(fetcher).to respond_to :errors
     end
@@ -58,19 +60,30 @@ RSpec.describe GemsuranceService, type: :service do
       service = GemsuranceService.new(resource)
 
       expect(resource.fetched_at).to eq nil
-      expect(resource.fetch_output).to eq ""
-      expect(resource.fetch_status).to eq "pending"
+      expect(resource.fetch_output).to eq ''
+      expect(resource.fetch_status).to eq 'pending'
 
       Timecop.freeze
 
-      report_file = "#{Rails.application.config.private_dir}/gemsurance_reports/#{resource.id}/gemsurance_report.yml"
-      output = %Q{Retrieving gem version information...\nRetrieving latest vulnerability data...\nReading vulnerability data...\nGenerating report...\nGenerated report #{report_file}.}
-      expect {
-        expect(Open3).to receive(:capture2e).
-          with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
-          and_return([output, 0])
+      report_file = Rails.application.config.private_dir.join(
+        'gemsurance_reports',
+        resource.id.to_s,
+        'gemsurance_report.yml',
+      )
+      output = "Retrieving gem version information...
+Retrieving latest vulnerability data...
+Reading vulnerability data...
+Generating report...
+Generated report #{report_file}."
+      expect do
+        expect(Open3).to receive(:capture2e)
+          .with(
+            /\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" gemsurance --format yml --output #{Regexp.escape report_file.to_s}/, # rubocop:disable Metrics/LineLength
+            chdir: resource.path,
+          )
+          .and_return([output, 0])
         service.update_gemsurance_report
-      }.to change { File.exist? service.dirname }.from(false).to(true)
+      end.to change { File.exist? service.dirname }.from(false).to(true)
 
       expect(resource.fetched_at).to eq Time.now.change(usec: 0)
       expect(resource.fetch_output).to eq output
@@ -82,19 +95,26 @@ RSpec.describe GemsuranceService, type: :service do
       service = GemsuranceService.new(resource)
 
       expect(resource.fetched_at).to eq nil
-      expect(resource.fetch_output).to eq ""
-      expect(resource.fetch_status).to eq "pending"
+      expect(resource.fetch_output).to eq ''
+      expect(resource.fetch_status).to eq 'pending'
 
       Timecop.freeze
 
-      report_file = "#{Rails.application.config.private_dir}/gemsurance_reports/#{resource.id}/gemsurance_report.yml"
-      output = %q{An error occured}
-      expect {
-        expect(Open3).to receive(:capture2e).
-          with(/\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" gemsurance --format yml --output #{Regexp.escape report_file}/, {chdir: resource.path}).
-          and_return([output, 0])
+      report_file = Rails.application.config.private_dir.join(
+        'gemsurance_reports',
+        resource.id.to_s,
+        'gemsurance_report.yml',
+      )
+      output = 'An error occured'
+      expect do
+        expect(Open3).to receive(:capture2e)
+          .with(
+            /\Aenv -i HOME="[^"]+" PATH="[^"]+" USER="[^"]+" GEM_HOME="[^"]+" GEM_PATH="[^"]+" gemsurance --format yml --output #{Regexp.escape report_file.to_s}/, # rubocop:disable Metrics/LineLength
+            chdir: resource.path,
+          )
+          .and_return([output, 0])
         service.update_gemsurance_report
-      }.to change { File.exist? service.dirname }.from(false).to(true)
+      end.to change { File.exist? service.dirname }.from(false).to(true)
 
       expect(resource.fetched_at).to eq Time.now.change(usec: 0)
       expect(resource.fetch_output).to eq output
@@ -107,7 +127,7 @@ RSpec.describe GemsuranceService, type: :service do
       resource = create :empty_local_resource
       service = GemsuranceService.new(resource)
       create :gem_usage, resource: resource
-      expect(gem_usages_to_arrays resource.gem_usages).to eq [
+      expect(gem_usages_to_arrays(resource.gem_usages)).to eq [
         ['TestGem#1', '1.2.3', false],
       ]
       expect(resource.gem_usages.size).to eq 1
@@ -115,14 +135,15 @@ RSpec.describe GemsuranceService, type: :service do
       expect(resource.gem_infos.size).to eq 1
 
       report_file = service.gemsurance_yaml_file
-      expect{service.load_gems}.to raise_exception %Q{No such file or directory @ rb_sysopen - #{report_file}}
+      expect {service.load_gems}
+        .to raise_exception "No such file or directory @ rb_sysopen - #{report_file}"
 
       FileUtils.mkdir_p service.dirname
-      FileUtils.cp File.join(Rails.root, 'spec', 'assets', 'simple_gemsurance_report.yml'), report_file
+      FileUtils.cp Rails.root.join('spec', 'assets', 'simple_gemsurance_report.yml'), report_file
 
       service.load_gems
 
-      expect(gem_usages_to_arrays resource.gem_usages).to eq [
+      expect(gem_usages_to_arrays(resource.gem_usages)).to eq [
         ['actionpack', '5.0.1', false],
         ['actionview', '5.0.1', false],
         ['activesupport', '5.0.1', false],
@@ -173,14 +194,15 @@ RSpec.describe GemsuranceService, type: :service do
       service = GemsuranceService.new(resource)
       report_file = service.gemsurance_yaml_file
       FileUtils.mkdir_p service.dirname
-      FileUtils.cp File.join(Rails.root, 'spec', 'assets', 'vulnerable_gemsurance_report.yml'), report_file
+      FileUtils.cp Rails.root.join('spec', 'assets', 'vulnerable_gemsurance_report.yml'),
+        report_file
 
-      expect{service.load_gems}.to raise_error Psych::SyntaxError
+      expect {service.load_gems}.to raise_error Psych::SyntaxError
 
       service.fix_gemsurance_report
       service.load_gems
 
-      expect(gem_usages_to_arrays resource.gem_usages).to eq [
+      expect(gem_usages_to_arrays(resource.gem_usages)).to eq [
         ['actionpack', '3.2.22.5', false],
         ['activemodel', '3.2.22.5', false],
         ['activesupport', '3.2.22.5', false],
@@ -221,20 +243,21 @@ RSpec.describe GemsuranceService, type: :service do
         ['warden', '1.2.7', false],
       ]
 
-      expect(resource.vulnerabilities.map {|v| [v.description, v.cve, v.url, v.patched_versions] }).to eq [
-        [
-          'Devise Gem for Ruby Unauthorized Access Using Remember Me Cookie',
-          '2015-8314',
-          'http://blog.plataformatec.com.br/2016/01/improve-remember-me-cookie-expiration-in-devise/',
-          '>= 3.5.4',
-        ],
-        [
-          'CSRF token fixation attacks in Devise',
-          nil,
-          'http://blog.plataformatec.com.br/2013/08/csrf-token-fixation-attacks-in-devise/',
-          '~> 2.2.5, >= 3.0.1',
-        ],
-      ]
+      expect(resource.vulnerabilities.map {|v| [v.description, v.cve, v.url, v.patched_versions] })
+        .to eq [
+          [
+            'Devise Gem for Ruby Unauthorized Access Using Remember Me Cookie',
+            '2015-8314',
+            'http://blog.plataformatec.com.br/2016/01/improve-remember-me-cookie-expiration-in-devise/',
+            '>= 3.5.4',
+          ],
+          [
+            'CSRF token fixation attacks in Devise',
+            nil,
+            'http://blog.plataformatec.com.br/2013/08/csrf-token-fixation-attacks-in-devise/',
+            '~> 2.2.5, >= 3.0.1',
+          ],
+        ]
     end
 
     def gem_usages_to_arrays usages

@@ -3,14 +3,38 @@
 # * https://github.com/rubocop-hq/rubocop/blob/master/config/enabled.yml
 # * https://github.com/rubocop-hq/rubocop/blob/master/config/disabled.yml
 
+AllCops:
+  TargetRubyVersion: 2.5
+  Exclude:
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+
+Metrics/AbcSize:
+  Max: 22
+
 Metrics/MethodLength:
-  Max: 15
+  Max: 16
 
 Metrics/LineLength:
   Max: 100
   IgnoredPatterns:
     # allow string representations of objects (in tests)
     - !ruby/regexp '/#<[A-Za-z0-9:]+ [a-z0-9]+: .*>/'
+  Exclude:
+    - db/schema.rb
+
+Metrics/BlockLength:
+  ExcludedMethods:
+    # ignore rspec methods
+    - feature
+    - namespace
+    - context
+    - describe
+    - it
+    - define
+    - shared_examples
+  Exclude:
+    - 'config/environments/*'
 
 Style/PercentLiteralDelimiters:
   # Specify the default preferred delimiter for all types with the 'default' key
@@ -30,15 +54,6 @@ Style/BarePercentLiterals:
 
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
-
-Metrics/BlockLength:
-  ExcludedMethods:
-    # ignore rspec methods
-    - context
-    - describe
-    - it
-    - define
-    - shared_examples
 
 # Trailing Commas
 
@@ -70,15 +85,21 @@ Style/MethodDefParentheses:
   Enabled: false
 Style/Documentation:
   Enabled: false
-Style/SpaceInsideBlockBraces:
+Style/MixinUsage:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Layout/SpaceInsideBlockBraces:
   Enabled: false
 Layout/ElseAlignment:
   Enabled: false
-Naming/UncommunicativeMethodParamName:
-  Enabled: false
 Layout/ClosingHeredocIndentation:
+  Enabled: false
+Layout/IndentHeredoc:
   Enabled: false
 Lint/AssignmentInCondition:
   Enabled: false
-Layout/IndentHeredoc:
+Lint/AmbiguousRegexpLiteral:
+  Enabled: false
+Naming/UncommunicativeMethodParamName:
   Enabled: false

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 # https://everydayrails.com/2012/04/07/testing-series-rspec-controllers.html
 
@@ -65,9 +67,9 @@ RSpec.describe ResourcesController do
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'creates a new resource' do
-        expect{
+        expect do
           post :create, params: {resource: attributes_for(:resource)}
-        }.to change(Resource,:count).by(1)
+        end.to change(Resource, :count).by(1)
         resource = assigns :resource
         expect(resource.name).to match /\ATest App \d+\z/
         expect(resource.resource_type).to eq 'local'
@@ -77,9 +79,13 @@ RSpec.describe ResourcesController do
       end
 
       it 'creates a new resource with optional attributes' do
-        expect{
-          post :create, params: {resource: attributes_for(:resource), build_url: 'https://test.test/project/1', build_image_url: 'https://test.test/project/1.svg'}
-        }.to change(Resource,:count).by(1)
+        expect do
+          post :create, params: {
+            resource: attributes_for(:resource),
+            build_url: 'https://test.test/project/1',
+            build_image_url: 'https://test.test/project/1.svg',
+          }
+        end.to change(Resource, :count).by(1)
         resource = assigns :resource
         expect(resource.name).to match /\ATest App \d+\z/
         expect(resource.resource_type).to eq 'local'
@@ -96,9 +102,9 @@ RSpec.describe ResourcesController do
 
     context 'with invalid attributes' do
       it 'does not save the new resource' do
-        expect{
+        expect do
           post :create, params: {resource: attributes_for(:invalid_resource)}
-        }.to_not change(Resource,:count)
+        end.to_not change(Resource, :count)
       end
 
       it 're-renders the new method' do
@@ -121,8 +127,10 @@ RSpec.describe ResourcesController do
       end
 
       it 'changes @resource\'s attributes' do
-        put :update, params: {id: @resource,
-          resource: attributes_for(:resource, name: 'MyOtherTestApp', path: @valid_path)}
+        put :update, params: {
+          id: @resource,
+          resource: attributes_for(:resource, name: 'MyOtherTestApp', path: @valid_path),
+        }
         @resource.reload
         expect(@resource.name).to eq('MyOtherTestApp')
         expect(@resource.path).to eq(@valid_path)
@@ -131,8 +139,13 @@ RSpec.describe ResourcesController do
       end
 
       it 'changes @resource\'s optional attributes' do
-        put :update, params: {id: @resource,
-          resource: {build_url: 'https://test.test/project/1', build_image_url: 'https://test.test/project/1.svg'}}
+        put :update, params: {
+          id: @resource,
+          resource: {
+            build_url: 'https://test.test/project/1',
+            build_image_url: 'https://test.test/project/1.svg',
+          },
+        }
         @resource.reload
         expect(@resource.build_url).to eq 'https://test.test/project/1'
         expect(@resource.build_image_url).to eq 'https://test.test/project/1.svg'
@@ -151,8 +164,10 @@ RSpec.describe ResourcesController do
       end
 
       it 'does not change @resource\'s attributes' do
-        put :update, params: {id: @resource,
-          resource: attributes_for(:resource, name: 'MyOtherTestApp', path: nil)}
+        put :update, params: {
+          id: @resource,
+          resource: attributes_for(:resource, name: 'MyOtherTestApp', path: nil),
+        }
         @resource.reload
         expect(@resource.name).to_not eq('MyOtherTestApp')
         expect(@resource.path).to eq(@valid_path)
@@ -170,13 +185,13 @@ RSpec.describe ResourcesController do
       @resource = create :resource
     end
 
-    it "deletes the resource" do
-      expect{
+    it 'deletes the resource' do
+      expect do
         delete :destroy, params: {id: @resource}
-      }.to change(Resource,:count).by(-1)
+      end.to change(Resource, :count).by(-1)
     end
 
-    it "redirects to resources#index" do
+    it 'redirects to resources#index' do
       delete :destroy, params: {id: @resource}
       expect(response).to redirect_to resources_url
     end
@@ -190,11 +205,11 @@ RSpec.describe ResourcesController do
     it 'calls the update resource job' do
       ActiveJob::Base.queue_adapter = :test
 
-      expect {
+      expect do
         put :update_data, params: {resource_id: @resource}
-      }.to have_enqueued_job(UpdateResourceJob).with(@resource.id)
+      end.to have_enqueued_job(UpdateResourceJob).with(@resource.id)
 
-      expect(flash.notice).to eq %Q{Started to update "Test App 1"}
+      expect(flash.notice).to eq 'Started to update "Test App 1"'
     end
   end
 end

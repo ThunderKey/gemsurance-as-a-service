@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GemVersion < ApplicationRecord
   include GemStatusSortable
 
@@ -8,19 +10,18 @@ class GemVersion < ApplicationRecord
 
   validates :version, presence: true, uniqueness: {scope: :gem_info}
 
-  after_create { gem_info.update_new_gem_versions!; reload }
+  after_create do
+    gem_info.update_new_gem_versions!
+    reload
+  end
   after_destroy { gem_info.update_all_gem_versions! }
 
-  scope :outdated, ->() {
-    where(outdated: true)
-  }
-
-  scope :not_outdated, ->() {
-    where(outdated: [false, nil])
-  }
+  scope :outdated, -> { where(outdated: true) }
+  scope :not_outdated, -> { where(outdated: [false, nil]) }
 
   def outdated?
     raise 'the GemInfo#update_new_gem_versions! did not get called!' if outdated.nil?
+
     outdated
   end
 
@@ -29,7 +30,7 @@ class GemVersion < ApplicationRecord
   end
 
   def vulnerable?
-    vulnerabilities_count > 0
+    vulnerabilities_count.positive?
   end
 
   def gem_status

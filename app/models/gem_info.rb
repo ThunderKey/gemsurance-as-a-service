@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GemInfo < ApplicationRecord
   has_many :gem_versions, inverse_of: :gem_info, dependent: :destroy
   has_many :resources, through: :gem_versions

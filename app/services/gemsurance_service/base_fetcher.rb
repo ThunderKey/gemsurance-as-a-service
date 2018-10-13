@@ -1,6 +1,13 @@
-class GemsuranceService:: BaseFetcher
-  def self.logger() GemsuranceService.logger; end
-  def logger() self.class.logger; end
+# frozen_string_literal: true
+
+class GemsuranceService::BaseFetcher
+  def self.logger
+    GemsuranceService.logger
+  end
+
+  def logger
+    self.class.logger
+  end
 
   def self.run *cmds, chdir:
     cmd = cmds.join(' ')
@@ -11,9 +18,9 @@ class GemsuranceService:: BaseFetcher
   def self.run_in_seperate_env *cmds, chdir:
     paths = ENV['PATH'].split(':')
     paths.each {|p| p.gsub! Rails.root.to_s, chdir }
-    gemsets = paths.select {|p| p =~ /\/gems\// }
-    gem_paths = gemsets.map {|g| g.gsub(/\/bin/, '') }.uniq
-    gem_homes = gem_paths.map {|g| g.gsub(/@[^\/]+\z/, '') }.uniq
+    gemsets = paths.select {|p| p =~ %r{/gems/} }
+    gem_paths = gemsets.map {|g| g.gsub(%r{/bin}, '') }.uniq
+    gem_homes = gem_paths.map {|g| g.gsub(%r{@[^/]+\z}, '') }.uniq
     run 'env', '-i',
       %Q{HOME="#{ENV['HOME']}"},
       %Q{PATH="#{paths.join ':'}"},

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'boot'
 
 require 'rails/all'
@@ -17,14 +19,14 @@ module GemsuranceAsAService
 
     config.active_job.queue_adapter = :sidekiq
 
-    config.url_regex = /\A#{URI::regexp(['http', 'https'])}\z/
+    config.url_regex = /\A#{URI.regexp(%w(http https))}\z/
     config.git_command = '/usr/bin/git'
-    config.private_dir = File.join Rails.root, 'private'
+    config.private_dir = Rails.root.join 'private'
 
     config.redis = ActiveSupport::OrderedOptions.new
     config.redis.host = 'localhost'
     config.redis.port = 6379
-    config.redis.sidekiq_namespace = "gaas_sidekiq"
+    config.redis.sidekiq_namespace = 'gaas_sidekiq'
 
     console do
       ActiveRecord::Base.connection

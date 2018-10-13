@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateGemInfos < ActiveRecord::Migration[5.0]
   def change
     create_table :gem_infos do |t|

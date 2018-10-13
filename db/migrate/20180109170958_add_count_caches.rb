@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddCountCaches < ActiveRecord::Migration[5.1]
   def up
     add_column :gem_versions, :vulnerabilities_count, :integer, default: 0

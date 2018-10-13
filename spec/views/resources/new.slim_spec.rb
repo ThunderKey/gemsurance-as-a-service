@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'resources/new.slim' do
@@ -6,10 +8,10 @@ RSpec.describe 'resources/new.slim' do
 
     render
 
-    expect(rendered).to match />Name<\/label>/
-    expect(rendered).to match />Build url<\/label>/
-    expect(rendered).to match />Build image url<\/label>/
-    expect(rendered).to match />Resource type<\/label>/
-    expect(rendered).to match />Path<\/label>/
+    expect(rendered).to match %r{>Name</label>}
+    expect(rendered).to match %r{>Build url</label>}
+    expect(rendered).to match %r{>Build image url</label>}
+    expect(rendered).to match %r{>Resource type</label>}
+    expect(rendered).to match %r{>Path</label>}
   end
 end

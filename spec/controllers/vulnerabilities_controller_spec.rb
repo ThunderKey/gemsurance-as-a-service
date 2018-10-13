@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe VulnerabilitiesController, type: :controller do
@@ -15,7 +17,7 @@ RSpec.describe VulnerabilitiesController, type: :controller do
       resource = create :resource
       v1 = create :vulnerability
       v2 = create :vulnerability
-      v3 = create :vulnerability
+      create :vulnerability
       v4 = create :vulnerability
 
       [v1, v2, v4].each do |v|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'gem_versions/show.slim' do
@@ -10,9 +12,10 @@ RSpec.describe 'gem_versions/show.slim' do
 
     render
 
-    expect(rendered).to match %r{<h1><a href="/gems/#{gem_version.gem_info.id}">TestGem#1</a> - 1\.2\.3</h1>}
+    expect(rendered)
+      .to match %r{<h1><a href="/gems/#{gem_version.gem_info.id}">TestGem#1</a> - 1\.2\.3</h1>}
     expect(rendered).to match %r{>Test App 1</a>}
-    expect(rendered).to_not match %{><h2>Vulnerabilities</h2>}
+    expect(rendered).to_not match %r{><h2>Vulnerabilities</h2>}
   end
 
   it 'displays a gem version with vulnerabilities correctly' do
@@ -26,10 +29,12 @@ RSpec.describe 'gem_versions/show.slim' do
 
     render
 
-    expect(rendered).to match %r{<h1><a href="/gems/#{gem_version.gem_info.id}">TestGem#1</a> - 1\.2\.3</h1>}
+    expect(rendered)
+      .to match %r{<h1><a href="/gems/#{gem_version.gem_info.id}">TestGem#1</a> - 1\.2\.3</h1>}
     expect(rendered).to match %r{>Test App 1</a>}
     expect(rendered).to match %r{><h2>Vulnerabilities</h2>}
     expect(rendered).to match %r{<li class="title small">Vulnerability 1</li>}
-    expect(rendered).to match %r{<li class="title small"><a target="_blank" href="https://example\.com/vulnerability2">Vulnerability 2</a></li>}
+    link = %Q{<a target="_blank" href="https://example\.com/vulnerability2">Vulnerability 2</a>}
+    expect(rendered).to match %r{<li class="title small">#{link}</li>}
   end
 end

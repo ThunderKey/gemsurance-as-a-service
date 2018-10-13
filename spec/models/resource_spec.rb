@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Resource, type: :model do
@@ -6,69 +8,130 @@ RSpec.describe Resource, type: :model do
 
   context 'is valid' do
     it 'with all required attributes' do
-      record = described_class.new name: 'Test Resource', resource_type: 'local', path: valid_path, owner: create(:user)
+      record = described_class.new(
+        name: 'Test Resource',
+        resource_type: 'local',
+        path: valid_path,
+        owner: create(:user),
+      )
       expect(record).to be_a_valid_record
     end
 
     it 'with all required and optional attributes' do
-      record = described_class.new name: 'Test Resource', resource_type: 'local', path: valid_path, owner: create(:user), build_url: 'https://test.test/mytest', build_image_url: 'https://test.test/mytest.png'
+      record = described_class.new(
+        name: 'Test Resource',
+        resource_type: 'local',
+        path: valid_path,
+        owner: create(:user),
+        build_url: 'https://test.test/mytest',
+        build_image_url: 'https://test.test/mytest.png',
+      )
       expect(record).to be_a_valid_record
     end
   end
 
   context 'is not valid' do
     it 'without a name' do
-      record = described_class.new resource_type: 'local', path: valid_path, owner: create(:user)
+      record = described_class.new(
+        resource_type: 'local',
+        path: valid_path,
+        owner: create(:user),
+      )
       expect(record).to_not be_a_valid_record
       expect(record.errors.full_messages).to eq ['Name can\'t be blank']
     end
 
     it 'without a resource_type' do
-      record = described_class.new name: 'Test Resource', path: valid_path, owner: create(:user)
+      record = described_class.new(
+        name: 'Test Resource',
+        path: valid_path,
+        owner: create(:user),
+      )
       expect(record).to_not be_a_valid_record
       expect(record.errors.full_messages).to eq ['Resource type can\'t be blank']
     end
 
     it 'without a owner' do
-      record = described_class.new name: 'Test Resource', resource_type: 'local', path: valid_path
+      record = described_class.new(
+        name: 'Test Resource',
+        resource_type: 'local',
+        path: valid_path,
+      )
       expect(record).to_not be_a_valid_record
       expect(record.errors.full_messages).to eq ['Owner must exist']
     end
 
     it 'without a path' do
-      record = described_class.new name: 'Test Resource', resource_type: 'local', owner: create(:user)
+      record = described_class.new(
+        name: 'Test Resource',
+        resource_type: 'local',
+        owner: create(:user),
+      )
       expect(record).to_not be_a_valid_record
-      expect(record.errors.full_messages).to eq ['Path can\'t be blank', 'Path must be an absolute path']
+      expect(record.errors.full_messages)
+        .to eq ['Path can\'t be blank', 'Path must be an absolute path']
     end
 
     it 'with an non-existing path' do
-      record = described_class.new name: 'Test Resource', resource_type: 'local', path: missing_path, owner: create(:user)
+      record = described_class.new(
+        name: 'Test Resource',
+        resource_type: 'local',
+        path: missing_path,
+        owner: create(:user),
+      )
       expect(record).to_not be_a_valid_record
       expect(record.errors.full_messages).to eq ['Path does not exist']
     end
 
     it 'with a file as a path' do
       FileUtils.touch missing_path
-      record = described_class.new name: 'Test Resource', resource_type: 'local', path: missing_path, owner: create(:user)
+      record = described_class.new(
+        name: 'Test Resource',
+        resource_type: 'local',
+        path: missing_path,
+        owner: create(:user),
+      )
       expect(record).to_not be_a_valid_record
       expect(record.errors.full_messages).to eq ['Path is not a directory']
     end
 
     it 'if the same name is used twice' do
-      described_class.create name: 'Test Resource', resource_type: 'local', path: valid_path, owner: create(:user)
-      record = described_class.new name: 'Test Resource', resource_type: 'local', path: valid_path, owner: create(:user)
+      described_class.create(
+        name: 'Test Resource',
+        resource_type: 'local',
+        path: valid_path,
+        owner: create(:user),
+      )
+      record = described_class.new(
+        name: 'Test Resource',
+        resource_type: 'local',
+        path: valid_path,
+        owner: create(:user),
+      )
       expect(record).to_not be_a_valid_record
       expect(record.errors.full_messages).to eq ['Name has already been taken']
     end
 
     it 'if the build_url is not a url' do
-      record = described_class.new name: 'Test Resource', resource_type: 'local', path: valid_path, owner: create(:user), build_url: 'test.ch/asdf'
+      record = described_class.new(
+        name: 'Test Resource',
+        resource_type: 'local',
+        path: valid_path,
+        owner: create(:user),
+        build_url: 'test.ch/asdf',
+      )
       expect(record).to_not be_a_valid_record
       expect(record.errors.full_messages).to eq ['Build url must be a valid URL']
     end
 
     it 'if the build_image_url is not a url' do
-      record = described_class.new name: 'Test Resource', resource_type: 'local', path: valid_path, owner: create(:user), build_image_url: 'test.ch/asdf'
+      record = described_class.new(
+        name: 'Test Resource',
+        resource_type: 'local',
+        path: valid_path,
+        owner: create(:user),
+        build_image_url: 'test.ch/asdf',
+      )
       expect(record).to_not be_a_valid_record
       expect(record.errors.full_messages).to eq ['Build image url must be a valid URL']
     end
@@ -131,7 +194,7 @@ RSpec.describe Resource, type: :model do
     it 'unknown' do
       # 2 times because checking the value and again in the raise statement
       expect(subject).to receive(:gem_status).exactly(2).times.and_return :unknown
-      expect{subject.numeric_gem_status}.to raise_error 'Unsupported gem_status :unknown'
+      expect {subject.numeric_gem_status}.to raise_error 'Unsupported gem_status :unknown'
     end
   end
 
@@ -172,7 +235,7 @@ RSpec.describe Resource, type: :model do
       expect(subject.map(&:name)).to eq [
         'Current App 0', 'Outdated App 0', 'Vulnerable App 0',
         'Current App 1', 'Outdated App 1', 'Vulnerable App 1',
-        'Current App 2', 'Outdated App 2', 'Vulnerable App 2',
+        'Current App 2', 'Outdated App 2', 'Vulnerable App 2'
       ]
     end
 
@@ -181,7 +244,7 @@ RSpec.describe Resource, type: :model do
         'Vulnerable App 0', 'Vulnerable App 1', 'Vulnerable App 2',
         'Current App 0', 'Outdated App 0',
         'Current App 1', 'Outdated App 1',
-        'Current App 2', 'Outdated App 2',
+        'Current App 2', 'Outdated App 2'
       ]
     end
 
@@ -190,7 +253,7 @@ RSpec.describe Resource, type: :model do
         'Vulnerable App 0', 'Vulnerable App 1', 'Vulnerable App 2',
         'Current App 0', 'Outdated App 0',
         'Current App 1', 'Outdated App 1',
-        'Current App 2', 'Outdated App 2',
+        'Current App 2', 'Outdated App 2'
       ]
     end
 
@@ -199,12 +262,13 @@ RSpec.describe Resource, type: :model do
         'Current App 0', 'Outdated App 0',
         'Current App 1', 'Outdated App 1',
         'Current App 2', 'Outdated App 2',
-        'Vulnerable App 0', 'Vulnerable App 1', 'Vulnerable App 2',
+        'Vulnerable App 0', 'Vulnerable App 1', 'Vulnerable App 2'
       ]
     end
 
     it 'raises an error with an invalid direction' do
-      expect{subject.sort_by_gem_status(:invalid)}.to raise_error "Unknown direction :invalid. Available: :asc and :desc"
+      expect {subject.sort_by_gem_status(:invalid)}
+        .to raise_error 'Unknown direction :invalid. Available: :asc and :desc'
     end
   end
 
@@ -212,7 +276,7 @@ RSpec.describe Resource, type: :model do
     expect(described_class.resource_types).to eq('local' => 'local')
     expect(described_class.resource_types.keys).to eq GemsuranceService.fetchers.keys
     expect(described_class.resource_type_attributes_for_select).to eq [
-      ['Local', 'local'],
+      %w(Local local),
     ]
   end
 
@@ -230,7 +294,7 @@ RSpec.describe Resource, type: :model do
         subject.gem_versions.each do |v|
           v.vulnerabilities.last!.destroy
         end
-      end.to change { subject.reload.vulnerabilities_count }.by -3
+      end.to change { subject.reload.vulnerabilities_count }.by(-3)
     end
   end
 end

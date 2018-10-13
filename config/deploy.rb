@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # config valid only for current version of Capistrano
 lock '3.11.0'
 
@@ -15,7 +17,12 @@ set :repo_url, 'git@github.com:ThunderKey/gemsurance-as-a-service.git'
 
 # You can configure the Airbrussh format using :format_options.
 # These are the defaults.
-# set :format_options, command_output: true, log_file: 'log/capistrano.log', color: :auto, truncate: :auto
+# set
+#   :format_options,
+#   command_output: true,
+#   log_file: 'log/capistrano.log',
+#   color: :auto,
+#   truncate: :auto
 
 # Default value for :pty is false
 # set :pty, true
@@ -38,5 +45,5 @@ set :keep_assets, 3
 # Defaults to: :auto
 set :rvm_type, :system
 
-#Defaults to: 'default'
+# Defaults to: 'default'
 set :rvm_ruby_version, 'ruby-2.5.0'

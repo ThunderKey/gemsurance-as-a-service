@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
@@ -6,7 +8,7 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = '18d702131479c9fa3cf6d6947d8735e983afffd3d26c95f75561cacb5bfa3ed31e9782305e3fc712883444251899a1a4bd698c9782470c8bf1febe3a83cf42de'
+  # config.secret_key = 'some-secret-key'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -108,7 +110,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 11
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = '3297c3a00877e6f6ca3423b179032d16be01b7c837fbd3a0106d17220eac0cae16a874c78bd6390715ca66a543628cbaadbf549a1cd75130b39c99ca6de011a2'
+  # config.pepper = 'some-pepper'
 
   # Send a notification email when the user's password is changed
   # config.send_password_change_notification = false
@@ -249,7 +251,12 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   keltec_config = Rails.application.secrets[:omniauth][:keltec]
-  config.omniauth :keltec, keltec_config[:app_id], keltec_config[:app_secret], strategy_class: OmniAuth::Strategies::Keltec
+  config.omniauth(
+    :keltec,
+    keltec_config[:app_id],
+    keltec_config[:app_secret],
+    strategy_class: OmniAuth::Strategies::Keltec,
+  )
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

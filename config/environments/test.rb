@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -15,7 +17,7 @@ Rails.application.configure do
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
-    'Cache-Control' => "public, max-age=#{1.hour.seconds.to_i}"
+    'Cache-Control' => "public, max-age=#{1.hour.seconds.to_i}",
   }
 
   # Show full error reports and disable caching.
@@ -40,15 +42,15 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  config.private_dir = File.join Rails.root, 'spec', 'tmp', 'private'
+  config.private_dir = Rails.root.join 'spec', 'tmp', 'private'
 
-  config.test_tmp_dir = File.join Rails.root, 'spec', 'tmp'
+  config.test_tmp_dir = Rails.root.join 'spec', 'tmp'
 
   config.redis.database = 3
 
   host = 'test.gaas.keltec.ch'
-  config.action_mailer.default_url_options = { host: host }
-  Rails.application.routes.default_url_options = { host: host }
+  config.action_mailer.default_url_options = {host: host}
+  Rails.application.routes.default_url_options = {host: host}
 
   config.after_initialize do
     Bullet.enable        = true

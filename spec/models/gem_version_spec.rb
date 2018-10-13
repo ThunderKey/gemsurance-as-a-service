@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GemVersion, type: :model do
@@ -12,20 +14,22 @@ RSpec.describe GemVersion, type: :model do
     subject { create :gem_version }
 
     it 'prevents the access to the db getter' do
-      expect { subject.outdated }.to raise_error /\Aprivate method `outdated' called for #{subject}/
+      expect { subject.outdated }
+        .to raise_error /\Aprivate method `outdated' called for #{subject}/
     end
 
     it 'would return the correct value if accessed with send' do
       expect(subject.outdated?).to eq false
-      expect(subject.send :outdated).to eq false
+      expect(subject.send(:outdated)).to eq false
 
       subject.outdated = true
       expect(subject.outdated?).to eq true
-      expect(subject.send :outdated).to eq true
+      expect(subject.send(:outdated)).to eq true
 
       subject.outdated = nil
-      expect { subject.outdated? }.to raise_error 'the GemInfo#update_new_gem_versions! did not get called!'
-      expect(subject.send :outdated).to eq nil
+      expect { subject.outdated? }
+        .to raise_error 'the GemInfo#update_new_gem_versions! did not get called!'
+      expect(subject.send(:outdated)).to eq nil
     end
   end
 
@@ -52,15 +56,15 @@ RSpec.describe GemVersion, type: :model do
   end
 
   it 'sees the correct versions as outdated' do
-    gem_info_1 = create :gem_info
-    gem_version_1_1 = gem_info_1.gem_versions.create version: '10.0.0'
-    gem_version_1_2 = gem_info_1.gem_versions.create version: '9.1.2'
-    gem_info_2 = create :gem_info
-    gem_version_2_1 = gem_info_2.gem_versions.create version: '9.1.2'
+    gem_info1 = create :gem_info
+    gem_version11 = gem_info1.gem_versions.create version: '10.0.0'
+    gem_version12 = gem_info1.gem_versions.create version: '9.1.2'
+    gem_info2 = create :gem_info
+    gem_version21 = gem_info2.gem_versions.create version: '9.1.2'
 
-    expect(gem_version_1_1.outdated?).to be false
-    expect(gem_version_1_2.outdated?).to be true
-    expect(gem_version_2_1.outdated?).to be false
+    expect(gem_version11.outdated?).to be false
+    expect(gem_version12.outdated?).to be true
+    expect(gem_version21.outdated?).to be false
   end
 
   describe 'sorting the versions' do
@@ -144,7 +148,8 @@ RSpec.describe GemVersion, type: :model do
     it 'unknown' do
       # 2 times because checking the value and again in the raise statement
       expect(subject).to receive(:gem_status).exactly(2).times.and_return :unknown
-      expect{subject.numeric_gem_status}.to raise_error 'Unsupported gem_status :unknown'
+      expect {subject.numeric_gem_status}
+        .to raise_error 'Unsupported gem_status :unknown'
     end
   end
 
@@ -178,7 +183,7 @@ RSpec.describe GemVersion, type: :model do
       expect(subject.map {|v| v.gem_info.name }).to eq [
         'Current Gem 0', 'Outdated Gem 0', 'Vulnerable Gem 0',
         'Current Gem 1', 'Outdated Gem 1', 'Vulnerable Gem 1',
-        'Current Gem 2', 'Outdated Gem 2', 'Vulnerable Gem 2',
+        'Current Gem 2', 'Outdated Gem 2', 'Vulnerable Gem 2'
       ]
     end
 
@@ -186,7 +191,7 @@ RSpec.describe GemVersion, type: :model do
       expect(subject.sort_by_gem_status.map {|v| v.gem_info.name }).to eq [
         'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2',
         'Outdated Gem 0', 'Outdated Gem 1', 'Outdated Gem 2',
-        'Current Gem 0', 'Current Gem 1', 'Current Gem 2',
+        'Current Gem 0', 'Current Gem 1', 'Current Gem 2'
       ]
     end
 
@@ -194,7 +199,7 @@ RSpec.describe GemVersion, type: :model do
       expect(subject.sort_by_gem_status(:asc).map {|v| v.gem_info.name }).to eq [
         'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2',
         'Outdated Gem 0', 'Outdated Gem 1', 'Outdated Gem 2',
-        'Current Gem 0', 'Current Gem 1', 'Current Gem 2',
+        'Current Gem 0', 'Current Gem 1', 'Current Gem 2'
       ]
     end
 
@@ -202,12 +207,13 @@ RSpec.describe GemVersion, type: :model do
       expect(subject.sort_by_gem_status(:desc).map {|v| v.gem_info.name }).to eq [
         'Current Gem 0', 'Current Gem 1', 'Current Gem 2',
         'Outdated Gem 0', 'Outdated Gem 1', 'Outdated Gem 2',
-        'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2',
+        'Vulnerable Gem 0', 'Vulnerable Gem 1', 'Vulnerable Gem 2'
       ]
     end
 
     it 'raises an error with an invalid direction' do
-      expect{subject.sort_by_gem_status(:invalid)}.to raise_error "Unknown direction :invalid. Available: :asc and :desc"
+      expect {subject.sort_by_gem_status(:invalid)}
+        .to raise_error 'Unknown direction :invalid. Available: :asc and :desc'
     end
   end
 end

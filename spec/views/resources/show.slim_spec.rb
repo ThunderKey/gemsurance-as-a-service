@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'resources/show.slim' do
@@ -7,12 +9,12 @@ RSpec.describe 'resources/show.slim' do
 
     render
 
-    expect(rendered).to match %r{Test Resource}
-    expect(rendered).to match %r{TestGem#1}
-    expect(rendered).to match %r{TestGem#2}
-    expect(rendered).to match %r{TestGem#3}
-    expect(rendered).to_not match %r{outdated}
-    expect(rendered).to_not match %r{vulnerable}
+    expect(rendered).to match /Test Resource/
+    expect(rendered).to match /TestGem#1/
+    expect(rendered).to match /TestGem#2/
+    expect(rendered).to match /TestGem#3/
+    expect(rendered).to_not match /outdated/
+    expect(rendered).to_not match /vulnerable/
   end
 
   it 'displays the resource correctly with an outdated gem' do
@@ -22,11 +24,11 @@ RSpec.describe 'resources/show.slim' do
 
     render
 
-    expect(rendered).to match %r{Test Resource}
-    expect(rendered).to match %r{TestGem#1}
-    expect(rendered).to match %r{TestGem#2}
+    expect(rendered).to match /Test Resource/
+    expect(rendered).to match /TestGem#1/
+    expect(rendered).to match /TestGem#2/
     expect(rendered).to match %r{<tr class="outdated"[^>]*><td><a[^>]*>TestGem#3</a>}
-    expect(rendered).to_not match %r{vulnerable}
+    expect(rendered).to_not match /vulnerable/
   end
 
   it 'displays the resource correctly with an outdated gem' do
@@ -41,10 +43,10 @@ RSpec.describe 'resources/show.slim' do
 
     render
 
-    expect(rendered).to match %r{Test Resource}
+    expect(rendered).to match /Test Resource/
     expect(rendered).to match %r{<tr class="vulnerable"[^>]*><td><a[^>]*>TestGem#1</a>}
-    expect(rendered).to match %r{TestGem#2}
+    expect(rendered).to match /TestGem#2/
     expect(rendered).to match %r{<tr class="vulnerable"[^>]*><td><a[^>]*>TestGem#3</a>}
-    expect(rendered).to_not match %r{outdated}
+    expect(rendered).to_not match /outdated/
   end
 end

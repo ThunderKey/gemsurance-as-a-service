@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
   "https://github.com/#{repo_name}.git"
 end
 
@@ -22,14 +24,14 @@ gem 'puma'
 
 gem 'slim'
 
-gem 'omniauth-keltec'
 gem 'devise'
+gem 'omniauth-keltec'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks'
 gem 'jquery-turbolinks'
+gem 'turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
@@ -45,10 +47,10 @@ gem 'gemsurance'
 gem 'whenever'
 
 source 'https://rails-assets.org' do
+  gem 'rails-assets-chart.js'
   gem 'rails-assets-foundation-sites', '~> 6.4'
   gem 'rails-assets-jquery'
   gem 'rails-assets-jquery-ujs'
-  gem 'rails-assets-chart.js'
 end
 
 group :production do
@@ -59,11 +61,11 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
 
-  gem 'rspec-rails'
+  gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'rails-controller-testing'
-  gem 'capybara'
+  gem 'rspec-rails'
 
   gem 'pry'
 
@@ -74,21 +76,21 @@ group :development, :test do
 end
 
 group :test do
-  gem 'timecop'
   gem 'simplecov'
+  gem 'timecop'
 end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
   gem 'listen'
+  gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen'
 
+  gem 'capistrano-bundler', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-rvm', require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano3-puma', require: false
   gem 'capistrano-sidekiq', require: false
+  gem 'capistrano3-puma', require: false
 end

@@ -1,15 +1,16 @@
-module ApplicationHelper
-  @@absolute_path_content_regex = /\/(?:[\w\-\.]+\/)*[\w\-\.]*/
-  @@absolute_path_regex = /\A#{@@absolute_path_content_regex}\z/
-  @@gemsurance_regex = /\A\s*Retrieving gem version information\.\.\.\s+Retrieving latest vulnerability data\.\.\.\s+Reading vulnerability data\.\.\.\s+Generating report\.\.\.\s+Generated report #{Rails.application.config.private_dir}\/gemsurance_reports\/\d+\/gemsurance_report\.yml\.\s*\Z/
+# frozen_string_literal: true
 
-  def self.absolute_path_regex() @@absolute_path_regex; end
-  def self.gemsurance_regex() @@gemsurance_regex; end
-  def absolute_path_regex() @@absolute_path_regex; end
-  def gemsurance_regex() @@gemsurance_regex; end
+module ApplicationHelper
+  @absolute_path_content_regex = %r{/(?:[\w\-\.]+/)*[\w\-\.]*}
+  class_variable_set '@@absolute_path_regex', /\A#{@absolute_path_content_regex}\z/
+  class_variable_set '@@gemsurance_regex', %r{\A\s*Retrieving gem version information\.\.\.\s+Retrieving latest vulnerability data\.\.\.\s+Reading vulnerability data\.\.\.\s+Generating report\.\.\.\s+Generated report #{Rails.application.config.private_dir}/gemsurance_reports/\d+/gemsurance_report\.yml\.\s*\Z} # rubocop:disable Metrics/LineLength
+
+  cattr_reader :absolute_path_regex
+  cattr_reader :gemsurance_regex
 
   def build_image_tag resource
     return nil if resource.build_image_url.blank?
+
     img = image_tag resource.build_image_url, class: 'build-image'
     if resource.build_url.blank?
       img
@@ -25,18 +26,20 @@ module ApplicationHelper
   def translate_flash_type type
     type = type.to_sym
     case type
-      when :notice; :primary
-      when :error;  :alert
+    when :notice then :primary
+    when :error then  :alert
       else type
     end
   end
 
   # nil for relative and absolute URLs
-  ALLOWED_PROTOCOLS = ['http', 'https', nil]
+  ALLOWED_PROTOCOLS = ['http', 'https', nil].freeze
   def safe_url! url
     return url if url.blank?
+
     uri = URI.parse url
     return url if ALLOWED_PROTOCOLS.include? uri.scheme
+
     raise "Insecure URL scheme #{uri.scheme.inspect} (allowed: #{ALLOWED_PROTOCOLS.inspect})"
   end
 end

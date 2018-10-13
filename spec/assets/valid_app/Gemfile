@@ -1,4 +1,6 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
-gem 'omniauth-keltec', git: 'https://github.com/ThunderKey/omniauth-keltec.git'
 gem 'devise'
+gem 'omniauth-keltec', git: 'https://github.com/ThunderKey/omniauth-keltec.git'

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module JsChartHelper
   def generate_colors number, saturation: 1, lightness: 0.7
-    number.times.map {|i| hsv_to_rgb_hex (i.to_f / number), saturation, lightness }
+    Array.new(number) {|i| hsv_to_rgb_hex (i.to_f / number), saturation, lightness }
   end
 
   def hsv_to_rgb hue_percentage, saturation, lightness
@@ -15,22 +17,23 @@ module JsChartHelper
     [
       hue_to_rgb(m1, m2, hue_percentage + 1.0 / 3),
       hue_to_rgb(m1, m2, hue_percentage),
-      hue_to_rgb(m1, m2, hue_percentage - 1.0 / 3)
+      hue_to_rgb(m1, m2, hue_percentage - 1.0 / 3),
     ].map { |c| (c * 0xff).round }
   end
 
   def hsv_to_rgb_hex hue, saturation, lightness
-    "#" + hsv_to_rgb(hue, saturation, lightness).map {|c| "%02X" % c }.join
+    '#' + hsv_to_rgb(hue, saturation, lightness).map {|c| format('%02X', c) }.join
   end
 
   # helper for making rgb
   def hue_to_rgb(m1, m2, h)
-    h += 1 if h < 0
+    h += 1 if h.negative?
     h -= 1 if h > 1
     return m1 + (m2 - m1) * h * 6 if h * 6 < 1
     return m2 if h * 2 < 1
-    return m1 + (m2 - m1) * (2.0/3 - h) * 6 if h * 3 < 2
-    return m1
+    return m1 + (m2 - m1) * (2.0 / 3 - h) * 6 if h * 3 < 2
+
+    m1
   end
 
   def transform_to_chart_data data
@@ -44,11 +47,7 @@ module JsChartHelper
     {
       labels: labels,
       datasets: [
-        {
-          data: raw_data,
-          backgroundColor: colors,
-          hoverBackgroundColor: colors,
-        }
+        {data: raw_data, backgroundColor: colors, hoverBackgroundColor: colors},
       ],
     }
   end

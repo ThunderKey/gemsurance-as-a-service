@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module WithMailsHelpers
   def sent_mails
     ActionMailer::Base.deliveries

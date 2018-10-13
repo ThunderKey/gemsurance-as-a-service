@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
-  devise  :database_authenticatable, :rememberable, :trackable,
-          :omniauthable, :omniauth_providers => [:keltec]
+  devise :database_authenticatable, :rememberable, :trackable,
+    :omniauthable, omniauth_providers: [:keltec]
 
   validates :email, presence: true, uniqueness: true
   validates :firstname, presence: true

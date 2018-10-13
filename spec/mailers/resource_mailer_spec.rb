@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ResourceMailer do
@@ -19,9 +21,9 @@ RSpec.describe ResourceMailer do
     end
 
     it 'renders the body' do
-      expect(ActionController::Base.helpers.strip_tags mail.body.encoded).to eq <<-EOT.chomp
+      expect(ActionController::Base.helpers.strip_tags(mail.body.encoded)).to eq <<-BODY.chomp
 Hi Peter TesterThe following gems are insecure and is used in your resource Test App 1TestGem#4 - 4.5.6: Example VulnerabilityGreetings, Gemsurance As A Service
-EOT
+BODY
     end
   end
 end

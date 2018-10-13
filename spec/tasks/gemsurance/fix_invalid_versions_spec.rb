@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'rake gemsurance:fix_invalid_versions' do
   it 'preloads the Rails environment' do
-    expect(subject.prerequisites).to include "environment"
+    expect(subject.prerequisites).to include 'environment'
   end
 
   before(:each) do
     3.times do |i|
       info = create :gem_info
-      (i+1).times { create :gem_version, gem_info: info }
+      (i + 1).times { create :gem_version, gem_info: info }
     end
   end
 
@@ -38,7 +40,7 @@ RSpec.describe 'rake gemsurance:fix_invalid_versions' do
       create :gem_version, gem_info: gem_info
     end
 
-    expect { subject.execute }.to output(<<-EOT).to_stdout
+    expect { subject.execute }.to output(<<-OUTPUT).to_stdout
 Too many gem versions for TestGem#2:
 \t3.4.5
 \t7.8.9
@@ -47,6 +49,6 @@ Too many gem versions for TestGem#3:
 \t6.7.8
 \t8.9.10
 Fixed
-EOT
+OUTPUT
   end
 end

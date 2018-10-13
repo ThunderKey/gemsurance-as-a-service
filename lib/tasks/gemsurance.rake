@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :gemsurance do
   desc 'Update all gemsurance reports'
   task update: :environment do
@@ -6,7 +8,8 @@ namespace :gemsurance do
       begin
         service.update_gems
         if r.fetch_status != 'successful'
-          puts "#{r.name} (##{r.id}) has the status #{r.fetch_status.inspect} after the update:\n#{r.fetch_output}"
+          puts "#{r.name} (##{r.id}) has the status #{r.fetch_status.inspect} after the update:
+#{r.fetch_output}"
         end
       rescue StandardError => e
         puts "Error in Resource##{r.id} #{r.name}"

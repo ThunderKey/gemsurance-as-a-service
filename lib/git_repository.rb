@@ -1,8 +1,26 @@
+# frozen_string_literal: true
+
 class GitRepository
-  class IllegalRepositoryError < IOError; end
-  class RepositoryNotFoundError < IOError; end
-  class RepositoryAlreadyClonedError < IOError; end
-  class GitCommandFailedError < StandardError; end
+  class IllegalRepositoryError < IOError
+    def initialize path
+      super "the repository #{path} exists but is not valid"
+    end
+  end
+  class RepositoryNotFoundError < IOError
+    def initialize path
+      super "the repository #{path} does not exist"
+    end
+  end
+  class RepositoryAlreadyClonedError < IOError
+    def initialize path
+      super "the repository #{path} is already checked out"
+    end
+  end
+  class GitCommandFailedError < StandardError
+    def initialize args
+      super "the command #{args.inspect} failed"
+    end
+  end
 
   attr_reader :path, :remote, :branch
 
@@ -13,8 +31,9 @@ class GitRepository
   end
 
   def clone new_remote
-    raise RepositoryAlreadyClonedError, "the repository #{path} is already checked out" if git_repository?
-    raise IllegalRepositoryError, "the repository #{path} exists but is not valid" if path_exists?
+    raise RepositoryAlreadyClonedError, path if git_repository?
+    raise IllegalRepositoryError, path if path_exists?
+
     git_exec 'clone', new_remote, path
   end
 
@@ -23,11 +42,12 @@ class GitRepository
   end
 
   def git_repository?
-    path_exists? && File.exist?(File.join path, '.git')
+    path_exists? && File.exist?(File.join(path, '.git'))
   end
 
   def pull
-    raise RepositoryNotFoundError, "the repository #{path} does not exist" unless git_repository?
+    raise RepositoryNotFoundError, path unless git_repository?
+
     git_exec '-C', path, 'pull', remote, branch
   end
 
@@ -39,10 +59,8 @@ class GitRepository
 
   # :nocov:
   def exec *args
-    #args << '&>/dev/null'
-    unless system(*args)
-      raise GitCommandFailedError, "the command #{args.inspect} failed"
-    end
+    # args << '&>/dev/null'
+    raise GitCommandFailedError, args unless system(*args)
   end
   # :nocov:
 end

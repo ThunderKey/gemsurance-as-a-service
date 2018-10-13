@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature '/gems', with_login: true do
   let(:base_url) { '/gems' }
 
   it 'displays all gems correctly' do
-    gem_infos = 3.times.map { create(:gem_info) }
+    gem_infos = Array.new(3) { create(:gem_info) }
 
     gem_infos.each {|i| create :gem_version, gem_info: i }
     create :gem_version, gem_info: gem_infos.last

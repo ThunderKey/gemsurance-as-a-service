@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GemsuranceService
   class LocalFetcher < BaseFetcher
     def self.update_gemsurance_report resource, file
@@ -7,15 +9,11 @@ class GemsuranceService
     def self.errors resource
       return {} if resource.path.blank?
 
-      unless File.exist? resource.path
-        return {path: :does_not_exist}
-      end
+      return {path: :does_not_exist} unless File.exist? resource.path
 
-      unless File.directory? resource.path
-        return {path: :not_a_directory}
-      end
+      return {path: :not_a_directory} unless File.directory? resource.path
 
-      return {}
+      {}
     end
   end
 end

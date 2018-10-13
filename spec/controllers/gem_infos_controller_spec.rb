@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 # https://everydayrails.com/2012/04/07/testing-series-rspec-controllers.html
 
@@ -34,7 +36,7 @@ RSpec.describe GemInfosController do
   describe 'GET #show' do
     it 'assigns the requested gem_info to @gem_info' do
       gem_info = create :gem_info
-      versions = 3.times.map { create :gem_version, gem_info: gem_info }
+      versions = Array.new(3) { create :gem_version, gem_info: gem_info }
       create(:empty_local_resource).gem_usages.create gem_version: versions[1]
       create(:empty_local_resource).gem_usages.create gem_version: versions[1]
       create(:empty_local_resource).gem_usages.create gem_version: versions[2]
@@ -46,9 +48,9 @@ RSpec.describe GemInfosController do
           {
             data: [0, 2, 1],
             backgroundColor: ['#FF6666', '#66FF66', '#6666FF'],
-            hoverBackgroundColor: ['#FF6666', '#66FF66', '#6666FF']
-          }
-        ]
+            hoverBackgroundColor: ['#FF6666', '#66FF66', '#6666FF'],
+          },
+        ],
       )
     end
 

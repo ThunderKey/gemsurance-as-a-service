@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.configure do |config|
   unless ENV['SKIP_BULLET'] == 'true'
     config.around(:each) do |example|

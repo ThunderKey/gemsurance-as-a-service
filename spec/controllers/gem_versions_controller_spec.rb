@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 # https://everydayrails.com/2012/04/07/testing-series-rspec-controllers.html
 

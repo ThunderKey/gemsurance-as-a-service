@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdateResourceJob < ApplicationJob
   queue_as :default
 

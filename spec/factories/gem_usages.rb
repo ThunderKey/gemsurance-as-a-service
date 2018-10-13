@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :gem_usage do
     gem_version { create :gem_version }
@@ -5,7 +7,7 @@ FactoryBot.define do
     in_gemfile { false }
 
     factory :gem_usage_in_gemfile do
-      in_gemfile = true
+      in_gemfile { true }
     end
 
     trait :vulnerable do

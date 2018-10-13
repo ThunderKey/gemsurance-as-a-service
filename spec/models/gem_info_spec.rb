@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GemInfo, type: :model do
-  context 'is valid'do
+  context 'is valid' do
     it 'with valid attributes' do
       record = described_class.new name: 'Test Gem'
       expect(record).to be_a_valid_record
