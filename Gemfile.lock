@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
   specs:
-    ThunderKey-rubocop (0.0.2)
+    ThunderKey-rubocop (0.0.3)
       rubocop (~> 0.59)
       rubocop-rspec (~> 1.30)
     actioncable (5.1.6)
