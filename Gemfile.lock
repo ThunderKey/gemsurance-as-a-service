@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
   specs:
-    ThunderKey-rubocop (0.0.7)
+    ThunderKey-rubocop (0.0.8)
       rubocop (~> 0.59)
       rubocop-rspec (~> 1.30)
     actioncable (5.1.6)
@@ -93,7 +93,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.0.5)
+    concurrent-ruby (1.1.0)
     connection_pool (2.2.2)
     crass (1.0.4)
     database_cleaner (1.7.0)
@@ -235,7 +235,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
-    redis (4.0.2)
+    redis (4.0.3)
     redis-namespace (1.6.0)
       redis (>= 3.0.4)
     ref (2.0.0)
