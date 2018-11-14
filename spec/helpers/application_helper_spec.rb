@@ -56,8 +56,8 @@ RSpec.describe ApplicationHelper, type: :helper do
     it { expect('/qrstuvwxyz').to match helper.absolute_path_regex }
     it { expect('/0123456789').to match helper.absolute_path_regex }
     it { expect('/-_').to match helper.absolute_path_regex }
-    it { expect('test/directory/').to_not match helper.absolute_path_regex }
-    it { expect('/test /directory/').to_not match helper.absolute_path_regex }
+    it { expect('test/directory/').not_to match helper.absolute_path_regex }
+    it { expect('/test /directory/').not_to match helper.absolute_path_regex }
   end
 
   describe '#gemsurance_regex' do
@@ -86,7 +86,7 @@ TXT
 
     describe "doesn't match an output" do
       it 'with an invalid path' do
-        expect(<<-TXT).to_not match helper.gemsurance_regex
+        expect(<<-TXT).not_to match helper.gemsurance_regex
 Retrieving gem version information...
 Retrieving latest vulnerability data...
 Reading vulnerability data...
@@ -96,11 +96,11 @@ TXT
       end
 
       it 'with only an error message' do
-        expect('Could not find bunlder').to_not match helper.gemsurance_regex
+        expect('Could not find bunlder').not_to match helper.gemsurance_regex
       end
 
       it 'with an additional error message' do
-        expect(<<-TXT).to_not match helper.gemsurance_regex
+        expect(<<-TXT).not_to match helper.gemsurance_regex
 Retrieving gem version information...
 Retrieving latest vulnerability data...
 Reading vulnerability data...

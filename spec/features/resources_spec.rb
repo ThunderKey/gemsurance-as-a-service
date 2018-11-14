@@ -2,11 +2,11 @@
 
 require 'rails_helper'
 
-RSpec.feature '/resources', with_login: true do
+RSpec.describe '/resources', with_login: true do
   let(:base_url) { '/resources' }
 
   it 'displays all resources correctly' do
-    3.times { create :resource }
+    create_list :resource, 3
 
     visit base_url
 
@@ -25,8 +25,8 @@ RSpec.feature '/resources', with_login: true do
       expect(page).to have_content 'TestGem#1'
       expect(page).to have_content 'TestGem#2'
       expect(page).to have_content 'TestGem#3'
-      expect(page).to_not have_selector 'tr.outdated'
-      expect(page).to_not have_selector 'tr.vulnerable'
+      expect(page).not_to have_selector 'tr.outdated'
+      expect(page).not_to have_selector 'tr.vulnerable'
     end
 
     it 'displays the resource correctly with an outdated gem' do
@@ -40,17 +40,13 @@ RSpec.feature '/resources', with_login: true do
       expect(page).to have_content 'TestGem#2'
       expect(page).to have_content 'TestGem#3'
       expect(page).to have_selector 'tr.outdated'
-      expect(page).to_not have_selector 'tr.vulnerable'
+      expect(page).not_to have_selector 'tr.vulnerable'
     end
 
     it 'displays the resource correctly with a vulnerable gem' do
       resource = create :resource, name: 'Test Resource'
-      2.times do
-        create :vulnerability, gem_version: resource.gem_versions.first!
-      end
-      3.times do
-        create :vulnerability, gem_version: resource.gem_versions.last!
-      end
+      create_list :vulnerability, 2, gem_version: resource.gem_versions.first!
+      create_list :vulnerability, 3, gem_version: resource.gem_versions.last!
 
       visit "#{base_url}/#{resource.id}"
 
@@ -58,7 +54,7 @@ RSpec.feature '/resources', with_login: true do
       expect(page).to have_content 'TestGem#1'
       expect(page).to have_content 'TestGem#2'
       expect(page).to have_content 'TestGem#3'
-      expect(page).to_not have_selector 'tr.outdated'
+      expect(page).not_to have_selector 'tr.outdated'
       expect(page).to have_selector 'tr.vulnerable'
     end
 
@@ -101,7 +97,7 @@ RSpec.feature '/resources', with_login: true do
       expect do
         click_button 'Create Resource'
         expect(page).to have_content 'Successfuly saved "MyTestResource"'
-      end.to change { Resource.count }.by 1
+      end.to change(Resource, :count).by 1
 
       resource = Resource.last
       expect(resource.name).to eq 'MyTestResource'

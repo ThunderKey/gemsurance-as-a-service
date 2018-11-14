@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.feature '/gems', with_login: true do
+RSpec.describe '/gems', with_login: true do
   let(:base_url) { '/gems' }
 
   it 'displays all gems correctly' do
@@ -22,12 +22,12 @@ RSpec.feature '/gems', with_login: true do
     within '#current-gems' do
       expect(page).to have_text 'TestGem#1'
       expect(page).to have_text 'TestGem#2'
-      expect(page).to_not have_text 'TestGem#3'
+      expect(page).not_to have_text 'TestGem#3'
     end
 
     within '#outdated-gems' do
-      expect(page).to_not have_text 'TestGem#1'
-      expect(page).to_not have_text 'TestGem#2'
+      expect(page).not_to have_text 'TestGem#1'
+      expect(page).not_to have_text 'TestGem#2'
       expect(page).to have_text 'TestGem#3'
     end
   end
@@ -60,7 +60,7 @@ RSpec.feature '/gems', with_login: true do
             within 'table' do
               expect(page).to have_content 'Test App 1'
             end
-            expect(page).to_not have_content 'Vulnerabilities'
+            expect(page).not_to have_content 'Vulnerabilities'
           end
         end
 
@@ -83,7 +83,7 @@ RSpec.feature '/gems', with_login: true do
             end
             expect(page).to have_content 'Vulnerabilities'
             expect(page).to have_content 'Vulnerability 1'
-            expect(page).to_not have_link 'Vulnerability 1'
+            expect(page).not_to have_link 'Vulnerability 1'
             expect(page).to have_link('Vulnerability 2', href: 'https://example.com/vulnerability2')
           end
         end

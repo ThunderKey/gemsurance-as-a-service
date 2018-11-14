@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe VulnerabilitiesController, type: :controller do
-  before :each do
+  before do
     stub_devise
   end
 

@@ -15,7 +15,7 @@ RSpec.describe 'gem_versions/show.slim' do
     expect(rendered)
       .to match %r{<h1><a href="/gems/#{gem_version.gem_info.id}">TestGem#1</a> - 1\.2\.3</h1>}
     expect(rendered).to match %r{>Test App 1</a>}
-    expect(rendered).to_not match %r{><h2>Vulnerabilities</h2>}
+    expect(rendered).not_to match %r{><h2>Vulnerabilities</h2>}
   end
 
   it 'displays a gem version with vulnerabilities correctly' do

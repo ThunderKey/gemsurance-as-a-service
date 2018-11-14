@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.feature '/', with_login: true do
+RSpec.describe '/', with_login: true do
   let(:base_url) { '/' }
 
   it 'gets rendered correctly' do

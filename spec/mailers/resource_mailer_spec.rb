@@ -10,7 +10,7 @@ RSpec.describe ResourceMailer do
       end
     end
 
-    let(:mail) { ResourceMailer.vulnerable_mail resource }
+    let(:mail) { described_class.vulnerable_mail resource }
 
     it 'renders the headers' do
       expect(mail.subject).to eq 'Vulnerabilities in Test App 1'

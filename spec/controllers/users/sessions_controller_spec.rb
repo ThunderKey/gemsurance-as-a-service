@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Users::SessionsController do
-  before :each do
+  before do
     @request.env['devise.mapping'] = Devise.mappings[:user]
   end
 

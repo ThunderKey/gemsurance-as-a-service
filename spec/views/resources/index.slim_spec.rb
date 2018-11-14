@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'resources/index.slim' do
   it 'displays all resources correctly' do
-    3.times { create :resource }
+    create_list :resource, 3
     assign :resources, Resource.all
 
     render

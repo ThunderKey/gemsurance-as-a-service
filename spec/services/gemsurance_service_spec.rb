@@ -26,8 +26,8 @@ RSpec.describe GemsuranceService, type: :service do
       service = GemsuranceService.new(resource)
 
       expect(service).to receive(:update_gemsurance_report).and_return false
-      expect(service).to_not receive(:fix_gemsurance_report)
-      expect(service).to_not receive(:load_gems)
+      expect(service).not_to receive(:fix_gemsurance_report)
+      expect(service).not_to receive(:load_gems)
       expect(service.update_gems).to eq false
     end
 

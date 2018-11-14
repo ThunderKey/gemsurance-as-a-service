@@ -12,7 +12,7 @@ FactoryBot.define do
 
     trait :with_gems do
       after(:create) do |resource|
-        3.times { create :gem_usage, resource: resource } if resource.gem_usages.empty?
+        create_list :gem_usage, 3, resource: resource if resource.gem_usages.empty?
         resource.reload
       end
     end

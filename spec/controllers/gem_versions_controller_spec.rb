@@ -4,7 +4,7 @@ require 'rails_helper'
 # https://everydayrails.com/2012/04/07/testing-series-rspec-controllers.html
 
 RSpec.describe GemVersionsController do
-  before :each do
+  before do
     stub_devise
   end
 

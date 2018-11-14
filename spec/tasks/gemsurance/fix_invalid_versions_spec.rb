@@ -3,21 +3,21 @@
 require 'rails_helper'
 
 RSpec.describe 'rake gemsurance:fix_invalid_versions' do
-  it 'preloads the Rails environment' do
-    expect(subject.prerequisites).to include 'environment'
-  end
-
-  before(:each) do
+  before do
     3.times do |i|
       info = create :gem_info
       (i + 1).times { create :gem_version, gem_info: info }
     end
   end
 
-  it 'does not update the gem versions if all are valid' do
-    expect_any_instance_of(GemInfo).to_not receive(:update_all_gem_versions!)
+  it 'preloads the Rails environment' do
+    expect(task.prerequisites).to include 'environment'
+  end
 
-    expect { subject.execute }.to_not output.to_stdout
+  it 'does not update the gem versions if all are valid' do
+    expect_any_instance_of(GemInfo).not_to receive(:update_all_gem_versions!)
+
+    expect { task.execute }.not_to output.to_stdout
   end
 
   it 'updates the gem versions if its invalid' do
@@ -28,7 +28,7 @@ RSpec.describe 'rake gemsurance:fix_invalid_versions' do
     expect(gem_info).to receive(:update_new_gem_versions!)
     create :gem_version, gem_info: gem_info
 
-    expect { subject.execute }.to output.to_stdout
+    expect { task.execute }.to output.to_stdout
   end
 
   it 'updates the gem versions if its invalid' do
@@ -40,7 +40,7 @@ RSpec.describe 'rake gemsurance:fix_invalid_versions' do
       create :gem_version, gem_info: gem_info
     end
 
-    expect { subject.execute }.to output(<<-OUTPUT).to_stdout
+    expect { task.execute }.to output(<<-OUTPUT).to_stdout
 Too many gem versions for TestGem#2:
 \t3.4.5
 \t7.8.9
