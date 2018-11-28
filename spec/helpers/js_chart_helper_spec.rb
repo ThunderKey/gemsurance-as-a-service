@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ApplicationHelper, type: :helper do
+RSpec.describe JsChartHelper, type: :helper do
   describe '#hsv_to_rgb' do
     it('red')   { expect(helper.hsv_to_rgb(0, 1, 0.5)).to eq [255, 0, 0] }
     it('green') { expect(helper.hsv_to_rgb(1.0 / 3, 1, 0.5)).to   eq [0, 255, 0] }

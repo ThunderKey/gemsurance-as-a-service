@@ -31,7 +31,7 @@ RSpec.describe 'rake gemsurance:fix_invalid_versions' do
     expect { task.execute }.to output.to_stdout
   end
 
-  it 'updates the gem versions if its invalid' do
+  it 'updates multiple gem versions if they are invalid' do
     allow_any_instance_of(GemInfo).to receive(:update_all_gem_versions!)
 
     GemInfo.last(2).each do |gem_info|

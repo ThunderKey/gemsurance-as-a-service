@@ -159,7 +159,6 @@ RSpec.describe GemVersion, type: :model do
 
     let(:resource) do
       create :empty_local_resource do |r|
-
         3.times do |i|
           # current
           create(:gem_info, name: "Current Gem #{i}") do |gem_info|

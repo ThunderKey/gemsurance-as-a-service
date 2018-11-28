@@ -48,22 +48,26 @@ RSpec.describe ApplicationHelper, type: :helper do
   end
 
   describe '#absolute_path_regex' do
-    it { expect('/').to match helper.absolute_path_regex }
-    it { expect('/test').to match helper.absolute_path_regex }
-    it { expect('/test/directory/').to match helper.absolute_path_regex }
-    it { expect('/test/directory/my-test_project.git').to match helper.absolute_path_regex }
-    it { expect('/abcdefghijklmnop').to match helper.absolute_path_regex }
-    it { expect('/qrstuvwxyz').to match helper.absolute_path_regex }
-    it { expect('/0123456789').to match helper.absolute_path_regex }
-    it { expect('/-_').to match helper.absolute_path_regex }
-    it { expect('test/directory/').not_to match helper.absolute_path_regex }
-    it { expect('/test /directory/').not_to match helper.absolute_path_regex }
+    subject { helper.absolute_path_regex }
+
+    it { is_expected.to match '/' }
+    it { is_expected.to match '/test' }
+    it { is_expected.to match '/test/directory/' }
+    it { is_expected.to match '/test/directory/my-test_project.git' }
+    it { is_expected.to match '/abcdefghijklmnop' }
+    it { is_expected.to match '/qrstuvwxyz' }
+    it { is_expected.to match '/0123456789' }
+    it { is_expected.to match '/-_' }
+    it { is_expected.not_to match 'test/directory/' }
+    it { is_expected.not_to match '/test /directory/' }
   end
 
   describe '#gemsurance_regex' do
+    subject { helper.gemsurance_regex }
+
     describe 'matches' do
       it 'a minimal correct output' do
-        expect(<<-TXT).to match helper.gemsurance_regex
+        is_expected.to match <<-TXT
 Retrieving gem version information...
 Retrieving latest vulnerability data...
 Reading vulnerability data...
@@ -72,7 +76,7 @@ Generated report #{Rails.application.config.private_dir}/gemsurance_reports/1/ge
 TXT
       end
       it 'a different formated correct output' do
-        expect(<<-TXT).to match helper.gemsurance_regex
+        is_expected.to match <<-TXT
 
   Retrieving gem version information...
   Retrieving latest vulnerability data...
@@ -86,7 +90,7 @@ TXT
 
     describe "doesn't match an output" do
       it 'with an invalid path' do
-        expect(<<-TXT).not_to match helper.gemsurance_regex
+        is_expected.not_to match <<-TXT
 Retrieving gem version information...
 Retrieving latest vulnerability data...
 Reading vulnerability data...
@@ -96,11 +100,11 @@ TXT
       end
 
       it 'with only an error message' do
-        expect('Could not find bunlder').not_to match helper.gemsurance_regex
+        is_expected.not_to match 'Could not find bunlder'
       end
 
       it 'with an additional error message' do
-        expect(<<-TXT).not_to match helper.gemsurance_regex
+        is_expected.not_to match <<-TXT
 Retrieving gem version information...
 Retrieving latest vulnerability data...
 Reading vulnerability data...

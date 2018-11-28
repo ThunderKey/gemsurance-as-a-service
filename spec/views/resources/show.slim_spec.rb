@@ -31,7 +31,7 @@ RSpec.describe 'resources/show.slim' do
     expect(rendered).not_to match /vulnerable/
   end
 
-  it 'displays the resource correctly with an outdated gem' do
+  it 'displays the resource correctly with vulnerable gems gem' do
     resource = create :resource, name: 'Test Resource'
     create_list :vulnerability, 2, gem_version: resource.gem_versions.first!
     create_list :vulnerability, 3, gem_version: resource.gem_versions.last!

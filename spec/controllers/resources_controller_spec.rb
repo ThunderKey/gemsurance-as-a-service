@@ -116,7 +116,7 @@ RSpec.describe ResourcesController do
 
   describe 'PUT #update' do
     let!(:resource) { create :resource, name: 'MyTestApp' }
-    let!(:valid_path) { resource.path }
+    let(:valid_path) { resource.path }
 
     context 'valid attributes' do
       it 'located the requested resource' do

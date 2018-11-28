@@ -17,9 +17,7 @@ RSpec.describe 'rake gemsurance:update' do
 
     task.execute
 
-    doubles.each do |double|
-      expect(double).to have_received(:update_gems)
-    end
+    expect(doubles).to all have_received(:update_gems)
   end
 
   it 'prints nothing if all are successful' do
