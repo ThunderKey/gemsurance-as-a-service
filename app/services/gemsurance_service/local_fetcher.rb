@@ -3,7 +3,13 @@
 class GemsuranceService
   class LocalFetcher < BaseFetcher
     def self.update_gemsurance_report resource, file
-      run_in_seperate_env 'gemsurance', '--format', 'yml', '--output', file, chdir: resource.path
+      output = exit_code = nil
+      3.times do
+        output, exit_code = run_gemsurance resource, file
+        break unless output.include? 'Psych::SyntaxError'
+        logger.error "Found Psycn::SyntaxError in output: #{output}"
+      end
+      [output, exit_code]
     end
 
     def self.errors resource
@@ -14,6 +20,10 @@ class GemsuranceService
       return {path: :not_a_directory} unless File.directory? resource.path
 
       {}
+    end
+
+    def self.run_gemsurance resource, file
+      run_in_seperate_env 'gemsurance', '--format', 'yml', '--output', file, chdir: resource.path
     end
   end
 end
