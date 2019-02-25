@@ -7,6 +7,7 @@ class GemsuranceService
       3.times do
         output, exit_code = run_gemsurance resource, file
         break unless output.include? 'Psych::SyntaxError'
+
         logger.error "Found Psycn::SyntaxError in output: #{output}"
       end
       [output, exit_code]
