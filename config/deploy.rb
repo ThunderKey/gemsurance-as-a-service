@@ -46,4 +46,4 @@ set :keep_assets, 3
 set :rvm_type, :system
 
 # Defaults to: 'default'
-set :rvm_ruby_version, 'ruby-2.5.3'
+set :rvm_ruby_version, 'ruby-2.6.2'
