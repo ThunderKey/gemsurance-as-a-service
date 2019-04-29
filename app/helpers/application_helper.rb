@@ -11,7 +11,7 @@ module ApplicationHelper
   def build_image_tag resource
     return nil if resource.build_image_url.blank?
 
-    img = image_tag resource.build_image_url, class: 'build-image'
+    img = image_tag resource.build_image_url, class: 'build-image', alt: 'Build'
     if resource.build_url.blank?
       img
     else
