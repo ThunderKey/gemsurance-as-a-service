@@ -37,7 +37,7 @@ class ResourcesController < ApplicationController
 
   def update
     @resource = Resource.find params[:id]
-    @resource.update_attributes resource_params
+    @resource.update resource_params
     if @resource.save
       flash[:notice] = %Q{Successfuly saved "#{@resource.name}"}
       redirect_to @resource

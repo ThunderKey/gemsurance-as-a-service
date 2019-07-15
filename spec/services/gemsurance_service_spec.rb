@@ -85,7 +85,7 @@ Generated report #{report_file}."
         service.update_gemsurance_report
       end.to change { File.exist? service.dirname }.from(false).to(true)
 
-      expect(resource.fetched_at).to eq Time.now.change(usec: 0)
+      expect(resource.fetched_at).to eq Time.zone.now.change(usec: 0)
       expect(resource.fetch_output).to eq output
       expect(resource.fetch_status).to eq 'successful'
     end
@@ -116,7 +116,7 @@ Generated report #{report_file}."
         service.update_gemsurance_report
       end.to change { File.exist? service.dirname }.from(false).to(true)
 
-      expect(resource.fetched_at).to eq Time.now.change(usec: 0)
+      expect(resource.fetched_at).to eq Time.zone.now.change(usec: 0)
       expect(resource.fetch_output).to eq output
       expect(resource.fetch_status).to eq 'failed'
     end

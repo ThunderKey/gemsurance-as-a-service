@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
-  @absolute_path_content_regex = %r{/(?:[\w\-\.]+/)*[\w\-\.]*}
-  class_variable_set '@@absolute_path_regex', /\A#{@absolute_path_content_regex}\z/
+  ABSOLUTE_PATH_CONTENT_REGEX = %r{/(?:[\w\-\.]+/)*[\w\-\.]*}.freeze
+  class_variable_set '@@absolute_path_regex', /\A#{ABSOLUTE_PATH_CONTENT_REGEX}\z/
   class_variable_set '@@gemsurance_regex', %r{\A\s*Retrieving gem version information\.\.\.\s+Retrieving latest vulnerability data\.\.\.\s+Reading vulnerability data\.\.\.\s+Generating report\.\.\.\s+Generated report #{Rails.application.config.private_dir}/gemsurance_reports/\d+/gemsurance_report\.yml\.\s*\Z} # rubocop:disable Metrics/LineLength
 
   cattr_reader :absolute_path_regex
@@ -15,7 +15,7 @@ module ApplicationHelper
     if resource.build_url.blank?
       img
     else
-      link_to img, resource.build_url, target: '_blank'
+      link_to img, resource.build_url, target: '_blank', rel: 'noopener'
     end
   end
 

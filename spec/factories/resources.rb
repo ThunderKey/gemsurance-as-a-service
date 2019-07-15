@@ -7,7 +7,7 @@ FactoryBot.define do
 
     trait :local do
       resource_type { :local }
-      path { File.join Rails.root, 'spec', 'assets', 'valid_app' }
+      path { Rails.root.join 'spec', 'assets', 'valid_app' }
     end
 
     trait :with_gems do

@@ -4,7 +4,7 @@ require 'rails_helper'
 # https://everydayrails.com/2012/04/07/testing-series-rspec-controllers.html
 
 RSpec.describe ResourcesController do
-  valid_path = File.join Rails.root, 'spec', 'assets', 'valid_app'
+  valid_path = Rails.root.join('spec', 'assets', 'valid_app').to_s
 
   before do
     stub_devise

@@ -70,7 +70,7 @@ RSpec.describe '/resources', with_login: true do
         fill_in 'Build url', with: 'http://example.com/my-test-resource'
         fill_in 'Build image url', with: 'http://example.com/my-test-resource.png'
         select 'Local', from: 'Resource type'
-        fill_in 'Path', with: File.join(Rails.root, 'spec', 'assets', 'valid_app')
+        fill_in 'Path', with: Rails.root.join('spec', 'assets', 'valid_app')
 
         click_button 'Update Resource'
 
@@ -79,7 +79,7 @@ RSpec.describe '/resources', with_login: true do
         expect(resource.build_url).to eq 'http://example.com/my-test-resource'
         expect(resource.build_image_url).to eq 'http://example.com/my-test-resource.png'
         expect(resource.resource_type).to eq 'local'
-        expect(resource.path).to eq File.join(Rails.root, 'spec', 'assets', 'valid_app')
+        expect(resource.path).to eq Rails.root.join('spec', 'assets', 'valid_app').to_s
       end
     end
   end
@@ -92,7 +92,7 @@ RSpec.describe '/resources', with_login: true do
       fill_in 'Build url', with: 'http://example.com/my-test-resource'
       fill_in 'Build image url', with: 'http://example.com/my-test-resource.png'
       select 'Local', from: 'Resource type'
-      fill_in 'Path', with: File.join(Rails.root, 'spec', 'assets', 'valid_app')
+      fill_in 'Path', with: Rails.root.join('spec', 'assets', 'valid_app')
 
       expect do
         click_button 'Create Resource'
@@ -104,7 +104,7 @@ RSpec.describe '/resources', with_login: true do
       expect(resource.build_url).to eq 'http://example.com/my-test-resource'
       expect(resource.build_image_url).to eq 'http://example.com/my-test-resource.png'
       expect(resource.resource_type).to eq 'local'
-      expect(resource.path).to eq File.join(Rails.root, 'spec', 'assets', 'valid_app')
+      expect(resource.path).to eq Rails.root.join('spec', 'assets', 'valid_app').to_s
     end
   end
 end

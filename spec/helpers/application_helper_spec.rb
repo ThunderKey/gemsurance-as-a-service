@@ -11,7 +11,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       resource = create :resource, build_url: build_url, build_image_url: build_image_url
       html = helper.build_image_tag resource
       img = %Q{<img class="build-image" alt="Build" src="#{build_image_url}" />}
-      expect(html).to eq %Q{<a target="_blank" href="#{build_url}">#{img}</a>}
+      expect(html).to eq %Q{<a target="_blank" rel="noopener" href="#{build_url}">#{img}</a>}
     end
 
     it 'generates the image if the build url is missing' do

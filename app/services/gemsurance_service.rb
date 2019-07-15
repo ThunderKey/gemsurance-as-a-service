@@ -29,7 +29,7 @@ class GemsuranceService < ApplicationService
     FileUtils.mkdir_p dirname unless File.exist? dirname
     output, _exit_status = fetcher.update_gemsurance_report resource, gemsurance_yaml_file
     resource.fetch_output = output
-    resource.fetched_at = Time.now
+    resource.fetched_at = Time.zone.now
     resource.fetch_status = gemsurance_regex.match?(output) ? 'successful' : 'failed'
     resource.save!
     reset!

@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Resource, type: :model do
-  valid_path = File.join Rails.root, 'spec', 'assets', 'valid_app'
-  missing_path = File.join Rails.application.config.test_tmp_dir, 'missing_app'
+  valid_path = Rails.root.join('spec', 'assets', 'valid_app').to_s
+  missing_path = Rails.application.config.test_tmp_dir.join 'missing_app'
 
   context 'is valid' do
     it 'with all required attributes' do
