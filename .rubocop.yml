@@ -1,5 +1,5 @@
 inherit_gem:
-  ThunderKey-rubocop: rubocop.yml
+  ThunderKey-rubocop: rubocop-rails.yml
 
 # Disable for now
 RSpec/MultipleExpectations:
