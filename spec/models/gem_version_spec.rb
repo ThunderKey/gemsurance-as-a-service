@@ -78,7 +78,7 @@ RSpec.describe GemVersion, type: :model do
     end
 
     it 'in ascending order' do
-      expect(GemVersion.all.sort_by(&:version_object).map(&:version)).to eq [
+      expect(described_class.all.sort_by(&:version_object).map(&:version)).to eq [
         '1.2.3',
         '1.2.3.1.beta',
         '1.2.3.1',
@@ -88,7 +88,7 @@ RSpec.describe GemVersion, type: :model do
     end
 
     it 'in descending order' do
-      expect(GemVersion.all.sort_by(&:version_object).reverse.map(&:version)).to eq [
+      expect(described_class.all.sort_by(&:version_object).reverse.map(&:version)).to eq [
         '10.0.0',
         '9.1.2',
         '1.2.3.1',

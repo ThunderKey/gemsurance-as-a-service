@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe GemsuranceService, type: :service do
   it 'includes valid fetchers' do
-    expect(GemsuranceService.fetchers.keys).to eq ['local']
-    GemsuranceService.fetchers.each do |_name, fetcher|
+    expect(described_class.fetchers.keys).to eq ['local']
+    described_class.fetchers.each do |_name, fetcher|
       expect(fetcher).to respond_to :update_gemsurance_report
       expect(fetcher).to respond_to :errors
     end
@@ -14,7 +14,7 @@ RSpec.describe GemsuranceService, type: :service do
   describe '#update_gems', with_mails: true do
     it 'calls the update and load methods in the correct order' do
       resource = create :empty_local_resource
-      service = GemsuranceService.new(resource)
+      service = described_class.new(resource)
 
       expect(service).to receive(:update_gemsurance_report).ordered.and_return true
       expect(service).to receive(:fix_gemsurance_report).ordered
@@ -23,7 +23,7 @@ RSpec.describe GemsuranceService, type: :service do
     end
     it 'does not call load methods if the update fails' do
       resource = create :empty_local_resource
-      service = GemsuranceService.new(resource)
+      service = described_class.new(resource)
 
       expect(service).to receive(:update_gemsurance_report).and_return false
       expect(service).not_to receive(:fix_gemsurance_report)
@@ -34,7 +34,7 @@ RSpec.describe GemsuranceService, type: :service do
     it 'sends a mail if the resource is vulnerable' do
       resource = create :resource
       create :vulnerability, gem_version: resource.gem_versions.first!
-      service = GemsuranceService.new(resource)
+      service = described_class.new(resource)
 
       expect(service).to receive(:update_gemsurance_report).and_return true
       expect(service).to receive(:fix_gemsurance_report)
@@ -57,7 +57,7 @@ RSpec.describe GemsuranceService, type: :service do
   describe '#update_gemsurance_report' do
     it 'updates the gemsurance report correctly' do
       resource = create :empty_local_resource
-      service = GemsuranceService.new(resource)
+      service = described_class.new(resource)
 
       expect(resource.fetched_at).to eq nil
       expect(resource.fetch_output).to eq ''
@@ -92,7 +92,7 @@ Generated report #{report_file}."
 
     it 'updates the status to failed if the command executes unsuccessful' do
       resource = create :empty_local_resource
-      service = GemsuranceService.new(resource)
+      service = described_class.new(resource)
 
       expect(resource.fetched_at).to eq nil
       expect(resource.fetch_output).to eq ''
@@ -125,7 +125,7 @@ Generated report #{report_file}."
   describe '#load_gems' do
     it 'loads the gems correctly' do
       resource = create :empty_local_resource
-      service = GemsuranceService.new(resource)
+      service = described_class.new(resource)
       create :gem_usage, resource: resource
       expect(gem_usages_to_arrays(resource.gem_usages)).to eq [
         ['TestGem#1', '1.2.3', false],
@@ -191,7 +191,7 @@ Generated report #{report_file}."
 
     it 'loads the gems with vulnerabilities correctly' do
       resource = create :empty_local_resource
-      service = GemsuranceService.new(resource)
+      service = described_class.new(resource)
       report_file = service.gemsurance_yaml_file
       FileUtils.mkdir_p service.dirname
       FileUtils.cp Rails.root.join('spec', 'assets', 'vulnerable_gemsurance_report.yml'),
