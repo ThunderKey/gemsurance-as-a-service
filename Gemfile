@@ -44,7 +44,7 @@ gem 'redis-namespace'
 # for ActiveJob workers
 gem 'sidekiq', '~> 5.0'
 
-gem 'gemsurance'
+gem 'gemsurance', '~> 0.9.0'
 
 gem 'whenever'
 
