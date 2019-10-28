@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ResourceMailer do
-  context '#vulnerable_mail' do
+  describe '#vulnerable_mail' do
     let(:resource) do
       create :resource do |r|
         create :gem_usage, :vulnerable, resource: r

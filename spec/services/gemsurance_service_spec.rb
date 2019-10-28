@@ -21,6 +21,7 @@ RSpec.describe GemsuranceService, type: :service do
       expect(service).to receive(:load_gems).ordered
       expect(service.update_gems).to eq true
     end
+
     it 'does not call load methods if the update fails' do
       resource = create :empty_local_resource
       service = described_class.new(resource)

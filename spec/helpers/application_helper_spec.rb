@@ -75,6 +75,7 @@ Generating report...
 Generated report #{Rails.application.config.private_dir}/gemsurance_reports/1/gemsurance_report.yml.
 TXT
       end
+
       it 'a different formated correct output' do
         is_expected.to match <<-TXT
 

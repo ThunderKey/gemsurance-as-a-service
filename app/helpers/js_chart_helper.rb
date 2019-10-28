@@ -22,7 +22,7 @@ module JsChartHelper
   end
 
   def hsv_to_rgb_hex hue, saturation, lightness
-    '#' + hsv_to_rgb(hue, saturation, lightness).map {|c| format('%02X', c) }.join
+    '#' + hsv_to_rgb(hue, saturation, lightness).map {|c| format('%<rgb>02X', rgb: c) }.join
   end
 
   # helper for making rgb
